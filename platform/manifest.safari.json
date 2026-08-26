@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "version": "0.4.8",
+  "default_locale": "zh_TW",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://translate.googleapis.com/*",
+    "https://raw.githubusercontent.com/*"
+  ],
+  "action": {
+    "default_title": "__MSG_extName__",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "platform-compat.js",
+      "integrity-guard.js",
+      "language-registry.js",
+      "ui-i18n.js",
+      "tts-registry.js",
+      "service-worker.js"
+    ],
+    "preferred_environment": [
+      "document",
+      "service_worker"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "platform-compat.js",
+        "integrity-client.js",
+        "language-registry.js",
+        "ui-i18n.js",
+        "translator-engine.js",
+        "tts-registry.js",
+        "selection-appearance.js",
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "exclude_matches": [
+        "https://piper.ttstool.com/*"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "safari": {
+      "strict_min_version": "17"
+    }
+  }
+}

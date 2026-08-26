@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RayLingo — Workspace</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="workspace.css">
+</head>
+<body data-page-mode="app" data-full-workspace="true">
+  <div class="workspace-layout">
+    <aside class="workspace-sidebar">
+      <div class="side-brand">
+        <div class="brand-mark" aria-hidden="true">文</div>
+        <div><strong>RayLingo</strong><small data-i18n="workspaceTitle">完整工作台</small></div>
+      </div>
+      <nav class="workspace-nav" aria-label="Workspace navigation">
+        <button class="nav-item active" type="button" data-workspace-page="translate" data-title-key="workspaceNavTranslate"><span>01</span><b data-i18n="workspaceNavTranslate">翻譯</b></button>
+        <button class="nav-item" type="button" data-workspace-page="language" data-title-key="workspaceNavLanguage"><span>02</span><b data-i18n="workspaceNavLanguage">語言</b></button>
+        <button class="nav-item" type="button" data-workspace-page="tts" data-title-key="workspaceNavTts"><span>03</span><b data-i18n="workspaceNavTts">語音 TTS</b></button>
+        <button class="nav-item" type="button" data-workspace-page="selection" data-title-key="workspaceNavSelection"><span>04</span><b data-i18n="workspaceNavSelection">反白翻譯</b></button>
+        <button class="nav-item" type="button" data-workspace-page="appearance" data-title-key="workspaceNavAppearance"><span>05</span><b data-i18n="workspaceNavAppearance">外觀</b></button>
+        <button class="nav-item" type="button" data-workspace-page="history" data-title-key="workspaceNavHistory"><span>06</span><b data-i18n="workspaceNavHistory">歷史</b></button>
+        <button class="nav-item" type="button" data-workspace-page="engine" data-title-key="workspaceNavEngine"><span>07</span><b data-i18n="workspaceNavEngine">翻譯引擎</b></button>
+        <button class="nav-item" type="button" data-workspace-page="security" data-title-key="workspaceNavSecurity"><span>08</span><b data-i18n="workspaceNavSecurity">安全與診斷</b></button>
+      </nav>
+      <div class="side-footer">
+        <div class="side-status-row"><span id="integrityBadge" class="integrity-badge" data-state="checking">…</span><span id="appVersion" class="version-badge">v0.4.8</span></div>
+        <small>RayLingo cross-browser build</small>
+      </div>
+    </aside>
+
+    <main class="workspace-content">
+      <header class="page-header">
+        <div>
+          <p id="workspaceEyebrow">RAYLINGO STUDIO</p>
+          <h1 id="workspacePageTitle" data-i18n="workspaceNavTranslate">翻譯</h1>
+          <span id="workspacePageDescription" data-i18n="workspaceTranslateDescription">即時翻譯、原文／譯文朗讀與複製。</span>
+        </div>
+        <span id="apiBadge" class="safe-badge">…</span>
+      </header>
+
+      <section class="workspace-page active" data-page="translate">
+        <div class="feature-card translator-hero">
+          <div class="language-row">
+            <label class="select-wrap"><span data-i18n="sourceLanguage">來源語言</span><select id="sourceLanguage"></select></label>
+            <button id="swapButton" class="icon-button" type="button" data-i18n-title="swap" title="交換語言" aria-label="Swap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11m0 0-3-3m3 3-3 3M17 17H6m0 0 3 3m-3-3 3-3"/></svg></button>
+            <label class="select-wrap"><span data-i18n="targetLanguage">目標語言</span><select id="targetLanguage"></select></label>
+          </div>
+          <div id="quickPairs" class="quick-pairs"></div>
+        </div>
+
+        <div class="translation-grid">
+          <article class="card text-work-card">
+            <div class="card-head"><div><h2 id="detectedLabel" data-i18n="detectedInput">輸入文字</h2><p data-i18n="workspaceSourceHelp">輸入或貼上後自動翻譯。</p></div><div class="result-actions">
+              <button id="sourceSpeakButton" class="secondary-btn action-button" type="button" disabled><span id="sourceSpeakButtonLabel" data-i18n="speak">朗讀</span></button>
+              <button id="sourceCopyButton" class="secondary-btn action-button" type="button" disabled><span data-i18n="copy">複製</span></button>
+              <button id="clearButton" class="secondary-btn action-button danger-soft" type="button"><span data-i18n="clear">清除</span></button>
+            </div></div>
+            <div class="workspace-text-panel"><textarea id="sourceText" maxlength="12000" spellcheck="false" data-i18n-placeholder="inputPlaceholder" placeholder="開始輸入或貼上文字，將自動翻譯…"></textarea><div class="panel-footer"><span id="charCount">0 / 12,000</span><button id="pasteButton" class="text-button" type="button" data-i18n="paste">貼上</button></div></div>
+          </article>
+          <article class="card text-work-card">
+            <div class="card-head"><div><h2 data-i18n="resultTitle">翻譯結果</h2><p data-i18n="workspaceResultHelp">結果可直接朗讀或複製。</p></div><div class="result-actions">
+              <button id="speakButton" class="secondary-btn action-button" type="button" disabled><span id="speakButtonLabel" data-i18n="speak">朗讀</span></button>
+              <button id="copyButton" class="secondary-btn action-button" type="button" disabled><span data-i18n="copy">複製</span></button>
+            </div></div>
+            <div id="translatedText" class="workspace-output translated-text placeholder" tabindex="0">—</div>
+          </article>
+        </div>
+        <div class="runtime-box translation-status-box status-line"><div><small data-i18n="workspaceTranslationStatus">翻譯狀態</small><strong id="statusText" data-i18n="readyInput">輸入文字後會自動翻譯</strong></div><span id="progressText" class="progress-text"></span></div>
+      </section>
+
+      <section class="workspace-page" data-page="language">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="workspaceNavLanguage">語言</h2><p data-i18n="workspaceLanguageDescription">管理介面語言與翻譯呈現方式。</p></div><span class="platform-badge">LANG</span></div>
+          <div class="setting-grid">
+            <label class="select-setting"><span><b data-i18n="uiLanguage">介面語言</b><small data-i18n="uiLanguageHelp">完整網頁與反白浮窗會使用此語言</small></span><select id="uiLocale"></select></label>
+            <label class="setting toggle-setting"><span><b data-i18n="typingEffect">結果逐字顯示</b><small data-i18n="workspaceTypingHelp">讓翻譯結果以打字效果呈現。</small></span><input id="typingEffectToggle" type="checkbox" checked></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="tts">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="ttsTitle">自然語音 TTS</h2><p data-i18n="ttsHelp">自動模式優先使用目前瀏覽器可用的多語言 TTS。</p></div><button id="ttsTestButton" class="primary-outline-btn" type="button" data-i18n="ttsTest">測試</button></div>
+          <div class="setting-grid">
+            <label class="select-setting"><span><b data-i18n="ttsEngine">語音引擎</b><small data-i18n="ttsLocalPrivacy">不需額外設定。</small></span><select id="ttsEngine"><option value="auto" data-i18n="ttsEngineAuto">自動（多語言系統 TTS 優先）</option><option value="ai-browser" data-i18n="ttsEngineAiLocal">瀏覽器 AI（自動下載）</option><option value="system" data-i18n="ttsEngineSystem">系統語音</option></select></label>
+            <label class="select-setting"><span><b data-i18n="ttsAiVoice">AI 聲音</b><small id="ttsAiLanguages" data-i18n="ttsAiLanguagesLoading">正在載入 AI 語言清單…</small></span><select id="ttsVoice"></select></label>
+            <label class="select-setting"><span><b data-i18n="ttsSystemVoice">系統聲音</b><small data-i18n="ttsSystemBrowserAuto">瀏覽器會依語言自動挑選。</small></span><select id="systemVoice"></select></label>
+            <label class="range-setting"><span><b data-i18n="ttsSpeed">語速</b><small id="ttsSpeedValue">1.00×</small></span><input id="ttsSpeed" type="range" min="0.65" max="1.60" step="0.05" value="1"></label>
+          </div>
+          <small id="ttsAiCompatibilityNote" class="tts-compatibility-note" hidden></small>
+          <div class="runtime-box"><div><small data-i18n="workspaceTtsStatus">TTS 狀態</small><strong id="ttsStatus" data-i18n="ttsStatusChecking">正在檢查多語言語音…</strong></div><span id="ttsStatusDot" class="tts-status-dot"></span></div>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="selection">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="selectionAppearanceTitle">反白翻譯</h2><p data-i18n="selectionHelp">反白後可直接開啟迷你翻譯器，並在浮窗切換語言。</p></div><span class="platform-badge">SELECT</span></div>
+          <div class="setting-grid">
+            <label class="select-setting"><span><b data-i18n="selectionMode">反白行為</b><small data-i18n="selectionHelp">控制反白後的啟動方式。</small></span><select id="selectionMode"><option value="auto" data-i18n="selectionModeAuto">直接開啟翻譯浮窗</option><option value="button" data-i18n="selectionModeButton">先顯示「譯」按鈕</option><option value="off" data-i18n="selectionModeOff">停用反白翻譯</option></select></label>
+            <label class="select-setting"><span><b data-i18n="selectionTriggerStyle">觸發樣式</b><small data-i18n="selectionAppearanceHelp">可顯示文字按鈕或小圓點。</small></span><select id="selectionTriggerStyle"><option value="label" data-i18n="selectionTriggerStyleLabel">顯示「譯」按鈕</option><option value="dot" data-i18n="selectionTriggerStyleDot">顯示小圓點</option></select></label>
+            <label class="range-setting"><span><b data-i18n="selectionTriggerSize">按鈕／小點大小</b><small id="selectionTriggerSizeValue">36px</small></span><input id="selectionTriggerSize" type="range" min="14" max="56" step="1" value="36"></label>
+          </div>
+          <div id="selectionAppearancePreview" class="selection-appearance-preview">
+            <div class="selection-preview-canvas"><button id="selectionPreviewTrigger" class="selection-preview-trigger" type="button" tabindex="-1"><span class="selection-preview-label">譯</span><span class="selection-preview-dot"></span></button><div id="selectionPreviewPanel" class="selection-preview-panel"><span class="selection-preview-accent"></span><strong>RayLingo</strong><small data-i18n="selectionPreviewText">反白翻譯預覽</small></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="appearance">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="appearanceTitle">介面外觀</h2><p data-i18n="appearanceHelp">Popup、完整網頁與反白翻譯共用背景與強調色。</p></div><span class="platform-badge">CUSTOM UI</span></div>
+          <div class="setting-grid appearance-grid">
+            <label class="select-setting"><span><b data-i18n="selectionSurfaceTheme">背景</b><small data-i18n="workspaceThemeHelp">切換 RayLingo 深色／淺色表面。</small></span><select id="selectionSurfaceTheme"><option value="black" data-i18n="selectionSurfaceBlack">黑色</option><option value="white" data-i18n="selectionSurfaceWhite">白色</option></select></label>
+            <div class="setting palette-setting"><span><b data-i18n="selectionAccentColor">強調色</b><small data-i18n="workspaceAccentHelp">按鈕、Focus、Badge 與品牌亮色。</small></span><code id="selectionAccentColorValue">#7658ff</code></div>
+          </div>
+          <div class="background-section"><div><b data-i18n="workspaceAccentPresets">強調色預設</b><small data-i18n="workspaceAccentPresetsHelp">RayLingo 內建八組強調色色票。</small></div>
+            <div id="accentPalette" class="swatch-grid" role="radiogroup" aria-label="Accent color">
+              <button type="button" class="accent-swatch" data-accent="#7658ff" data-name="violet"><i style="--swatch-a:#7658ff;--swatch-b:#9a83ff"></i><span>violet</span></button>
+              <button type="button" class="accent-swatch" data-accent="#3478f6" data-name="blue"><i style="--swatch-a:#3478f6;--swatch-b:#64a2ff"></i><span>blue</span></button>
+              <button type="button" class="accent-swatch" data-accent="#00a7c7" data-name="cyan"><i style="--swatch-a:#00a7c7;--swatch-b:#54d6e8"></i><span>cyan</span></button>
+              <button type="button" class="accent-swatch" data-accent="#1f9d68" data-name="green"><i style="--swatch-a:#1f9d68;--swatch-b:#55c998"></i><span>green</span></button>
+              <button type="button" class="accent-swatch" data-accent="#c88713" data-name="amber"><i style="--swatch-a:#c88713;--swatch-b:#f0b84e"></i><span>amber</span></button>
+              <button type="button" class="accent-swatch" data-accent="#e66a2c" data-name="orange"><i style="--swatch-a:#e66a2c;--swatch-b:#ff9a58"></i><span>orange</span></button>
+              <button type="button" class="accent-swatch" data-accent="#e04e73" data-name="rose"><i style="--swatch-a:#e04e73;--swatch-b:#ff86a4"></i><span>rose</span></button>
+              <button type="button" class="accent-swatch" data-accent="#b84ad8" data-name="magenta"><i style="--swatch-a:#b84ad8;--swatch-b:#e685ff"></i><span>magenta</span></button>
+            </div>
+          </div>
+          <label class="custom-accent-row"><span><b data-i18n="customAccentColor">自訂顏色</b><small data-i18n="workspaceCustomAccentHelp">自訂顏色也會同步 Popup 與反白浮窗。</small></span><input id="selectionAccentColor" type="color" value="#7658ff"></label>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="history">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="historyTitle">最近翻譯</h2><p data-i18n="historyLocal">只儲存在這個瀏覽器</p></div><button id="clearHistoryButton" class="secondary-btn" type="button" data-i18n="clearHistory">清除紀錄</button></div>
+          <label class="toggle-list-item"><span><b data-i18n="historyEnabled">儲存翻譯紀錄（僅本機）</b><small data-i18n="workspaceHistoryHelp">關閉後不再加入新的歷史紀錄。</small></span><input id="historyToggle" type="checkbox" checked></label>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="engine">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="remoteTitle">瀏覽器相容／遠端備援</h2><p data-i18n="remoteHelp">沒有本機 Translator API 時，允許將文字送至 Google Translate。</p></div><span class="platform-badge">ENGINE</span></div>
+          <label class="toggle-list-item"><span><b data-i18n="remoteTitle">啟用遠端備援</b><small id="remoteFallbackHelp" data-i18n="remoteHelp">沒有本機 Translator API 時，允許將文字送至 Google Translate</small></span><input id="remoteFallbackToggle" type="checkbox" checked></label>
+          <div class="runtime-box"><div><small data-i18n="workspaceProviderStatus">目前翻譯引擎</small><strong id="providerNote" data-i18n="providerChecking">正在檢查翻譯引擎…</strong></div><span class="safe-badge">AUTO</span></div>
+        </div>
+      </section>
+
+      <section class="workspace-page" data-page="security">
+        <div class="card integrity-card">
+          <div class="card-head"><div><h2 data-i18n="workspaceSecurityTitle">完整性與防偽</h2><p data-i18n="workspaceSecurityDescription">RayLingo 會驗證簽章與受保護檔案；未授權變更會鎖定。</p></div><span class="safe-badge">VERIFY</span></div>
+          <div class="fingerprint-box"><small>Ed25519 + SHA-256</small><code>Runtime integrity guard active</code></div>
+          <div class="security-note" data-i18n="workspaceSecurityNote">合法修改需要獨立 AI 授權檔重新簽章；授權檔不包含在擴充 ZIP。</div>
+        </div>
+        <div class="card diagnostics-card"><div class="card-head"><div><h2 data-i18n="workspaceDiagnosticsTitle">執行狀態</h2><p data-i18n="workspaceDiagnosticsDescription">版本、引擎與安全狀態集中顯示於側欄與頁首。</p></div></div><div class="diagnostic-grid"><article><small>Product</small><strong>RayLingo</strong></article><article><small>Version</small><strong>0.4.8</strong></article><article><small>Build</small><strong>Signed integrity</strong></article></div></div>
+        <div class="card update-card">
+          <div class="card-head"><div><h2 data-i18n="updateTitle">檢查更新</h2><p data-i18n="updateDescription">從官方 GitHub 讀取已簽章版本資訊，不會自行替換擴充程式碼。</p></div><div class="update-actions"><button id="updateCheckButton" class="primary-outline-btn" type="button" data-i18n="updateCheckButton">檢查更新</button><button id="updateDownloadButton" class="secondary-btn update-download" type="button" data-i18n="updateDownloadButton" hidden>取得新版</button></div></div>
+          <div class="runtime-box update-status-box"><div><small data-i18n="updateStatusLabel">更新狀態</small><strong id="updateStatus" data-i18n="updateStatusIdle">尚未檢查</strong></div><span id="updateSignatureBadge" class="safe-badge">SIGNED</span></div>
+          <div class="update-meta"><code id="updateVersionMeta">current 0.4.8</code><code id="updatePackageMeta">—</code></div>
+        </div>
+        <div class="card compatibility-card">
+          <div class="card-head"><div><h2 data-i18n="compatTitle">瀏覽器相容性</h2><p data-i18n="compatDescription">同一核心依瀏覽器能力選擇背景與 TTS 後端。</p></div><span id="platformBadge" class="platform-badge">WEBEXT</span></div>
+          <div class="compat-list">
+            <article><small>Chromium</small><strong>Chrome / Brave / Edge / Opera / Vivaldi</strong><span data-i18n="compatChromium">完整 MV3、原生擴充 TTS 與可用時的 Browser AI。</span></article>
+            <article><small>Firefox</small><strong>WebExtensions</strong><span data-i18n="compatFirefox">使用背景 scripts 與 Web Speech TTS fallback；翻譯可走遠端備援。</span></article>
+            <article><small>Safari</small><strong>Safari Web Extension</strong><span data-i18n="compatSafari">共用核心可轉換；安裝仍需 Apple 的 Safari Web Extension 封裝。</span></article>
+            <article><small data-i18n="compatCurrentBrowser">目前瀏覽器</small><strong id="platformName">WebExtension</strong><span id="platformCapabilities">—</span></article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="platform-compat.js"></script>
+  <script src="integrity-client.js"></script>
+  <script src="language-registry.js"></script>
+  <script src="ui-i18n.js"></script>
+  <script src="translator-engine.js"></script>
+  <script src="tts-registry.js"></script>
+  <script src="selection-appearance.js"></script>
+  <script src="popup.js"></script>
+  <script src="update-checker.js"></script>
+  <script src="workspace-ui.js"></script>
+</body>
+</html>

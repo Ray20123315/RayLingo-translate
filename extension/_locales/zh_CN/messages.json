@@ -1,0 +1,647 @@
+{
+  "autoDetected": {
+    "message": "检测"
+  },
+  "badgeBrave": {
+    "message": "跨浏览器"
+  },
+  "badgeDisabled": {
+    "message": "未启用"
+  },
+  "badgeLocal": {
+    "message": "本地优先"
+  },
+  "badgeRemote": {
+    "message": "远程兼容"
+  },
+  "brandSubtitle": {
+    "message": "即时、多语言、跨浏览器"
+  },
+  "clear": {
+    "message": "清除"
+  },
+  "clearHistory": {
+    "message": "清除记录"
+  },
+  "clipboardReadFailed": {
+    "message": "无法读取剪贴板，请使用 Ctrl+V 粘贴"
+  },
+  "contextRoot": {
+    "message": "RayLingo 即时翻译"
+  },
+  "contextTranslateTo": {
+    "message": "翻译为"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "copy": {
+    "message": "复制"
+  },
+  "copyFailed": {
+    "message": "复制失败，请手动选择结果"
+  },
+  "detectedInput": {
+    "message": "输入文字"
+  },
+  "emptyHistory": {
+    "message": "暂无翻译记录"
+  },
+  "extDescription": {
+    "message": "实时多语翻译、划词迷你翻译器、多语言系统语音与可选的浏览器神经网络 AI TTS。"
+  },
+  "extName": {
+    "message": "RayLingo 即时翻译"
+  },
+  "historyCleared": {
+    "message": "翻译记录已清除"
+  },
+  "historyEnabled": {
+    "message": "保存翻译记录（仅本地）"
+  },
+  "historyLocal": {
+    "message": "仅保存在此浏览器"
+  },
+  "historyRestored": {
+    "message": "已载入这条翻译"
+  },
+  "historyTitle": {
+    "message": "最近翻译"
+  },
+  "inputPlaceholder": {
+    "message": "开始输入或粘贴文字，将自动翻译…"
+  },
+  "lang_ar": {
+    "message": "阿拉伯语"
+  },
+  "lang_auto": {
+    "message": "自动检测"
+  },
+  "lang_de": {
+    "message": "德语"
+  },
+  "lang_en": {
+    "message": "英语"
+  },
+  "lang_es": {
+    "message": "西班牙语"
+  },
+  "lang_fr": {
+    "message": "法语"
+  },
+  "lang_hi": {
+    "message": "印地语"
+  },
+  "lang_id": {
+    "message": "印度尼西亚语"
+  },
+  "lang_it": {
+    "message": "意大利语"
+  },
+  "lang_ja": {
+    "message": "日语"
+  },
+  "lang_ko": {
+    "message": "韩语"
+  },
+  "lang_nl": {
+    "message": "荷兰语"
+  },
+  "lang_pl": {
+    "message": "波兰语"
+  },
+  "lang_pt": {
+    "message": "葡萄牙语"
+  },
+  "lang_ru": {
+    "message": "俄语"
+  },
+  "lang_th": {
+    "message": "泰语"
+  },
+  "lang_tr": {
+    "message": "土耳其语"
+  },
+  "lang_uk": {
+    "message": "乌克兰语"
+  },
+  "lang_vi": {
+    "message": "越南语"
+  },
+  "lang_zhHans": {
+    "message": "简体中文"
+  },
+  "lang_zhHant": {
+    "message": "繁体中文"
+  },
+  "paste": {
+    "message": "粘贴"
+  },
+  "providerBrave": {
+    "message": "此浏览器未提供内置 Translator API；需要时使用远程备用"
+  },
+  "providerChecking": {
+    "message": "正在检查翻译引擎…"
+  },
+  "providerNative": {
+    "message": "Translator API 可用；支持的语言对会优先在设备端处理"
+  },
+  "providerRemote": {
+    "message": "此浏览器没有 Chrome Translator API；必要时使用远程备用"
+  },
+  "readyInput": {
+    "message": "输入文字后会自动翻译"
+  },
+  "remoteHelp": {
+    "message": "没有本地 Translator API 时，允许将文字发送到 Google Translate"
+  },
+  "remoteHelpDisabled": {
+    "message": "已关闭：只使用可用的本地 Translator API"
+  },
+  "remoteHelpEnabled": {
+    "message": "已启用：必要时翻译文字会离开设备"
+  },
+  "remoteHttpFailed": {
+    "message": "远程翻译服务目前无法完成请求。"
+  },
+  "remoteNoInput": {
+    "message": "没有可翻译的文字。"
+  },
+  "remoteNoText": {
+    "message": "远程翻译没有返回文字。"
+  },
+  "remoteRateLimited": {
+    "message": "Google Translate 暂时限制请求，请稍后再试。"
+  },
+  "remoteResponseChanged": {
+    "message": "远程翻译返回格式已变更。"
+  },
+  "remoteTitle": {
+    "message": "浏览器兼容／远程备用"
+  },
+  "remoteUnsupported": {
+    "message": "远程备用不支持此语言。"
+  },
+  "resultTitle": {
+    "message": "翻译结果"
+  },
+  "selectionAction": {
+    "message": "译"
+  },
+  "selectionClose": {
+    "message": "关闭"
+  },
+  "selectionCopy": {
+    "message": "复制"
+  },
+  "selectionDone": {
+    "message": "完成"
+  },
+  "selectionHelp": {
+    "message": "划词后可直接打开迷你翻译器，并在浮窗切换语言"
+  },
+  "selectionMode": {
+    "message": "划词行为"
+  },
+  "selectionModeAuto": {
+    "message": "直接打开翻译浮窗"
+  },
+  "selectionModeButton": {
+    "message": "先显示“译”按钮"
+  },
+  "selectionModeOff": {
+    "message": "关闭划词翻译"
+  },
+  "selectionOriginal": {
+    "message": "原文"
+  },
+  "selectionPin": {
+    "message": "固定"
+  },
+  "selectionPinned": {
+    "message": "已固定；划选其他文字不会替换此浮窗"
+  },
+  "selectionRemotePrivacy": {
+    "message": "远程模式会将这段文字发送出设备"
+  },
+  "selectionResult": {
+    "message": "翻译"
+  },
+  "selectionSpeak": {
+    "message": "朗读"
+  },
+  "selectionTitle": {
+    "message": "网页划词翻译"
+  },
+  "selectionTooLong": {
+    "message": "划选文字过长，最多 5,000 字"
+  },
+  "selectionUnpin": {
+    "message": "取消固定"
+  },
+  "selectionWaiting": {
+    "message": "正在翻译…"
+  },
+  "settingsTitle": {
+    "message": "偏好设置"
+  },
+  "sourceLanguage": {
+    "message": "源语言"
+  },
+  "speak": {
+    "message": "朗读"
+  },
+  "statusDetecting": {
+    "message": "正在判断语言…"
+  },
+  "statusDownloadingModel": {
+    "message": "正在下载本地翻译语言包…"
+  },
+  "statusNativeDone": {
+    "message": "已使用本地模型翻译"
+  },
+  "statusNativeTranslating": {
+    "message": "本地翻译中…"
+  },
+  "statusNeedGesture": {
+    "message": "首次启用本地语言包需要用户操作，请切换语言或点击快捷语言组合。"
+  },
+  "statusNoResult": {
+    "message": "尚未取得翻译结果"
+  },
+  "statusPreparingModel": {
+    "message": "正在准备本地翻译语言包…"
+  },
+  "statusRemoteDisabled": {
+    "message": "此浏览器没有 Translator API，请开启远程备用"
+  },
+  "statusRemoteDone": {
+    "message": "已使用远程兼容模式翻译"
+  },
+  "statusRemoteReady": {
+    "message": "已启用远程兼容翻译"
+  },
+  "statusRemoteTranslating": {
+    "message": "远程兼容模式翻译中…"
+  },
+  "statusSameLanguage": {
+    "message": "源语言与目标语言相同，保留原文"
+  },
+  "statusTranslationFailed": {
+    "message": "翻译失败，请稍后再试。"
+  },
+  "stopSpeak": {
+    "message": "停止朗读"
+  },
+  "swap": {
+    "message": "交换语言"
+  },
+  "targetLanguage": {
+    "message": "目标语言"
+  },
+  "ttsAiOffline": {
+    "message": "浏览器 AI 仍在启动；系统语音可随时备用"
+  },
+  "ttsAiOnline": {
+    "message": "浏览器 AI 声音已安装并可使用"
+  },
+  "ttsAiUnsupportedLanguage": {
+    "message": "Piper AI 没有此语言模型；将自动改用系统语音"
+  },
+  "ttsAiUnsupportedShort": {
+    "message": "此语言没有 AI 模型"
+  },
+  "ttsAiUsing": {
+    "message": "正在使用浏览器神经网络 AI 语音"
+  },
+  "ttsAiVoice": {
+    "message": "AI 声音"
+  },
+  "ttsAiVoiceAuto": {
+    "message": "自动声音"
+  },
+  "ttsEngine": {
+    "message": "语音引擎"
+  },
+  "ttsEngineAiLocal": {
+    "message": "浏览器 AI（自动下载）"
+  },
+  "ttsEngineAuto": {
+    "message": "自动（多语言系统 TTS 优先）"
+  },
+  "ttsEngineSystem": {
+    "message": "系统语音"
+  },
+  "ttsFailed": {
+    "message": "语音播放失败"
+  },
+  "ttsFallbackSystem": {
+    "message": "AI 无法使用，已改用系统语音"
+  },
+  "ttsHelp": {
+    "message": "自动模式优先使用当前浏览器可用的多语言 TTS；会根据翻译目标语言自动选择声音，失败时再使用备用引擎。"
+  },
+  "ttsLocalPrivacy": {
+    "message": "不需要 Docker、localhost、API key 或手动设置。朗读语言默认跟随翻译结果，程序会自动选择匹配声音。"
+  },
+  "ttsNoText": {
+    "message": "没有可朗读的文字"
+  },
+  "ttsQualityNatural": {
+    "message": "高质量"
+  },
+  "ttsSpeed": {
+    "message": "语速"
+  },
+  "ttsStatusChecking": {
+    "message": "正在检查多语言语音…"
+  },
+  "ttsStatusFailed": {
+    "message": "无法检查 TTS 状态"
+  },
+  "ttsStop": {
+    "message": "停止"
+  },
+  "ttsSystemUsing": {
+    "message": "正在使用系统语音"
+  },
+  "ttsSystemVoice": {
+    "message": "系统声音"
+  },
+  "ttsSystemVoiceAuto": {
+    "message": "自动选择最佳声音"
+  },
+  "ttsTest": {
+    "message": "测试"
+  },
+  "ttsTitle": {
+    "message": "自然语音 TTS"
+  },
+  "typingEffect": {
+    "message": "结果逐字显示"
+  },
+  "uiLanguage": {
+    "message": "界面语言"
+  },
+  "uiLocale_auto": {
+    "message": "跟随浏览器"
+  },
+  "versionLabel": {
+    "message": "版本"
+  },
+  "ttsAiPreparing": {
+    "message": "此语言第一次朗读时会自动安装 AI 声音"
+  },
+  "ttsAiWarming": {
+    "message": "正在启动隐藏的浏览器 AI 引擎…"
+  },
+  "ttsAiDownloading": {
+    "message": "正在下载 AI 声音模型… {percent}%"
+  },
+  "ttsSystemReady": {
+    "message": "多语言 TTS 已就绪"
+  },
+  "ttsSystemNoExactVoice": {
+    "message": "系统 TTS 可用；浏览器会按当前语言自动选择合适声音"
+  },
+  "ttsSystemBrowserAuto": {
+    "message": "系统 TTS 可用；浏览器会按当前语言自动选择合适声音"
+  },
+  "ttsVoiceLanguageUnknown": {
+    "message": "未提供语言标记"
+  },
+  "openFullPage": {
+    "message": "完整网页"
+  },
+  "ttsAiLanguagesLoading": {
+    "message": "正在加载 AI 语言列表…"
+  },
+  "ttsAiLanguagesSummary": {
+    "message": "AI 支持 {count} 种翻译语言；展开列表查看全部"
+  },
+  "ttsAiAutoDownload": {
+    "message": "首次使用自动下载声音"
+  },
+  "ttsAiInstalledVoices": {
+    "message": "已安装 {count} 个声音"
+  },
+  "selectionAppearanceTitle": {
+    "message": "划词翻译外观"
+  },
+  "selectionAppearanceHelp": {
+    "message": "调整“译”按钮／小点与大小；颜色沿用上方界面外观"
+  },
+  "selectionTriggerStyle": {
+    "message": "触发样式"
+  },
+  "selectionTriggerStyleLabel": {
+    "message": "显示“译”按钮"
+  },
+  "selectionTriggerStyleDot": {
+    "message": "显示小圆点"
+  },
+  "selectionSurfaceTheme": {
+    "message": "背景"
+  },
+  "selectionSurfaceWhite": {
+    "message": "白色"
+  },
+  "selectionSurfaceBlack": {
+    "message": "黑色"
+  },
+  "selectionTriggerSize": {
+    "message": "按钮／小点大小"
+  },
+  "selectionAccentColor": {
+    "message": "强调色"
+  },
+  "selectionPreviewText": {
+    "message": "划词翻译预览"
+  },
+  "ttsAiTraditionalCompatibleShort": {
+    "message": "普通话 Neural（繁中兼容）"
+  },
+  "ttsAiTraditionalCompatibilityNote": {
+    "message": "繁体中文可使用普通话 Neural 声音直接朗读繁体文字。Piper 目前没有原生 zh-TW 模型，因此 AI 模式会使用兼容的 Mandarin zh-CN 神经声音；系统 TTS 仍优先使用 zh-TW 声音。"
+  },
+  "workspaceTitle": {
+    "message": "RayLingo 完整工作台"
+  },
+  "appearanceTitle": {
+    "message": "界面外观"
+  },
+  "appearanceHelp": {
+    "message": "Popup、完整网页与划词翻译共用背景和强调色；颜色只在这里设置"
+  },
+  "accentColorHelp": {
+    "message": "按钮、Focus、Badge 与划词提示会使用此颜色"
+  },
+  "customAccentColor": {
+    "message": "自定义颜色"
+  },
+  "securityVerified": {
+    "message": "已验证"
+  },
+  "securityLocked": {
+    "message": "已锁定"
+  },
+  "securityLockTitle": {
+    "message": "RayLingo 已安全锁定"
+  },
+  "securityLockBody": {
+    "message": "受保护文件已被更改，或完整性签名无效。请恢复原始签名文件，或使用合法授权重新签名。"
+  },
+  "workspaceLauncherHelp": {
+    "message": "语音、划词、外观、历史与安全设置"
+  },
+  "workspaceNavTranslate": {
+    "message": "翻译"
+  },
+  "workspaceNavLanguage": {
+    "message": "语言"
+  },
+  "workspaceNavTts": {
+    "message": "语音 TTS"
+  },
+  "workspaceNavSelection": {
+    "message": "划词翻译"
+  },
+  "workspaceNavAppearance": {
+    "message": "外观"
+  },
+  "workspaceNavHistory": {
+    "message": "历史"
+  },
+  "workspaceNavEngine": {
+    "message": "翻译引擎"
+  },
+  "workspaceNavSecurity": {
+    "message": "安全与诊断"
+  },
+  "workspaceTranslateDescription": {
+    "message": "即时翻译、原文／译文朗读与复制。"
+  },
+  "workspaceSourceHelp": {
+    "message": "输入或粘贴后自动翻译。"
+  },
+  "workspaceResultHelp": {
+    "message": "结果可直接朗读或复制。"
+  },
+  "workspaceTranslationStatus": {
+    "message": "翻译状态"
+  },
+  "workspaceLanguageDescription": {
+    "message": "管理界面语言与翻译显示方式。"
+  },
+  "workspaceTypingHelp": {
+    "message": "让翻译结果以打字效果显示。"
+  },
+  "workspaceTtsDescription": {
+    "message": "管理多语言系统 TTS、Browser AI 声音与语速。"
+  },
+  "workspaceTtsStatus": {
+    "message": "TTS 状态"
+  },
+  "workspaceSelectionDescription": {
+    "message": "调整划词翻译行为、触发器与大小。"
+  },
+  "workspaceThemeHelp": {
+    "message": "切换 RayLingo 深色／浅色表面。"
+  },
+  "workspaceAccentHelp": {
+    "message": "按钮、Focus、Badge 与品牌亮色。"
+  },
+  "workspaceAccentPresets": {
+    "message": "强调色预设"
+  },
+  "workspaceAccentPresetsHelp": {
+    "message": "RayLingo 内置八组强调色色票。"
+  },
+  "workspaceCustomAccentHelp": {
+    "message": "自定义颜色也会同步 Popup 与划词浮窗。"
+  },
+  "workspaceHistoryHelp": {
+    "message": "关闭后不再加入新的历史记录。"
+  },
+  "workspaceHistoryDescription": {
+    "message": "管理仅保存在本机的翻译历史。"
+  },
+  "workspaceProviderStatus": {
+    "message": "当前翻译引擎"
+  },
+  "workspaceEngineDescription": {
+    "message": "查看当前浏览器的翻译能力与远程备用。"
+  },
+  "workspaceSecurityTitle": {
+    "message": "完整性与防伪"
+  },
+  "workspaceSecurityDescription": {
+    "message": "验证 RayLingo Build 完整性与防伪状态。"
+  },
+  "workspaceSecurityNote": {
+    "message": "合法修改需要独立 AI 授权文件重新签名；授权文件不包含在扩展 ZIP。"
+  },
+  "workspaceDiagnosticsTitle": {
+    "message": "运行状态"
+  },
+  "workspaceDiagnosticsDescription": {
+    "message": "版本、引擎与安全状态集中显示在侧栏与页首。"
+  },
+  "workspaceAppearanceDescription": {
+    "message": "所有背景与强调色只在完整工作台设置。"
+  },
+  "uiLanguageHelp": {
+    "message": "完整网页与划词浮窗会使用此语言"
+  },
+  "updateTitle": {
+    "message": "检查更新"
+  },
+  "updateDescription": {
+    "message": "从官方 GitHub 读取已签名版本信息，不会自行替换扩展代码。"
+  },
+  "updateCheckButton": {
+    "message": "检查更新"
+  },
+  "updateDownloadButton": {
+    "message": "获取新版"
+  },
+  "updateStatusLabel": {
+    "message": "更新状态"
+  },
+  "updateStatusIdle": {
+    "message": "尚未检查"
+  },
+  "updateStatusChecking": {
+    "message": "正在验证更新信息…"
+  },
+  "updateStatusLatest": {
+    "message": "已是最新版 v{version}"
+  },
+  "updateStatusAvailable": {
+    "message": "有新版 v{version}"
+  },
+  "updateStatusFailed": {
+    "message": "更新检查失败"
+  },
+  "updateSigned": {
+    "message": "签名已验证"
+  },
+  "compatTitle": {
+    "message": "浏览器兼容性"
+  },
+  "compatDescription": {
+    "message": "同一核心根据浏览器能力选择后台与 TTS 后端。"
+  },
+  "compatChromium": {
+    "message": "完整 MV3、原生扩展 TTS 与可用时的 Browser AI。"
+  },
+  "compatFirefox": {
+    "message": "使用后台 scripts 与 Web Speech TTS fallback；翻译可使用远程备用。"
+  },
+  "compatSafari": {
+    "message": "共用核心可转换；安装仍需 Apple Safari Web Extension 封装。"
+  },
+  "compatCurrentBrowser": {
+    "message": "当前浏览器"
+  }
+}

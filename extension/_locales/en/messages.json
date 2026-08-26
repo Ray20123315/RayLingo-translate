@@ -1,0 +1,647 @@
+{
+  "autoDetected": {
+    "message": "Detected"
+  },
+  "badgeBrave": {
+    "message": "Cross-browser"
+  },
+  "badgeDisabled": {
+    "message": "Disabled"
+  },
+  "badgeLocal": {
+    "message": "Local first"
+  },
+  "badgeRemote": {
+    "message": "Remote compatible"
+  },
+  "brandSubtitle": {
+    "message": "Live, multilingual, cross-browser"
+  },
+  "clear": {
+    "message": "Clear"
+  },
+  "clearHistory": {
+    "message": "Clear history"
+  },
+  "clipboardReadFailed": {
+    "message": "Could not read the clipboard. Use Ctrl+V instead."
+  },
+  "contextRoot": {
+    "message": "RayLingo Live Translate"
+  },
+  "contextTranslateTo": {
+    "message": "Translate to"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "copyFailed": {
+    "message": "Copy failed. Select the result manually."
+  },
+  "detectedInput": {
+    "message": "Input text"
+  },
+  "emptyHistory": {
+    "message": "No translation history yet"
+  },
+  "extDescription": {
+    "message": "Live multilingual translation, selection mini-translator, multilingual system voices, and optional browser neural AI TTS."
+  },
+  "extName": {
+    "message": "RayLingo Live Translate"
+  },
+  "historyCleared": {
+    "message": "Translation history cleared"
+  },
+  "historyEnabled": {
+    "message": "Save translation history (local only)"
+  },
+  "historyLocal": {
+    "message": "Stored only in this browser"
+  },
+  "historyRestored": {
+    "message": "Translation loaded from history"
+  },
+  "historyTitle": {
+    "message": "Recent translations"
+  },
+  "inputPlaceholder": {
+    "message": "Start typing or paste text to translate automatically…"
+  },
+  "lang_ar": {
+    "message": "Arabic"
+  },
+  "lang_auto": {
+    "message": "Auto detect"
+  },
+  "lang_de": {
+    "message": "German"
+  },
+  "lang_en": {
+    "message": "English"
+  },
+  "lang_es": {
+    "message": "Spanish"
+  },
+  "lang_fr": {
+    "message": "French"
+  },
+  "lang_hi": {
+    "message": "Hindi"
+  },
+  "lang_id": {
+    "message": "Indonesian"
+  },
+  "lang_it": {
+    "message": "Italian"
+  },
+  "lang_ja": {
+    "message": "Japanese"
+  },
+  "lang_ko": {
+    "message": "Korean"
+  },
+  "lang_nl": {
+    "message": "Dutch"
+  },
+  "lang_pl": {
+    "message": "Polish"
+  },
+  "lang_pt": {
+    "message": "Portuguese"
+  },
+  "lang_ru": {
+    "message": "Russian"
+  },
+  "lang_th": {
+    "message": "Thai"
+  },
+  "lang_tr": {
+    "message": "Turkish"
+  },
+  "lang_uk": {
+    "message": "Ukrainian"
+  },
+  "lang_vi": {
+    "message": "Vietnamese"
+  },
+  "lang_zhHans": {
+    "message": "Simplified Chinese"
+  },
+  "lang_zhHant": {
+    "message": "Traditional Chinese"
+  },
+  "paste": {
+    "message": "Paste"
+  },
+  "providerBrave": {
+    "message": "This browser does not expose a built-in Translator API; remote fallback is used when needed"
+  },
+  "providerChecking": {
+    "message": "Checking translation engine…"
+  },
+  "providerNative": {
+    "message": "Translator API is available; supported pairs are processed on-device first"
+  },
+  "providerRemote": {
+    "message": "This browser does not expose Chrome Translator API; remote fallback is used when needed"
+  },
+  "readyInput": {
+    "message": "Translation starts as you type"
+  },
+  "remoteHelp": {
+    "message": "When local Translator API is unavailable, allow text to be sent to Google Translate"
+  },
+  "remoteHelpDisabled": {
+    "message": "Disabled: only an available local Translator API is used"
+  },
+  "remoteHelpEnabled": {
+    "message": "Enabled: translation text may leave your device when needed"
+  },
+  "remoteHttpFailed": {
+    "message": "The remote translation service could not complete the request."
+  },
+  "remoteNoInput": {
+    "message": "There is no text to translate."
+  },
+  "remoteNoText": {
+    "message": "The remote translation service returned no text."
+  },
+  "remoteRateLimited": {
+    "message": "Google Translate is temporarily rate-limiting requests. Try again later."
+  },
+  "remoteResponseChanged": {
+    "message": "The remote translation response format has changed."
+  },
+  "remoteTitle": {
+    "message": "Browser compatibility / remote fallback"
+  },
+  "remoteUnsupported": {
+    "message": "Remote fallback does not support this language."
+  },
+  "resultTitle": {
+    "message": "Translation"
+  },
+  "selectionAction": {
+    "message": "T"
+  },
+  "selectionClose": {
+    "message": "Close"
+  },
+  "selectionCopy": {
+    "message": "Copy"
+  },
+  "selectionDone": {
+    "message": "Done"
+  },
+  "selectionHelp": {
+    "message": "Highlight text to open a mini translator and switch languages inside the floating panel"
+  },
+  "selectionMode": {
+    "message": "Selection behavior"
+  },
+  "selectionModeAuto": {
+    "message": "Open translation panel immediately"
+  },
+  "selectionModeButton": {
+    "message": "Show Translate button first"
+  },
+  "selectionModeOff": {
+    "message": "Disable selection translation"
+  },
+  "selectionOriginal": {
+    "message": "Original"
+  },
+  "selectionPin": {
+    "message": "Pin"
+  },
+  "selectionPinned": {
+    "message": "Pinned; highlighting other text will not replace this panel"
+  },
+  "selectionRemotePrivacy": {
+    "message": "Remote mode sends this text off-device"
+  },
+  "selectionResult": {
+    "message": "Translation"
+  },
+  "selectionSpeak": {
+    "message": "Speak"
+  },
+  "selectionTitle": {
+    "message": "Selection translation"
+  },
+  "selectionTooLong": {
+    "message": "Selection is too long; maximum 5,000 characters"
+  },
+  "selectionUnpin": {
+    "message": "Unpin"
+  },
+  "selectionWaiting": {
+    "message": "Translating…"
+  },
+  "settingsTitle": {
+    "message": "Preferences"
+  },
+  "sourceLanguage": {
+    "message": "Source"
+  },
+  "speak": {
+    "message": "Speak"
+  },
+  "statusDetecting": {
+    "message": "Detecting language…"
+  },
+  "statusDownloadingModel": {
+    "message": "Downloading local translation model…"
+  },
+  "statusNativeDone": {
+    "message": "Translated with the on-device model"
+  },
+  "statusNativeTranslating": {
+    "message": "Translating on device…"
+  },
+  "statusNeedGesture": {
+    "message": "The local language model needs a user gesture the first time. Switch language or click a quick pair."
+  },
+  "statusNoResult": {
+    "message": "No translation result yet"
+  },
+  "statusPreparingModel": {
+    "message": "Preparing local translation model…"
+  },
+  "statusRemoteDisabled": {
+    "message": "This browser has no Translator API; enable remote fallback to translate"
+  },
+  "statusRemoteDone": {
+    "message": "Translated with remote compatibility mode"
+  },
+  "statusRemoteReady": {
+    "message": "Remote-compatible translation is enabled"
+  },
+  "statusRemoteTranslating": {
+    "message": "Translating with remote compatibility mode…"
+  },
+  "statusSameLanguage": {
+    "message": "Source and target are the same; original text kept"
+  },
+  "statusTranslationFailed": {
+    "message": "Translation failed. Try again later."
+  },
+  "stopSpeak": {
+    "message": "Stop speaking"
+  },
+  "swap": {
+    "message": "Swap languages"
+  },
+  "targetLanguage": {
+    "message": "Target"
+  },
+  "ttsAiOffline": {
+    "message": "Browser AI is still starting; system voice is ready as fallback"
+  },
+  "ttsAiOnline": {
+    "message": "Browser AI voice is installed and ready"
+  },
+  "ttsAiUnsupportedLanguage": {
+    "message": "Piper AI does not have a model for this language; system voice will be used"
+  },
+  "ttsAiUnsupportedShort": {
+    "message": "AI model unavailable for this language"
+  },
+  "ttsAiUsing": {
+    "message": "Using browser neural AI voice"
+  },
+  "ttsAiVoice": {
+    "message": "AI voice"
+  },
+  "ttsAiVoiceAuto": {
+    "message": "Automatic voice"
+  },
+  "ttsEngine": {
+    "message": "Voice engine"
+  },
+  "ttsEngineAiLocal": {
+    "message": "Browser AI (automatic download)"
+  },
+  "ttsEngineAuto": {
+    "message": "Auto (multilingual system TTS first)"
+  },
+  "ttsEngineSystem": {
+    "message": "System voice"
+  },
+  "ttsFailed": {
+    "message": "Speech playback failed"
+  },
+  "ttsFallbackSystem": {
+    "message": "AI unavailable; switched to system voice"
+  },
+  "ttsHelp": {
+    "message": "Auto uses the best multilingual TTS available in the current browser and selects a voice for the translation language."
+  },
+  "ttsLocalPrivacy": {
+    "message": "No Docker, localhost service, API key, or manual setup is required. Speech follows the translation result language and selects a matching voice automatically."
+  },
+  "ttsNoText": {
+    "message": "There is no text to read"
+  },
+  "ttsQualityNatural": {
+    "message": "high quality"
+  },
+  "ttsSpeed": {
+    "message": "Speed"
+  },
+  "ttsStatusChecking": {
+    "message": "Checking multilingual speech…"
+  },
+  "ttsStatusFailed": {
+    "message": "Unable to check TTS status"
+  },
+  "ttsStop": {
+    "message": "Stop"
+  },
+  "ttsSystemUsing": {
+    "message": "Using system voice"
+  },
+  "ttsSystemVoice": {
+    "message": "System voice"
+  },
+  "ttsSystemVoiceAuto": {
+    "message": "Automatically choose best voice"
+  },
+  "ttsTest": {
+    "message": "Test"
+  },
+  "ttsTitle": {
+    "message": "Natural voice TTS"
+  },
+  "typingEffect": {
+    "message": "Type-on result animation"
+  },
+  "uiLanguage": {
+    "message": "Interface language"
+  },
+  "uiLocale_auto": {
+    "message": "Follow browser"
+  },
+  "versionLabel": {
+    "message": "Version"
+  },
+  "ttsAiPreparing": {
+    "message": "AI is ready to install this language automatically on first use"
+  },
+  "ttsAiWarming": {
+    "message": "Starting the hidden browser AI engine…"
+  },
+  "ttsAiDownloading": {
+    "message": "Downloading AI voice model… {percent}%"
+  },
+  "ttsSystemReady": {
+    "message": "Multilingual TTS is ready"
+  },
+  "ttsSystemNoExactVoice": {
+    "message": "System TTS is available; the browser will automatically choose the best voice for this language"
+  },
+  "ttsSystemBrowserAuto": {
+    "message": "System TTS is available; the browser will automatically choose a voice for this language"
+  },
+  "ttsVoiceLanguageUnknown": {
+    "message": "language metadata unavailable"
+  },
+  "openFullPage": {
+    "message": "Full page"
+  },
+  "ttsAiLanguagesLoading": {
+    "message": "Loading AI language catalog…"
+  },
+  "ttsAiLanguagesSummary": {
+    "message": "AI supports {count} translation languages; open the list to view all"
+  },
+  "ttsAiAutoDownload": {
+    "message": "Voice downloads automatically on first use"
+  },
+  "ttsAiInstalledVoices": {
+    "message": "{count} voice(s) installed"
+  },
+  "selectionAppearanceTitle": {
+    "message": "Selection translator appearance"
+  },
+  "selectionAppearanceHelp": {
+    "message": "Adjust the Translate button/dot and size. Colors follow the interface appearance above."
+  },
+  "selectionTriggerStyle": {
+    "message": "Trigger style"
+  },
+  "selectionTriggerStyleLabel": {
+    "message": "Show “Translate” button"
+  },
+  "selectionTriggerStyleDot": {
+    "message": "Show a small dot"
+  },
+  "selectionSurfaceTheme": {
+    "message": "Background"
+  },
+  "selectionSurfaceWhite": {
+    "message": "White"
+  },
+  "selectionSurfaceBlack": {
+    "message": "Black"
+  },
+  "selectionTriggerSize": {
+    "message": "Button / dot size"
+  },
+  "selectionAccentColor": {
+    "message": "Accent color"
+  },
+  "selectionPreviewText": {
+    "message": "Selection translator preview"
+  },
+  "ttsAiTraditionalCompatibleShort": {
+    "message": "Mandarin Neural (Traditional-compatible)"
+  },
+  "ttsAiTraditionalCompatibilityNote": {
+    "message": "Traditional Chinese text can be read by the Mandarin neural voice. Piper currently has no native zh-TW model, so Browser AI uses a compatible Mandarin zh-CN model; system TTS still prefers zh-TW voices."
+  },
+  "workspaceTitle": {
+    "message": "RayLingo Workspace"
+  },
+  "appearanceTitle": {
+    "message": "Interface appearance"
+  },
+  "appearanceHelp": {
+    "message": "Popup, Workspace, and selection translation share the same surface and accent colors. Colors are configured only here."
+  },
+  "accentColorHelp": {
+    "message": "Buttons, focus rings, badges, and selection hints use this color."
+  },
+  "customAccentColor": {
+    "message": "Custom color"
+  },
+  "securityVerified": {
+    "message": "Verified"
+  },
+  "securityLocked": {
+    "message": "Locked"
+  },
+  "securityLockTitle": {
+    "message": "RayLingo is locked"
+  },
+  "securityLockBody": {
+    "message": "Protected files changed or the integrity signature is invalid. Restore the original signed files or perform an authorized re-sign."
+  },
+  "workspaceLauncherHelp": {
+    "message": "Voice, selection, appearance, history and security settings"
+  },
+  "workspaceNavTranslate": {
+    "message": "Translate"
+  },
+  "workspaceNavLanguage": {
+    "message": "Language"
+  },
+  "workspaceNavTts": {
+    "message": "Voice TTS"
+  },
+  "workspaceNavSelection": {
+    "message": "Selection"
+  },
+  "workspaceNavAppearance": {
+    "message": "Appearance"
+  },
+  "workspaceNavHistory": {
+    "message": "History"
+  },
+  "workspaceNavEngine": {
+    "message": "Translation engine"
+  },
+  "workspaceNavSecurity": {
+    "message": "Security & diagnostics"
+  },
+  "workspaceTranslateDescription": {
+    "message": "Live translation with source/result speech and copy controls."
+  },
+  "workspaceSourceHelp": {
+    "message": "Translation starts automatically as you type or paste."
+  },
+  "workspaceResultHelp": {
+    "message": "Speak or copy the translated result directly."
+  },
+  "workspaceTranslationStatus": {
+    "message": "Translation status"
+  },
+  "workspaceLanguageDescription": {
+    "message": "Manage interface language and translation presentation."
+  },
+  "workspaceTypingHelp": {
+    "message": "Reveal translated results with a typing effect."
+  },
+  "workspaceTtsDescription": {
+    "message": "Manage multilingual system TTS, Browser AI voices and speed."
+  },
+  "workspaceTtsStatus": {
+    "message": "TTS status"
+  },
+  "workspaceSelectionDescription": {
+    "message": "Configure selection translation behavior, trigger and size."
+  },
+  "workspaceThemeHelp": {
+    "message": "Switch between RayLingo dark and light surfaces."
+  },
+  "workspaceAccentHelp": {
+    "message": "Buttons, focus rings, badges and brand highlights."
+  },
+  "workspaceAccentPresets": {
+    "message": "Accent presets"
+  },
+  "workspaceAccentPresetsHelp": {
+    "message": "RayLingo includes eight built-in accent swatches."
+  },
+  "workspaceCustomAccentHelp": {
+    "message": "Custom colors also sync to the Popup and selection overlay."
+  },
+  "workspaceHistoryHelp": {
+    "message": "When disabled, new translations are not added to history."
+  },
+  "workspaceHistoryDescription": {
+    "message": "Manage translation history stored only in this browser."
+  },
+  "workspaceProviderStatus": {
+    "message": "Current translation engine"
+  },
+  "workspaceEngineDescription": {
+    "message": "Inspect the current browser translation capability and remote fallback."
+  },
+  "workspaceSecurityTitle": {
+    "message": "Integrity & authenticity"
+  },
+  "workspaceSecurityDescription": {
+    "message": "Verify RayLingo build integrity and anti-tamper status."
+  },
+  "workspaceSecurityNote": {
+    "message": "Authorized changes require the separate AI authorization file to re-sign; that file is not bundled in the extension ZIP."
+  },
+  "workspaceDiagnosticsTitle": {
+    "message": "Runtime status"
+  },
+  "workspaceDiagnosticsDescription": {
+    "message": "Version, engine and security status are consolidated in the sidebar and header."
+  },
+  "workspaceAppearanceDescription": {
+    "message": "Background and accent colors are configured only in the full Workspace."
+  },
+  "uiLanguageHelp": {
+    "message": "The full Workspace and selection overlay use this interface language."
+  },
+  "updateTitle": {
+    "message": "Check for updates"
+  },
+  "updateDescription": {
+    "message": "Reads signed version metadata from the official GitHub repository and never replaces extension code by itself."
+  },
+  "updateCheckButton": {
+    "message": "Check for updates"
+  },
+  "updateDownloadButton": {
+    "message": "Get new version"
+  },
+  "updateStatusLabel": {
+    "message": "Update status"
+  },
+  "updateStatusIdle": {
+    "message": "Not checked yet"
+  },
+  "updateStatusChecking": {
+    "message": "Verifying update metadata…"
+  },
+  "updateStatusLatest": {
+    "message": "Up to date v{version}"
+  },
+  "updateStatusAvailable": {
+    "message": "New version v{version}"
+  },
+  "updateStatusFailed": {
+    "message": "Update check failed"
+  },
+  "updateSigned": {
+    "message": "Signature verified"
+  },
+  "compatTitle": {
+    "message": "Browser compatibility"
+  },
+  "compatDescription": {
+    "message": "The shared core selects background and TTS backends based on browser capabilities."
+  },
+  "compatChromium": {
+    "message": "Full MV3, extension TTS, and Browser AI when available."
+  },
+  "compatFirefox": {
+    "message": "Uses background scripts and Web Speech TTS fallback; translation can use remote fallback."
+  },
+  "compatSafari": {
+    "message": "Shared core is convertible; installation still requires Apple Safari Web Extension packaging."
+  },
+  "compatCurrentBrowser": {
+    "message": "Current browser"
+  }
+}

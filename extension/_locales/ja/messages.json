@@ -1,0 +1,647 @@
+{
+  "autoDetected": {
+    "message": "検出"
+  },
+  "badgeBrave": {
+    "message": "クロスブラウザー"
+  },
+  "badgeDisabled": {
+    "message": "無効"
+  },
+  "badgeLocal": {
+    "message": "ローカル優先"
+  },
+  "badgeRemote": {
+    "message": "リモート対応"
+  },
+  "brandSubtitle": {
+    "message": "リアルタイム・多言語・クロスブラウザー"
+  },
+  "clear": {
+    "message": "クリア"
+  },
+  "clearHistory": {
+    "message": "履歴を削除"
+  },
+  "clipboardReadFailed": {
+    "message": "クリップボードを読み取れません。Ctrl+V を使用してください。"
+  },
+  "contextRoot": {
+    "message": "RayLingo リアルタイム翻訳"
+  },
+  "contextTranslateTo": {
+    "message": "翻訳先"
+  },
+  "copied": {
+    "message": "コピー済み"
+  },
+  "copy": {
+    "message": "コピー"
+  },
+  "copyFailed": {
+    "message": "コピーできませんでした。結果を手動で選択してください。"
+  },
+  "detectedInput": {
+    "message": "テキストを入力"
+  },
+  "emptyHistory": {
+    "message": "翻訳履歴はまだありません"
+  },
+  "extDescription": {
+    "message": "リアルタイム多言語翻訳、選択ミニ翻訳、多言語システム音声、任意のブラウザ内ニューラル AI TTS。"
+  },
+  "extName": {
+    "message": "RayLingo リアルタイム翻訳"
+  },
+  "historyCleared": {
+    "message": "翻訳履歴を削除しました"
+  },
+  "historyEnabled": {
+    "message": "翻訳履歴を保存（端末内のみ）"
+  },
+  "historyLocal": {
+    "message": "このブラウザ内のみに保存"
+  },
+  "historyRestored": {
+    "message": "履歴から翻訳を読み込みました"
+  },
+  "historyTitle": {
+    "message": "最近の翻訳"
+  },
+  "inputPlaceholder": {
+    "message": "入力または貼り付けると自動で翻訳します…"
+  },
+  "lang_ar": {
+    "message": "アラビア語"
+  },
+  "lang_auto": {
+    "message": "自動検出"
+  },
+  "lang_de": {
+    "message": "ドイツ語"
+  },
+  "lang_en": {
+    "message": "英語"
+  },
+  "lang_es": {
+    "message": "スペイン語"
+  },
+  "lang_fr": {
+    "message": "フランス語"
+  },
+  "lang_hi": {
+    "message": "ヒンディー語"
+  },
+  "lang_id": {
+    "message": "インドネシア語"
+  },
+  "lang_it": {
+    "message": "イタリア語"
+  },
+  "lang_ja": {
+    "message": "日本語"
+  },
+  "lang_ko": {
+    "message": "韓国語"
+  },
+  "lang_nl": {
+    "message": "オランダ語"
+  },
+  "lang_pl": {
+    "message": "ポーランド語"
+  },
+  "lang_pt": {
+    "message": "ポルトガル語"
+  },
+  "lang_ru": {
+    "message": "ロシア語"
+  },
+  "lang_th": {
+    "message": "タイ語"
+  },
+  "lang_tr": {
+    "message": "トルコ語"
+  },
+  "lang_uk": {
+    "message": "ウクライナ語"
+  },
+  "lang_vi": {
+    "message": "ベトナム語"
+  },
+  "lang_zhHans": {
+    "message": "簡体字中国語"
+  },
+  "lang_zhHant": {
+    "message": "繁体字中国語"
+  },
+  "paste": {
+    "message": "貼り付け"
+  },
+  "providerBrave": {
+    "message": "このブラウザーは内蔵 Translator API を公開していないため、必要に応じてリモートを使用します"
+  },
+  "providerChecking": {
+    "message": "翻訳エンジンを確認中…"
+  },
+  "providerNative": {
+    "message": "Translator API が利用可能です。対応言語は端末内処理を優先します"
+  },
+  "providerRemote": {
+    "message": "このブラウザは Chrome Translator API を公開していないため、必要に応じてリモートを使用します"
+  },
+  "readyInput": {
+    "message": "入力すると自動翻訳します"
+  },
+  "remoteHelp": {
+    "message": "ローカル Translator API がない場合、Google Translate への送信を許可します"
+  },
+  "remoteHelpDisabled": {
+    "message": "無効：利用可能なローカル Translator API のみ使用します"
+  },
+  "remoteHelpEnabled": {
+    "message": "有効：必要な場合は翻訳文が端末外へ送信されます"
+  },
+  "remoteHttpFailed": {
+    "message": "リモート翻訳サービスがリクエストを完了できませんでした。"
+  },
+  "remoteNoInput": {
+    "message": "翻訳するテキストがありません。"
+  },
+  "remoteNoText": {
+    "message": "リモート翻訳からテキストが返されませんでした。"
+  },
+  "remoteRateLimited": {
+    "message": "Google Translate により一時的にリクエストが制限されています。後でもう一度お試しください。"
+  },
+  "remoteResponseChanged": {
+    "message": "リモート翻訳の応答形式が変更されました。"
+  },
+  "remoteTitle": {
+    "message": "ブラウザー互換／リモートフォールバック"
+  },
+  "remoteUnsupported": {
+    "message": "リモートフォールバックはこの言語に対応していません。"
+  },
+  "resultTitle": {
+    "message": "翻訳結果"
+  },
+  "selectionAction": {
+    "message": "訳"
+  },
+  "selectionClose": {
+    "message": "閉じる"
+  },
+  "selectionCopy": {
+    "message": "コピー"
+  },
+  "selectionDone": {
+    "message": "完了"
+  },
+  "selectionHelp": {
+    "message": "テキストを選択するとミニ翻訳を開き、浮動パネル内で言語を変更できます"
+  },
+  "selectionMode": {
+    "message": "選択時の動作"
+  },
+  "selectionModeAuto": {
+    "message": "翻訳パネルをすぐ開く"
+  },
+  "selectionModeButton": {
+    "message": "先に「訳」ボタンを表示"
+  },
+  "selectionModeOff": {
+    "message": "選択翻訳を無効化"
+  },
+  "selectionOriginal": {
+    "message": "原文"
+  },
+  "selectionPin": {
+    "message": "固定"
+  },
+  "selectionPinned": {
+    "message": "固定中。別のテキスト選択ではこのパネルを置き換えません"
+  },
+  "selectionRemotePrivacy": {
+    "message": "リモートモードではこのテキストが端末外へ送信されます"
+  },
+  "selectionResult": {
+    "message": "翻訳"
+  },
+  "selectionSpeak": {
+    "message": "読み上げ"
+  },
+  "selectionTitle": {
+    "message": "選択テキスト翻訳"
+  },
+  "selectionTooLong": {
+    "message": "選択文字が長すぎます。最大 5,000 文字です"
+  },
+  "selectionUnpin": {
+    "message": "固定解除"
+  },
+  "selectionWaiting": {
+    "message": "翻訳中…"
+  },
+  "settingsTitle": {
+    "message": "設定"
+  },
+  "sourceLanguage": {
+    "message": "原文の言語"
+  },
+  "speak": {
+    "message": "読み上げ"
+  },
+  "statusDetecting": {
+    "message": "言語を判定中…"
+  },
+  "statusDownloadingModel": {
+    "message": "ローカル翻訳モデルをダウンロード中…"
+  },
+  "statusNativeDone": {
+    "message": "端末内モデルで翻訳しました"
+  },
+  "statusNativeTranslating": {
+    "message": "端末内で翻訳中…"
+  },
+  "statusNeedGesture": {
+    "message": "初回のローカルモデル有効化には操作が必要です。言語を切り替えるかクイックペアを押してください。"
+  },
+  "statusNoResult": {
+    "message": "翻訳結果はまだありません"
+  },
+  "statusPreparingModel": {
+    "message": "ローカル翻訳モデルを準備中…"
+  },
+  "statusRemoteDisabled": {
+    "message": "Translator API がありません。リモートフォールバックを有効にしてください"
+  },
+  "statusRemoteDone": {
+    "message": "リモート互換モードで翻訳しました"
+  },
+  "statusRemoteReady": {
+    "message": "リモート互換翻訳が有効です"
+  },
+  "statusRemoteTranslating": {
+    "message": "リモート互換モードで翻訳中…"
+  },
+  "statusSameLanguage": {
+    "message": "原文と翻訳先が同じため、原文を表示します"
+  },
+  "statusTranslationFailed": {
+    "message": "翻訳に失敗しました。後でもう一度お試しください。"
+  },
+  "stopSpeak": {
+    "message": "読み上げ停止"
+  },
+  "swap": {
+    "message": "言語を入れ替え"
+  },
+  "targetLanguage": {
+    "message": "翻訳先"
+  },
+  "ttsAiOffline": {
+    "message": "ブラウザ AI を起動中です。システム音声はフォールバックとして利用できます"
+  },
+  "ttsAiOnline": {
+    "message": "ブラウザ AI 音声はインストール済みで使用できます"
+  },
+  "ttsAiUnsupportedLanguage": {
+    "message": "Piper AI にこの言語モデルがないため、システム音声を使用します"
+  },
+  "ttsAiUnsupportedShort": {
+    "message": "この言語の AI モデルはありません"
+  },
+  "ttsAiUsing": {
+    "message": "ブラウザ内ニューラル AI 音声を使用中"
+  },
+  "ttsAiVoice": {
+    "message": "AI 音声"
+  },
+  "ttsAiVoiceAuto": {
+    "message": "自動音声"
+  },
+  "ttsEngine": {
+    "message": "音声エンジン"
+  },
+  "ttsEngineAiLocal": {
+    "message": "ブラウザ AI（自動ダウンロード）"
+  },
+  "ttsEngineAuto": {
+    "message": "自動（多言語システム TTS 優先）"
+  },
+  "ttsEngineSystem": {
+    "message": "システム音声"
+  },
+  "ttsFailed": {
+    "message": "音声再生に失敗しました"
+  },
+  "ttsFallbackSystem": {
+    "message": "AI を使用できないためシステム音声に切り替えました"
+  },
+  "ttsHelp": {
+    "message": "自動モードは現在のブラウザーで利用できる多言語 TTS を優先し、翻訳先言語に合わせて音声を選択します。"
+  },
+  "ttsLocalPrivacy": {
+    "message": "Docker、localhost、API キー、手動設定は不要です。読み上げ言語は翻訳結果に追従し、適切な音声を自動選択します。"
+  },
+  "ttsNoText": {
+    "message": "読み上げるテキストがありません"
+  },
+  "ttsQualityNatural": {
+    "message": "高品質"
+  },
+  "ttsSpeed": {
+    "message": "速度"
+  },
+  "ttsStatusChecking": {
+    "message": "多言語音声を確認中…"
+  },
+  "ttsStatusFailed": {
+    "message": "TTS 状態を確認できません"
+  },
+  "ttsStop": {
+    "message": "停止"
+  },
+  "ttsSystemUsing": {
+    "message": "システム音声を使用中"
+  },
+  "ttsSystemVoice": {
+    "message": "システム音声"
+  },
+  "ttsSystemVoiceAuto": {
+    "message": "最適な音声を自動選択"
+  },
+  "ttsTest": {
+    "message": "テスト"
+  },
+  "ttsTitle": {
+    "message": "自然音声 TTS"
+  },
+  "typingEffect": {
+    "message": "結果をタイプ表示"
+  },
+  "uiLanguage": {
+    "message": "表示言語"
+  },
+  "uiLocale_auto": {
+    "message": "ブラウザに合わせる"
+  },
+  "versionLabel": {
+    "message": "バージョン"
+  },
+  "ttsAiPreparing": {
+    "message": "この言語は初回読み上げ時に AI 音声を自動インストールします"
+  },
+  "ttsAiWarming": {
+    "message": "非表示のブラウザ AI エンジンを起動中…"
+  },
+  "ttsAiDownloading": {
+    "message": "AI 音声モデルをダウンロード中… {percent}%"
+  },
+  "ttsSystemReady": {
+    "message": "多言語 TTS を使用できます"
+  },
+  "ttsSystemNoExactVoice": {
+    "message": "システム TTS を利用できます。ブラウザが現在の言語に合う音声を自動選択します"
+  },
+  "ttsSystemBrowserAuto": {
+    "message": "システム TTS を利用できます。ブラウザが現在の言語に合う音声を自動選択します"
+  },
+  "ttsVoiceLanguageUnknown": {
+    "message": "言語情報なし"
+  },
+  "openFullPage": {
+    "message": "フルページ"
+  },
+  "ttsAiLanguagesLoading": {
+    "message": "AI 言語一覧を読み込み中…"
+  },
+  "ttsAiLanguagesSummary": {
+    "message": "AI は {count} の翻訳言語に対応；一覧を開いてすべて表示"
+  },
+  "ttsAiAutoDownload": {
+    "message": "初回利用時に音声を自動ダウンロード"
+  },
+  "ttsAiInstalledVoices": {
+    "message": "{count} 個の音声をインストール済み"
+  },
+  "selectionAppearanceTitle": {
+    "message": "選択翻訳の外観"
+  },
+  "selectionAppearanceHelp": {
+    "message": "「譯」ボタン／ドットとサイズを調整します。色は上のインターフェース外観を使用します。"
+  },
+  "selectionTriggerStyle": {
+    "message": "トリガー表示"
+  },
+  "selectionTriggerStyleLabel": {
+    "message": "「訳」ボタンを表示"
+  },
+  "selectionTriggerStyleDot": {
+    "message": "小さなドットを表示"
+  },
+  "selectionSurfaceTheme": {
+    "message": "背景"
+  },
+  "selectionSurfaceWhite": {
+    "message": "白"
+  },
+  "selectionSurfaceBlack": {
+    "message": "黒"
+  },
+  "selectionTriggerSize": {
+    "message": "ボタン／ドットのサイズ"
+  },
+  "selectionAccentColor": {
+    "message": "アクセント色"
+  },
+  "selectionPreviewText": {
+    "message": "選択翻訳プレビュー"
+  },
+  "ttsAiTraditionalCompatibleShort": {
+    "message": "中国語 Neural（繁体字対応）"
+  },
+  "ttsAiTraditionalCompatibilityNote": {
+    "message": "繁体字中国語は Mandarin Neural 音声で読み上げできます。Piper には現在ネイティブ zh-TW モデルがないため、Browser AI は互換性のある zh-CN モデルを使用し、システム TTS は引き続き zh-TW 音声を優先します。"
+  },
+  "workspaceTitle": {
+    "message": "RayLingo ワークスペース"
+  },
+  "appearanceTitle": {
+    "message": "インターフェース外観"
+  },
+  "appearanceHelp": {
+    "message": "Popup、Workspace、選択翻訳で背景色とアクセント色を共有します。色の設定はここだけで行います。"
+  },
+  "accentColorHelp": {
+    "message": "ボタン、Focus、Badge、選択ヒントにこの色を使用します。"
+  },
+  "customAccentColor": {
+    "message": "カスタム色"
+  },
+  "securityVerified": {
+    "message": "検証済み"
+  },
+  "securityLocked": {
+    "message": "ロック中"
+  },
+  "securityLockTitle": {
+    "message": "RayLingo はロックされています"
+  },
+  "securityLockBody": {
+    "message": "保護ファイルが変更されたか、整合性署名が無効です。署名済みファイルを復元するか、正規の認証で再署名してください。"
+  },
+  "workspaceLauncherHelp": {
+    "message": "音声・選択翻訳・外観・履歴・セキュリティ設定"
+  },
+  "workspaceNavTranslate": {
+    "message": "翻訳"
+  },
+  "workspaceNavLanguage": {
+    "message": "言語"
+  },
+  "workspaceNavTts": {
+    "message": "音声 TTS"
+  },
+  "workspaceNavSelection": {
+    "message": "選択翻訳"
+  },
+  "workspaceNavAppearance": {
+    "message": "外観"
+  },
+  "workspaceNavHistory": {
+    "message": "履歴"
+  },
+  "workspaceNavEngine": {
+    "message": "翻訳エンジン"
+  },
+  "workspaceNavSecurity": {
+    "message": "セキュリティと診断"
+  },
+  "workspaceTranslateDescription": {
+    "message": "リアルタイム翻訳、原文／訳文の読み上げとコピー。"
+  },
+  "workspaceSourceHelp": {
+    "message": "入力または貼り付けると自動翻訳します。"
+  },
+  "workspaceResultHelp": {
+    "message": "翻訳結果を直接読み上げ・コピーできます。"
+  },
+  "workspaceTranslationStatus": {
+    "message": "翻訳状態"
+  },
+  "workspaceLanguageDescription": {
+    "message": "UI 言語と翻訳表示を管理します。"
+  },
+  "workspaceTypingHelp": {
+    "message": "翻訳結果をタイプ表示します。"
+  },
+  "workspaceTtsDescription": {
+    "message": "多言語システム TTS、Browser AI 音声、速度を管理します。"
+  },
+  "workspaceTtsStatus": {
+    "message": "TTS 状態"
+  },
+  "workspaceSelectionDescription": {
+    "message": "選択翻訳の動作、トリガー、サイズを調整します。"
+  },
+  "workspaceThemeHelp": {
+    "message": "RayLingo のダーク／ライト表面を切り替えます。"
+  },
+  "workspaceAccentHelp": {
+    "message": "ボタン、Focus、Badge、ブランドの強調色。"
+  },
+  "workspaceAccentPresets": {
+    "message": "アクセントプリセット"
+  },
+  "workspaceAccentPresetsHelp": {
+    "message": "RayLingo 内蔵の 8 色アクセントです。"
+  },
+  "workspaceCustomAccentHelp": {
+    "message": "カスタム色は Popup と選択翻訳にも同期します。"
+  },
+  "workspaceHistoryHelp": {
+    "message": "オフにすると新しい翻訳を履歴へ追加しません。"
+  },
+  "workspaceHistoryDescription": {
+    "message": "このブラウザ内だけに保存される翻訳履歴を管理します。"
+  },
+  "workspaceProviderStatus": {
+    "message": "現在の翻訳エンジン"
+  },
+  "workspaceEngineDescription": {
+    "message": "現在のブラウザーの翻訳能力とリモートフォールバックを確認します。"
+  },
+  "workspaceSecurityTitle": {
+    "message": "整合性と真正性"
+  },
+  "workspaceSecurityDescription": {
+    "message": "RayLingo Build の整合性と改ざん防止状態を検証します。"
+  },
+  "workspaceSecurityNote": {
+    "message": "正規の変更には別の AI 認可ファイルで再署名が必要です。認可ファイルは拡張 ZIP に含まれません。"
+  },
+  "workspaceDiagnosticsTitle": {
+    "message": "実行状態"
+  },
+  "workspaceDiagnosticsDescription": {
+    "message": "バージョン、エンジン、安全状態をサイドバーとヘッダーに集約します。"
+  },
+  "workspaceAppearanceDescription": {
+    "message": "背景とアクセント色は完全版 Workspace でのみ設定します。"
+  },
+  "uiLanguageHelp": {
+    "message": "完全版 Workspace と選択翻訳ポップアップで使用する UI 言語です。"
+  },
+  "updateTitle": {
+    "message": "更新を確認"
+  },
+  "updateDescription": {
+    "message": "公式 GitHub から署名済みバージョン情報を読み取り、拡張コードを自動置換しません。"
+  },
+  "updateCheckButton": {
+    "message": "更新を確認"
+  },
+  "updateDownloadButton": {
+    "message": "新版を取得"
+  },
+  "updateStatusLabel": {
+    "message": "更新状態"
+  },
+  "updateStatusIdle": {
+    "message": "未確認"
+  },
+  "updateStatusChecking": {
+    "message": "更新情報を検証中…"
+  },
+  "updateStatusLatest": {
+    "message": "最新版 v{version}"
+  },
+  "updateStatusAvailable": {
+    "message": "新版 v{version}"
+  },
+  "updateStatusFailed": {
+    "message": "更新確認に失敗"
+  },
+  "updateSigned": {
+    "message": "署名確認済み"
+  },
+  "compatTitle": {
+    "message": "ブラウザー互換性"
+  },
+  "compatDescription": {
+    "message": "共通コアがブラウザー機能に応じて背景処理と TTS を選択します。"
+  },
+  "compatChromium": {
+    "message": "完全な MV3、拡張 TTS、利用可能な場合は Browser AI。"
+  },
+  "compatFirefox": {
+    "message": "background scripts と Web Speech TTS fallback を使用します。"
+  },
+  "compatSafari": {
+    "message": "共通コアは変換可能ですが、Apple の Safari Web Extension パッケージが必要です。"
+  },
+  "compatCurrentBrowser": {
+    "message": "現在のブラウザー"
+  }
+}

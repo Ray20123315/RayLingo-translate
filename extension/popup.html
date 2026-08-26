@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RayLingo</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body data-page-mode="popup">
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">文</div>
+        <div class="brand-copy">
+          <h1>RayLingo</h1>
+          <p data-i18n="brandSubtitle">即時、多語、跨瀏覽器</p>
+        </div>
+      </div>
+      <span class="studio-badge">TRANSLATE</span>
+    </header>
+
+    <section class="section translator-card">
+      <div class="language-row">
+        <label class="select-wrap">
+          <span data-i18n="sourceLanguage">來源語言</span>
+          <select id="sourceLanguage"></select>
+        </label>
+        <button id="swapButton" class="icon-button" type="button" data-i18n-title="swap" title="交換語言" aria-label="Swap">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11m0 0-3-3m3 3-3 3M17 17H6m0 0 3 3m-3-3 3-3"/></svg>
+        </button>
+        <label class="select-wrap">
+          <span data-i18n="targetLanguage">目標語言</span>
+          <select id="targetLanguage"></select>
+        </label>
+      </div>
+
+      <div id="quickPairs" class="quick-pairs"></div>
+
+      <div class="text-panel input-panel">
+        <div class="panel-heading">
+          <span id="detectedLabel" data-i18n="detectedInput">輸入文字</span>
+          <div class="result-actions">
+            <button id="sourceSpeakButton" class="action-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h4l5 4V6l-5 4H5zM17 9c1.3 1.6 1.3 4.4 0 6M19.5 7c2.5 2.8 2.5 7.2 0 10"/></svg>
+              <span id="sourceSpeakButtonLabel" data-i18n="speak">朗讀</span>
+            </button>
+            <button id="sourceCopyButton" class="action-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h10v10H9zM5 5h10v4M5 5v10h4"/></svg>
+              <span data-i18n="copy">複製</span>
+            </button>
+            <button id="clearButton" class="action-button danger-soft" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>
+              <span data-i18n="clear">清除</span>
+            </button>
+          </div>
+        </div>
+        <textarea id="sourceText" maxlength="12000" spellcheck="false" data-i18n-placeholder="inputPlaceholder" placeholder="開始輸入或貼上文字，將自動翻譯…"></textarea>
+        <div class="panel-footer">
+          <span id="charCount">0 / 12,000</span>
+          <button id="pasteButton" class="text-button" type="button" data-i18n="paste">貼上</button>
+        </div>
+      </div>
+
+      <div class="status-line" aria-live="polite">
+        <span class="status-dot"></span>
+        <span id="statusText" data-i18n="readyInput">輸入文字後會自動翻譯</span>
+        <span id="progressText" class="progress-text"></span>
+      </div>
+
+      <div class="text-panel output-panel">
+        <div class="panel-heading">
+          <span data-i18n="resultTitle">翻譯結果</span>
+          <div class="result-actions">
+            <button id="speakButton" class="action-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h4l5 4V6l-5 4H5zM17 9c1.3 1.6 1.3 4.4 0 6M19.5 7c2.5 2.8 2.5 7.2 0 10"/></svg>
+              <span id="speakButtonLabel" data-i18n="speak">朗讀</span>
+            </button>
+            <button id="copyButton" class="action-button" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 9h10v10H9zM5 5h10v4M5 5v10h4"/></svg>
+              <span data-i18n="copy">複製</span>
+            </button>
+          </div>
+        </div>
+        <div id="translatedText" class="translated-text placeholder" tabindex="0">—</div>
+      </div>
+    </section>
+
+    <div class="options-cta">
+      <button id="openAppButton" type="button">
+        <span data-i18n="openFullPage">完整網頁</span>
+        <small data-i18n="workspaceLauncherHelp">語音、反白、外觀、歷史與安全設定</small>
+        <b aria-hidden="true">›</b>
+      </button>
+    </div>
+
+    <footer class="popup-footer">
+      <div class="runtime-copy">
+        <span id="providerNote" data-i18n="providerChecking">正在檢查翻譯引擎…</span>
+        <small>RayLingo Studio UI</small>
+      </div>
+      <div class="footer-badges">
+        <span id="apiBadge" class="api-badge">…</span>
+        <span id="integrityBadge" class="integrity-badge" data-state="checking">…</span>
+        <span id="appVersion" class="version-badge">v0.4.8</span>
+      </div>
+    </footer>
+  </main>
+  <script src="platform-compat.js"></script>
+  <script src="integrity-client.js"></script>
+  <script src="language-registry.js"></script>
+  <script src="ui-i18n.js"></script>
+  <script src="translator-engine.js"></script>
+  <script src="tts-registry.js"></script>
+  <script src="selection-appearance.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
