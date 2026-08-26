@@ -1,0 +1,75 @@
+name: Materialize RayLingo v0.4.8
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/materialize-v0.4.8.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and verify signed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat \
+            .release_chunks/source-00.b64 \
+            .release_chunks/source-01a.b64 .release_chunks/source-01b.b64 .release_chunks/source-01c.b64 .release_chunks/source-01d.b64 \
+            .release_chunks/source-02a.b64 .release_chunks/source-02b.b64 .release_chunks/source-02c.b64 .release_chunks/source-02d.b64 \
+            .release_chunks/source-03.b64 \
+            .release_chunks/source-04a.b64 .release_chunks/source-04b.b64 .release_chunks/source-04c.b64 .release_chunks/source-04d.b64 \
+            .release_chunks/source-05.b64 \
+            .release_chunks/source-06a.b64 .release_chunks/source-06b.b64 .release_chunks/source-06c.b64 .release_chunks/source-06d.b64 \
+            .release_chunks/source-07a.b64 .release_chunks/source-07b.b64 .release_chunks/source-07c.b64 .release_chunks/source-07d.b64 \
+            .release_chunks/source-08a.b64 .release_chunks/source-08b.b64 \
+            > /tmp/raylingo-source.b64
+          base64 --decode /tmp/raylingo-source.b64 > /tmp/RayLingo_v0.4.8_source.zip
+          echo '18dc6bcddb91340ded58c5033a55bf35c33a2fdf6ccb3d91d46d0321541462fa  /tmp/RayLingo_v0.4.8_source.zip' | sha256sum -c -
+          rm -rf /tmp/raylingo-src
+          mkdir -p /tmp/raylingo-src
+          unzip -q /tmp/RayLingo_v0.4.8_source.zip -d /tmp/raylingo-src
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('/tmp/raylingo-src')
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest['version']=='0.4.8', manifest['version']
+          for name in ['manifest.firefox.json','manifest.safari.json','integrity-manifest.json','update-checker.js']:
+              assert (root/name).is_file(), name
+          print('source-contract PASS')
+          PY
+
+      - name: Materialize repository layout
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf extension platform
+          mkdir -p extension platform updates
+          cp -a /tmp/raylingo-src/. extension/
+          mv extension/manifest.firefox.json platform/manifest.firefox.json
+          mv extension/manifest.safari.json platform/manifest.safari.json
+          cp /tmp/raylingo-src/README.md README.md
+          cp /tmp/raylingo-src/SECURITY.md SECURITY.md
+          cp /tmp/raylingo-src/BROWSER_COMPATIBILITY.md BROWSER_COMPATIBILITY.md
+          cp /tmp/raylingo-src/THIRD_PARTY_NOTICES.md THIRD_PARTY_NOTICES.md
+          rm -rf .release_chunks
+
+      - name: Commit verified v0.4.8 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'RayLingo Release Bot'
+          git config user.email '150588882+Ray20123315@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'Materialize verified RayLingo v0.4.8 source'
+          git push origin HEAD:main
