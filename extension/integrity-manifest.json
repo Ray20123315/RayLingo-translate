@@ -137,7 +137,7 @@
       },
       {
         "path": "popup.js",
-          "sha256": "2eae19bcf92aa53be984e1eaefed2e348674898126e176651e49988d92e84533",
+        "sha256": "2eae19bcf92aa53be984e1eaefed2e348674898126e176651e49988d92e84533",
         "size": 46972
       },
       {
@@ -188,5 +188,5 @@
     ],
     "version": "0.5.1"
   },
-  "signature": "vCyEcgTZxV2D2ZA2XAEKdmvogetV7k+365ynnI2om91bfct7ZJMFzcFgIDL+Pnoq3gistdBmAhaak4vgpw3fDg=="
+  "signature": "vCyEcgTZxV2D2ZA2YAEKdmvogetV7k+365ynnI2om91bfct7ZJMFzcFgIDL+Pnoq3gistdBmAhaak4vgpw3fDg=="
 }

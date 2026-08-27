@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/publish-v0.5.1-release.yml'
+      - 'extension/**'
+      - 'platform/**'
+      - '.release_meta/**'
+      - 'updates/latest.json'
   workflow_dispatch:
 
 permissions:
