@@ -1,0 +1,144 @@
+name: Publish RayLingo v0.4.8 Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-v0.4.8-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build platform packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import json; print(json.load(open("extension/manifest.json"))["version"])')" = "0.4.8"
+          rm -rf release-work
+          mkdir -p release-work/{chromium,firefox,safari,source}
+
+          cp -a extension/. release-work/chromium/
+
+          cp -a extension/. release-work/firefox/
+          rm -f release-work/firefox/offscreen.html release-work/firefox/offscreen.js release-work/firefox/piper-autoinstall.js
+          cp platform/manifest.firefox.json release-work/firefox/manifest.json
+          cp .release_meta/firefox-integrity-v0.4.8.json release-work/firefox/integrity-manifest.json
+
+          cp -a extension/. release-work/safari/
+          rm -f release-work/safari/offscreen.html release-work/safari/offscreen.js release-work/safari/piper-autoinstall.js
+          cp platform/manifest.safari.json release-work/safari/manifest.json
+          cp .release_meta/safari-integrity-v0.4.8.json release-work/safari/integrity-manifest.json
+
+          cp -a extension/. release-work/source/
+          cp platform/manifest.firefox.json release-work/source/manifest.firefox.json
+          cp platform/manifest.safari.json release-work/source/manifest.safari.json
+
+          test "$(find release-work/chromium -type f | wc -l)" -eq 37
+          test "$(find release-work/firefox -type f | wc -l)" -eq 34
+          test "$(find release-work/safari -type f | wc -l)" -eq 34
+          test "$(find release-work/source -type f | wc -l)" -eq 39
+
+      - name: Verify signed package integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+          const crypto = require('crypto');
+          const PUBLIC_KEY_B64 = 'aX2fqaYF7j0JcRbVDUkkqpYicLimgnhN90znvhO0RUE=';
+          const KEY_ID = 'ed25519-sha256:c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a';
+          function canonicalize(value){
+            if(Array.isArray(value)) return '[' + value.map(canonicalize).join(',') + ']';
+            if(value && typeof value === 'object') return '{' + Object.keys(value).sort().map(k => JSON.stringify(k)+':'+canonicalize(value[k])).join(',') + '}';
+            return JSON.stringify(value);
+          }
+          async function verifyPackage(root){
+            const manifest = JSON.parse(fs.readFileSync(path.join(root,'integrity-manifest.json'),'utf8'));
+            if(manifest.algorithm !== 'Ed25519' || manifest.keyId !== KEY_ID || manifest.signed.version !== '0.4.8') throw new Error(`${root}: metadata mismatch`);
+            for(const entry of manifest.signed.files){
+              const p = path.join(root, entry.path);
+              const buf = fs.readFileSync(p);
+              const digest = crypto.createHash('sha256').update(buf).digest('hex');
+              if(buf.length !== entry.size || digest !== entry.sha256) throw new Error(`${root}: hash mismatch ${entry.path}`);
+            }
+            const key = await crypto.webcrypto.subtle.importKey('raw', Buffer.from(PUBLIC_KEY_B64,'base64'), {name:'Ed25519'}, false, ['verify']);
+            const ok = await crypto.webcrypto.subtle.verify({name:'Ed25519'}, key, Buffer.from(manifest.signature,'base64'), Buffer.from(canonicalize(manifest.signed)));
+            if(!ok) throw new Error(`${root}: signature mismatch`);
+            console.log(`${root}: integrity PASS (${manifest.signed.files.length} protected files)`);
+          }
+          Promise.all(['release-work/chromium','release-work/firefox','release-work/safari'].map(verifyPackage)).catch(err => { console.error(err); process.exit(1); });
+          NODE
+
+      - name: Create ZIP assets and release notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release-work/chromium && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.4.8_chromium.zip" .)
+          (cd release-work/firefox && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.4.8_firefox.zip" .)
+          (cd release-work/safari && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.4.8_safari-source.zip" .)
+          (cd release-work/source && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.4.8_source.zip" .)
+
+          unzip -t RayLingo_v0.4.8_chromium.zip >/dev/null
+          unzip -t RayLingo_v0.4.8_firefox.zip >/dev/null
+          unzip -t RayLingo_v0.4.8_safari-source.zip >/dev/null
+          unzip -t RayLingo_v0.4.8_source.zip >/dev/null
+
+          C_SHA=$(sha256sum RayLingo_v0.4.8_chromium.zip | awk '{print $1}')
+          F_SHA=$(sha256sum RayLingo_v0.4.8_firefox.zip | awk '{print $1}')
+          S_SHA=$(sha256sum RayLingo_v0.4.8_safari-source.zip | awk '{print $1}')
+          SRC_SHA=$(sha256sum RayLingo_v0.4.8_source.zip | awk '{print $1}')
+
+          cat > release-notes.md <<EOF
+          ## RayLingo v0.4.8
+
+          ### 主要更新
+          - 修正反白翻譯「小點」預覽與實際觸發器置中。
+          - 新增簽章驗證的 GitHub 更新檢查。
+          - 保留 8 組預設強調色與自訂色。
+          - 提供 Chromium、Firefox 與 Safari Web Extension conversion source。
+          - 受保護檔案使用 SHA-256 + Ed25519 完整性驗證；異動會進入 LOCK。
+
+          ### 下載
+          - **Chromium**：Chrome、Brave、Edge、Opera、Vivaldi 等 Chromium 系瀏覽器。
+          - **Firefox**：WebExtensions build；永久安裝仍需 Mozilla/AMO signing。
+          - **Safari source**：需用 Xcode / Safari Web Extension 工具轉換與 Apple signing。
+          - **Full source**：共用核心來源與各平台 manifest templates。
+
+          ### Release asset SHA-256
+          - \`RayLingo_v0.4.8_chromium.zip\`: \`$C_SHA\`
+          - \`RayLingo_v0.4.8_firefox.zip\`: \`$F_SHA\`
+          - \`RayLingo_v0.4.8_safari-source.zip\`: \`$S_SHA\`
+          - \`RayLingo_v0.4.8_source.zip\`: \`$SRC_SHA\`
+
+          > Release ZIP 是由 GitHub Actions 從已簽章 canonical source 重建，因此 archive-level SHA 可能與先前本機 ZIP 不同；內部受保護檔案的 SHA-256 / Ed25519 驗證保持一致。
+          EOF
+
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v0.4.8 >/dev/null 2>&1; then
+            echo 'v0.4.8 Release already exists' >&2
+            exit 1
+          fi
+          gh release create v0.4.8 \
+            RayLingo_v0.4.8_chromium.zip \
+            RayLingo_v0.4.8_firefox.zip \
+            RayLingo_v0.4.8_safari-source.zip \
+            RayLingo_v0.4.8_source.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --target a668413be01dde07578fec864927b6bc3afed7e6 \
+            --title 'RayLingo v0.4.8' \
+            --notes-file release-notes.md
+          gh release view v0.4.8 --repo "$GITHUB_REPOSITORY" --json tagName,url,assets
