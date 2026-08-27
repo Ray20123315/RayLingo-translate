@@ -15,6 +15,18 @@
     security:['workspaceSecurityDescription','驗證 RayLingo Build 完整性與防偽狀態。']
   });
   function t(key,fallback){ try{return globalThis.RayLingoI18n?.t?.(key,fallback)||fallback;}catch{return fallback;} }
+  function syncRuntimeVersion() {
+    const version = globalThis.chrome?.runtime?.getManifest?.().version || '—';
+    const badge = document.getElementById('appVersion');
+    if (badge) badge.textContent = `v${version}`;
+    const updateMeta = document.getElementById('updateVersionMeta');
+    if (updateMeta && /^current\s/i.test(updateMeta.textContent || '')) updateMeta.textContent = `current ${version}`;
+    for (const article of document.querySelectorAll('.diagnostic-grid article')) {
+      if (article.querySelector('small')?.textContent?.trim() === 'Version') {
+        const strong = article.querySelector('strong'); if (strong) strong.textContent = version;
+      }
+    }
+  }
   function activate(name,{replaceHash=false}={}) {
     if (!pages.some(page => page.dataset.page === name)) name='translate';
     for (const page of pages) page.classList.toggle('active', page.dataset.page === name);
@@ -27,8 +39,9 @@
     const desc=descriptions[name]; if(description&&desc) description.textContent=t(desc[0],desc[1]);
     const hash='#'+name; if(location.hash!==hash) history[replaceHash?'replaceState':'pushState'](null,'',hash);
   }
+  syncRuntimeVersion();
   for(const button of buttons) button.addEventListener('click',()=>activate(button.dataset.workspacePage));
   addEventListener('hashchange',()=>activate(location.hash.slice(1)||'translate',{replaceHash:true}));
-  addEventListener('raylingo-i18n-applied',()=>activate(location.hash.slice(1)||'translate',{replaceHash:true}));
+  addEventListener('raylingo-i18n-applied',()=>{ syncRuntimeVersion(); activate(location.hash.slice(1)||'translate',{replaceHash:true}); });
   setTimeout(()=>activate(location.hash.slice(1)||'translate',{replaceHash:true}),0);
 })();

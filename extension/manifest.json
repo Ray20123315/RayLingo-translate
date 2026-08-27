@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "default_locale": "zh_TW",
   "permissions": [
     "storage",
@@ -48,17 +48,6 @@
       "exclude_matches": [
         "https://piper.ttstool.com/*"
       ]
-    },
-    {
-      "matches": [
-        "https://piper.ttstool.com/*"
-      ],
-      "js": [
-        "platform-compat.js",
-        "piper-autoinstall.js"
-      ],
-      "all_frames": true,
-      "run_at": "document_idle"
     }
   ],
   "icons": {
@@ -68,6 +57,6 @@
     "128": "icons/icon128.png"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; frame-src https://piper.ttstool.com"
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }

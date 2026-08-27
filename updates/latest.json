@@ -1,32 +1,31 @@
 {
   "schema": 1,
   "algorithm": "Ed25519",
-  "keyId": "ed25519-sha256:c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a",
+  "keyId": "ed25519-sha256:7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed",
   "signed": {
     "channel": "stable",
-    "notesUrl": "https://github.com/Ray20123315/RayLingo-translate",
+    "notesUrl": "https://github.com/Ray20123315/RayLingo-translate/releases/tag/v0.5.0",
     "packages": {
       "chromium": {
-        "url": "https://github.com/Ray20123315/RayLingo-translate/archive/refs/heads/main.zip",
-        "installPath": "RayLingo-translate-main/extension",
-        "format": "repository-archive"
+        "url": "https://github.com/Ray20123315/RayLingo-translate/releases/download/v0.5.0/RayLingo_v0.5.0_chromium.zip",
+        "installPath": ".",
+        "format": "release-asset"
       },
       "firefox": {
-        "url": "https://github.com/Ray20123315/RayLingo-translate/archive/refs/heads/main.zip",
-        "installPath": "RayLingo-translate-main/extension",
-        "manifestTemplate": "RayLingo-translate-main/platform/manifest.firefox.json",
-        "format": "repository-archive"
+        "url": "https://github.com/Ray20123315/RayLingo-translate/releases/download/v0.5.0/RayLingo_v0.5.0_firefox.zip",
+        "installPath": ".",
+        "format": "release-asset"
       },
       "safari": {
-        "url": "https://github.com/Ray20123315/RayLingo-translate/archive/refs/heads/main.zip",
-        "installPath": "RayLingo-translate-main/extension",
-        "manifestTemplate": "RayLingo-translate-main/platform/manifest.safari.json",
-        "format": "repository-archive"
+        "url": "https://github.com/Ray20123315/RayLingo-translate/releases/download/v0.5.0/RayLingo_v0.5.0_safari-source.zip",
+        "installPath": ".",
+        "format": "release-asset"
       }
     },
-    "publishedAt": "2026-08-26T18:35:12+08:00",
+    "publishedAt": "2026-08-27T13:38:11+08:00",
     "repository": "Ray20123315/RayLingo-translate",
-    "version": "0.4.8"
+    "version": "0.5.0",
+    "trustGeneration": 2
   },
-  "signature": "Xkm6Mm6xcfTA1GdR0pyLhfzwSGkEPO9wF9UgSUY7S6GiqWdKuW22ud4hvvwCa4WWlODm2AJHS7vy08G4VGUyAg=="
+  "signature": "MQPWmX0T4M4hKpvWUnHlbgj/zlB0pGshKiD49CQ8nExRdwVpNZnwZdReAj9kZXpYifiq4G+NTw7qUMcXPOyLAw=="
 }

@@ -1,23 +1,35 @@
 (() => {
   'use strict';
 
-  const SUPPORTED = Object.freeze(['zh_TW', 'zh_CN', 'en', 'ja', 'ko']);
+  const UI_LOCALES = Object.freeze([
+    { code: 'zh_TW', label: '繁體中文', aliases: ['zh_tw', 'zh_hant', 'zh_hk', 'zh_mo'] },
+    { code: 'zh_CN', label: '简体中文', aliases: ['zh_cn', 'zh_hans', 'zh_sg'] },
+    { code: 'en', label: 'English', aliases: ['en'] },
+    { code: 'ja', label: '日本語', aliases: ['ja'] },
+    { code: 'ko', label: '한국어', aliases: ['ko'] }
+  ]);
+  const SUPPORTED = Object.freeze(UI_LOCALES.map(locale => locale.code));
+  const FALLBACK_LOCALE = 'en';
+  const LAST_RESORT_LOCALE = 'zh_TW';
   const cache = new Map();
-  let currentLocale = 'zh_TW';
+  let currentLocale = LAST_RESORT_LOCALE;
   let currentMessages = null;
+  let fallbackMessages = null;
 
   function normalizeLocale(locale) {
     if (!locale || locale === 'auto') return null;
     const normalized = String(locale).replace('-', '_');
     if (SUPPORTED.includes(normalized)) return normalized;
     const lower = normalized.toLowerCase();
-    if (lower.startsWith('zh_tw') || lower.startsWith('zh_hant') || lower.startsWith('zh_hk')) return 'zh_TW';
-    if (lower.startsWith('zh_cn') || lower.startsWith('zh_hans') || lower.startsWith('zh_sg')) return 'zh_CN';
+    for (const item of UI_LOCALES) {
+      if (item.aliases.some(alias => lower === alias || lower.startsWith(`${alias}_`))) return item.code;
+    }
     const base = lower.split('_')[0];
-    return SUPPORTED.find(item => item.toLowerCase() === base) || null;
+    return UI_LOCALES.find(item => item.code.toLowerCase() === base)?.code || null;
   }
 
   async function loadMessages(locale) {
+    if (!locale) return null;
     if (cache.has(locale)) return cache.get(locale);
     try {
       const url = chrome.runtime.getURL(`_locales/${locale}/messages.json`);
@@ -28,6 +40,7 @@
       return messages;
     } catch (error) {
       console.debug('[RayLingo] locale file load failed:', locale, error);
+      cache.set(locale, null);
       return null;
     }
   }
@@ -42,19 +55,29 @@
         preferred = 'auto';
       }
     }
-    const browserLocale = chrome.i18n?.getUILanguage?.() || 'zh-TW';
-    currentLocale = normalizeLocale(preferred) || normalizeLocale(browserLocale) || 'zh_TW';
+
+    const browserLocale = chrome.i18n?.getUILanguage?.() || LAST_RESORT_LOCALE.replace('_', '-');
+    currentLocale = normalizeLocale(preferred) || normalizeLocale(browserLocale) || LAST_RESORT_LOCALE;
     currentMessages = await loadMessages(currentLocale);
-    if (!currentMessages && currentLocale !== 'zh_TW') {
-      currentLocale = 'zh_TW';
-      currentMessages = await loadMessages(currentLocale);
+    fallbackMessages = currentLocale === FALLBACK_LOCALE ? currentMessages : await loadMessages(FALLBACK_LOCALE);
+
+    if (!currentMessages) {
+      if (fallbackMessages) {
+        currentLocale = FALLBACK_LOCALE;
+        currentMessages = fallbackMessages;
+      } else {
+        currentLocale = LAST_RESORT_LOCALE;
+        currentMessages = await loadMessages(LAST_RESORT_LOCALE);
+      }
     }
     return currentLocale;
   }
 
   function t(key, fallback = '') {
-    const entry = currentMessages?.[key];
-    if (entry?.message) return entry.message;
+    const direct = currentMessages?.[key]?.message;
+    if (direct) return direct;
+    const english = fallbackMessages?.[key]?.message;
+    if (english) return english;
     try {
       const browserMessage = chrome.i18n?.getMessage?.(key);
       if (browserMessage) return browserMessage;
@@ -101,28 +124,25 @@
 
   function populateUiLocaleSelect(select, preference = 'auto') {
     if (!select) return;
-    const labels = {
-      auto: t('uiLocale_auto', 'Follow browser'),
-      zh_TW: '繁體中文',
-      zh_CN: '简体中文',
-      en: 'English',
-      ja: '日本語',
-      ko: '한국어'
-    };
-    select.replaceChildren();
-    for (const code of ['auto', ...SUPPORTED]) {
+    const auto = document.createElement('option');
+    auto.value = 'auto';
+    auto.textContent = t('uiLocale_auto', 'Follow browser');
+    select.replaceChildren(auto);
+    for (const locale of UI_LOCALES) {
       const option = document.createElement('option');
-      option.value = code;
-      option.textContent = labels[code];
+      option.value = locale.code;
+      option.textContent = locale.label;
       select.append(option);
     }
-    select.value = labels[preference] ? preference : 'auto';
+    select.value = preference === 'auto' || SUPPORTED.includes(preference) ? preference : 'auto';
   }
 
   function getLocale() { return currentLocale; }
 
   globalThis.RayLingoI18n = Object.freeze({
     supported: SUPPORTED,
+    registry: UI_LOCALES,
+    fallbackLocale: FALLBACK_LOCALE,
     init,
     t,
     apply,

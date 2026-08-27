@@ -5,9 +5,11 @@
   const isFirefox = /Firefox\//i.test(ua);
   const isSafari = /Safari\//i.test(ua) && !/(Chrome|Chromium|CriOS|Edg|OPR|Firefox)\//i.test(ua);
   const isChromium = !isFirefox && !isSafari && /(Chrome|Chromium|CriOS|Edg|OPR)\//i.test(ua);
+  // Brave intentionally uses a Chrome-like UA. Its documented JS detection API
+  // is navigator.brave.isBrave(); the presence check keeps the synchronous label
+  // correct while `isBrave()` remains available for callers that need confirmation.
+  const isBrave = Boolean(globalThis.navigator?.brave && typeof globalThis.navigator.brave.isBrave === 'function');
 
-  // Firefox exposes both namespaces. Prefer its Promise-based `browser` namespace
-  // so the existing async RayLingo code keeps the same semantics as Chromium MV3.
   if (isFirefox && globalThis.browser) {
     try { globalThis.chrome = globalThis.browser; } catch {}
   }
@@ -17,6 +19,7 @@
   const packageKey = family === 'firefox' ? 'firefox' : family === 'safari' ? 'safari' : 'chromium';
 
   function browserLabel() {
+    if (isBrave) return 'Brave';
     if (/Edg\//i.test(ua)) return 'Microsoft Edge';
     if (/OPR\//i.test(ua)) return 'Opera';
     if (/Vivaldi/i.test(ua)) return 'Vivaldi';
@@ -24,6 +27,12 @@
     if (isSafari) return 'Safari';
     if (/Chrome\//i.test(ua) || /Chromium\//i.test(ua)) return 'Chromium';
     return 'WebExtension';
+  }
+
+  async function confirmBrave() {
+    if (!isBrave) return false;
+    try { return Boolean(await globalThis.navigator.brave.isBrave()); }
+    catch { return true; }
   }
 
   function capabilities() {
@@ -47,6 +56,8 @@
     isFirefox,
     isSafari,
     isChromium,
+    isBrave,
+    confirmBrave,
     api,
     capabilities
   });

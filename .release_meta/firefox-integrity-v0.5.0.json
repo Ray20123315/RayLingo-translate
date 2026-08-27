@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "algorithm": "Ed25519",
+  "keyId": "ed25519-sha256:7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed",
+  "signed": {
+    "createdAt": "2026-08-27T13:38:11+08:00",
+    "files": [
+      {
+        "path": "app.css",
+        "sha256": "b36393893a1decdca755d9197c72670ce0435629a2c00ebba50e79a845eb8753",
+        "size": 1916
+      },
+      {
+        "path": "app.html",
+        "sha256": "aa8a0edc794c3662c8385df3246a585753d289899a67d5dcb5f65423a1c61584",
+        "size": 12177
+      },
+      {
+        "path": "content.js",
+        "sha256": "8bc402a57f476b11ec70bc7a330688a4823303b570f438ffbf87f1ebf86aaaee",
+        "size": 31329
+      },
+      {
+        "path": "integrity-client.js",
+        "sha256": "ff7c5e3508e9a309b8fcb28ce1569b19ed6c0478e4b861a727397512875d5552",
+        "size": 2209
+      },
+      {
+        "path": "integrity-guard.js",
+        "sha256": "8b51d4af724a0395b171221183858033dae096ad69f8092bc6923b26382683d8",
+        "size": 4049
+      },
+      {
+        "path": "language-registry.js",
+        "sha256": "f3d9aa89b669bf4cf67d97e0793e7a33a1860f79dc221b0947691cbe0ffee9cc",
+        "size": 5261
+      },
+      {
+        "path": "manifest.json",
+        "sha256": "3ccd9468d30e824492018a6888354a52c65a26e83d0475fe81c50f5153745760",
+        "size": 1423
+      },
+      {
+        "path": "platform-compat.js",
+        "sha256": "9779b9ae0b86ab2333bbc8cc39a1850273e19b8f11f50209798bedfd35a7e5e7",
+        "size": 2393
+      },
+      {
+        "path": "popup.css",
+        "sha256": "18371ff2716eff7d30b43831c48f94c8b97587ff6f9e36fe43c7ddd757fb9388",
+        "size": 10289
+      },
+      {
+        "path": "popup.html",
+        "sha256": "efc49edd5d81cefacb653d8684b475447dd8c5902a16abdf5a70e7b5a8dd2fef",
+        "size": 5236
+      },
+      {
+        "path": "popup.js",
+        "sha256": "2eae19bcf92aa53be984e1eaefed2e348674898126e176651e49988d92e84533",
+        "size": 46972
+      },
+      {
+        "path": "selection-appearance.js",
+        "sha256": "abe6b0cb650ab4db5b2e43fe8138db1e380a10b64d0608b9eba33d6a0da38e9f",
+        "size": 6467
+      },
+      {
+        "path": "service-worker.js",
+        "sha256": "af4812f8a44bf87bbbe930efaf347935a1170bd37d34313086c5900b287f5868",
+        "size": 23875
+      },
+      {
+        "path": "translator-engine.js",
+        "sha256": "f91cdbe738df2fa299db748e82baa270afd4e855b87b4a22cbc8797aba4b4fb4",
+        "size": 4801
+      },
+      {
+        "path": "tts-registry.js",
+        "sha256": "185b559d69cfb368ea9e7d6dfa9eba8d69d8c57e81a367782c27ec986a38ad7b",
+        "size": 8566
+      },
+      {
+        "path": "ui-i18n.js",
+        "sha256": "9b754d7893ffb05331df47eae4f36a163c140f9f8bd3dcc585508bb422a50712",
+        "size": 5673
+      },
+      {
+        "path": "update-checker.js",
+        "sha256": "538fba145335c6553bb488ecfe28a0a39cea4542e44c7fd2ffe37ef76647c072",
+        "size": 4593
+      },
+      {
+        "path": "workspace-ui.js",
+        "sha256": "473dd2a1f1072bb74945f31b30ea4ad252b1a1e2807039d0f3e3fc2c9121c9a1",
+        "size": 3194
+      },
+      {
+        "path": "workspace.css",
+        "sha256": "62495a4d8aa9e43c0a34d1b5952de155d595b83f3cc69f11e670c72da7407b55",
+        "size": 15139
+      },
+      {
+        "path": "workspace.html",
+        "sha256": "a32a44126747aefa3445b7389d5dfbd863995c46dcb35fd4b07635a654021316",
+        "size": 19527
+      }
+    ],
+    "version": "0.5.0"
+  },
+  "signature": "WfCAsbizHmWK3oBIr2MbxM94I1d5WtDt8quIsQjIsZrOFcq/oAnvoxxz8BVoYQ+hcg7bpILo1Wamfh0VP7yMBA=="
+}
