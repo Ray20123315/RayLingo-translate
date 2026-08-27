@@ -1,0 +1,34 @@
+name: Export RayLingo feature baseline
+
+on:
+  push:
+    branches:
+      - feature/visible-translation-v0.6.0
+    paths:
+      - '.github/workflows/export-feature-v0.6.0.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Pack baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -czf raylingo-feature-baseline.tar.gz \
+            extension platform updates .release_meta \
+            README.md SECURITY.md BROWSER_COMPATIBILITY.md THIRD_PARTY_NOTICES.md
+          tar -tzf raylingo-feature-baseline.tar.gz >/dev/null
+      - name: Upload baseline
+        uses: actions/upload-artifact@v4
+        with:
+          name: raylingo-feature-baseline
+          path: raylingo-feature-baseline.tar.gz
+          retention-days: 1
+          if-no-files-found: error
