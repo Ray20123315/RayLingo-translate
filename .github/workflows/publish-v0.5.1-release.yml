@@ -1,0 +1,117 @@
+name: Publish RayLingo v0.5.1 Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-v0.5.1-release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build platform packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import json; print(json.load(open("extension/manifest.json"))["version"])')" = "0.5.1"
+          rm -rf release-work
+          mkdir -p release-work/{chromium,firefox,safari,source}
+          cp -a extension/. release-work/chromium/
+          cp -a extension/. release-work/firefox/
+          rm -f release-work/firefox/offscreen.html release-work/firefox/offscreen.js release-work/firefox/piper-autoinstall.js
+          cp platform/manifest.firefox.json release-work/firefox/manifest.json
+          cp .release_meta/firefox-integrity-v0.5.1.json release-work/firefox/integrity-manifest.json
+          cp -a extension/. release-work/safari/
+          rm -f release-work/safari/offscreen.html release-work/safari/offscreen.js release-work/safari/piper-autoinstall.js
+          cp platform/manifest.safari.json release-work/safari/manifest.json
+          cp .release_meta/safari-integrity-v0.5.1.json release-work/safari/integrity-manifest.json
+          cp -a extension/. release-work/source/
+          cp platform/manifest.firefox.json release-work/source/manifest.firefox.json
+          cp platform/manifest.safari.json release-work/source/manifest.safari.json
+
+      - name: Verify signed package integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs'); const path=require('path'); const crypto=require('crypto');
+          const PUBLIC_KEY_B64='BSvI+aEQja2zdnXo3OIxReAHOAzxwx85aTotVeKEppQ=';
+          const KEY_ID='ed25519-sha256:7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed';
+          function canonicalize(v){ if(Array.isArray(v))return '['+v.map(canonicalize).join(',')+']'; if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalize(v[k])).join(',')+'}'; return JSON.stringify(v); }
+          async function verifyPackage(root){
+            const m=JSON.parse(fs.readFileSync(path.join(root,'integrity-manifest.json'),'utf8'));
+            if(m.algorithm!=='Ed25519'||m.keyId!==KEY_ID||m.signed.version!=='0.5.1') throw new Error(`${root}: metadata mismatch`);
+            for(const e of m.signed.files){ const p=path.join(root,e.path); const b=fs.readFileSync(p); const h=crypto.createHash('sha256').update(b).digest('hex'); if(b.length!==e.size||h!==e.sha256) throw new Error(`${root}: hash mismatch ${e.path}`); }
+            const key=await crypto.webcrypto.subtle.importKey('raw',Buffer.from(PUBLIC_KEY_B64,'base64'),{name:'Ed25519'},false,['verify']);
+            const ok=await crypto.webcrypto.subtle.verify({name:'Ed25519'},key,Buffer.from(m.signature,'base64'),Buffer.from(canonicalize(m.signed)));
+            if(!ok) throw new Error(`${root}: signature mismatch`);
+            console.log(`${root}: integrity PASS (${m.signed.files.length} protected files)`);
+          }
+          Promise.all(['release-work/chromium','release-work/firefox','release-work/safari'].map(verifyPackage)).catch(e=>{console.error(e);process.exit(1)});
+          NODE
+
+      - name: Verify signed update metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('fs'); const crypto=require('crypto');
+          const PUBLIC_KEY_B64='BSvI+aEQja2zdnXo3OIxReAHOAzxwx85aTotVeKEppQ='; const KEY_ID='ed25519-sha256:7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed';
+          function canonicalize(v){ if(Array.isArray(v))return '['+v.map(canonicalize).join(',')+']'; if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+canonicalize(v[k])).join(',')+'}'; return JSON.stringify(v); }
+          (async()=>{ const m=JSON.parse(fs.readFileSync('updates/latest.json','utf8')); if(m.keyId!==KEY_ID||m.signed.version!=='0.5.1') throw new Error('update metadata mismatch'); const key=await crypto.webcrypto.subtle.importKey('raw',Buffer.from(PUBLIC_KEY_B64,'base64'),{name:'Ed25519'},false,['verify']); const ok=await crypto.webcrypto.subtle.verify({name:'Ed25519'},key,Buffer.from(m.signature,'base64'),Buffer.from(canonicalize(m.signed))); if(!ok) throw new Error('update signature mismatch'); console.log('update metadata PASS'); })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+
+      - name: Create ZIP assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release-work/chromium && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.5.1_chromium.zip" .)
+          (cd release-work/firefox && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.5.1_firefox.zip" .)
+          (cd release-work/safari && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.5.1_safari-source.zip" .)
+          (cd release-work/source && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.5.1_source.zip" .)
+          for f in RayLingo_v0.5.1_*.zip; do unzip -t "$f" >/dev/null; sha256sum "$f"; done
+
+      - name: Write release notes
+        shell: bash
+        run: |
+          cat > release-notes.md <<'EOF'
+          ## RayLingo v0.5.1
+
+          ### Security hardening
+          - 恢復 v0.4.8 的完整性保護語意：Chromium 簽 36 個套件檔，Firefox / Safari 各簽 33 個。
+          - docs、UI locale message files 與 icons 再次納入 SHA-256 + Ed25519 signed inventory。
+          - v0.5.0 的功能與簽章本身已通過 Release workflow；v0.5.1 修正的是 protected-file scope，不重寫既有 v0.5.0 tag。
+
+          ### Compatibility
+          - 沿用 signing identity v2；已安裝 v0.5.0 的使用者可正常驗證 v0.5.1。
+          - 從 v0.4.8 直接升級到 v0.5.x 仍需一次手動安裝，因 v0.4.8 updater 有 verifier-context bug 且使用舊 signing identity。
+          EOF
+
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v0.5.1 >/dev/null 2>&1; then
+            echo 'v0.5.1 Release already exists' >&2
+            exit 1
+          fi
+          gh release create v0.5.1 \
+            RayLingo_v0.5.1_chromium.zip \
+            RayLingo_v0.5.1_firefox.zip \
+            RayLingo_v0.5.1_safari-source.zip \
+            RayLingo_v0.5.1_source.zip \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title 'RayLingo v0.5.1' \
+            --notes-file release-notes.md
+          gh release view v0.5.1 --repo "$GITHUB_REPOSITORY" --json tagName,url,assets

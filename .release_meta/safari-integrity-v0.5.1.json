@@ -102,23 +102,8 @@
       },
       {
         "path": "manifest.json",
-        "sha256": "526ce3ff1c56d74ba34aa5257f5ed03cd38eb5c61b6c4aa43c340d74faaa5a32",
-        "size": 1386
-      },
-      {
-        "path": "offscreen.html",
-        "sha256": "219ba30d94d5047dc2b7a063272994755241187ed66d052e1a7f4154b26bf723",
-        "size": 517
-      },
-      {
-        "path": "offscreen.js",
-        "sha256": "579d5c7bcad8f55a25f3345383e5df3570cb454a939dda0a684ecde0564228a1",
-        "size": 15885
-      },
-      {
-        "path": "piper-autoinstall.js",
-        "sha256": "7d3d208e796c843286facbad52220213d760b5a2e4860ee12f971a3d7fd51519",
-        "size": 3562
+        "sha256": "2f4a81fad007bff3a6be53d03a51b1af4427f1655d4f64c5658adeacdac29eef",
+        "size": 1633
       },
       {
         "path": "platform-compat.js",
@@ -137,7 +122,7 @@
       },
       {
         "path": "popup.js",
-          "sha256": "2eae19bcf92aa53be984e1eaefed2e348674898126e176651e49988d92e84533",
+        "sha256": "2eae19bcf92aa53be984e1eaefed2e348674898126e176651e49988d92e84533",
         "size": 46972
       },
       {
@@ -188,5 +173,5 @@
     ],
     "version": "0.5.1"
   },
-  "signature": "vCyEcgTZxV2D2ZA2XAEKdmvogetV7k+365ynnI2om91bfct7ZJMFzcFgIDL+Pnoq3gistdBmAhaak4vgpw3fDg=="
+  "signature": "oFAQHniXaOi255o80DREwLFCqGxmr6kvQyIG7z9gm1P5AprI6FSzVGIy8OPRAXRUvz0zUpg3mobJ6cZ99tYODg=="
 }

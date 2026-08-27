@@ -1,8 +1,8 @@
-# RayLingo v0.5.0
+# RayLingo v0.5.1
 
 RayLingo 是跨瀏覽器即時翻譯擴充套件。Popup 專注翻譯；Workspace 管理多語言 TTS、反白翻譯、外觀、歷史、更新與診斷。
 
-## v0.5.0 重點
+## v0.5.1 重點
 
 - 修正 Workspace 更新檢查的 verifier context 問題，避免把執行環境錯誤誤報為 `UPDATE_SIGNATURE_INVALID`。
 - Update Checker 直接在頁面執行環境驗證 Ed25519 metadata，並區分不支援、Key ID 不符、repository 不符與真正簽章錯誤。
@@ -19,4 +19,4 @@ RayLingo 是跨瀏覽器即時翻譯擴充套件。Popup 專注翻譯；Workspac
 
 ## 安裝
 
-Chromium / Brave：解壓 `RayLingo_v0.5.0_chromium.zip`，到 Extensions 管理頁開啟 Developer mode，使用 Load unpacked 載入解壓後資料夾。
+Chromium / Brave：解壓 `RayLingo_v0.5.1_chromium.zip`，到 Extensions 管理頁開啟 Developer mode，使用 Load unpacked 載入解壓後資料夾。

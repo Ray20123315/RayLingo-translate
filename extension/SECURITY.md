@@ -1,6 +1,6 @@
-# RayLingo Integrity Security — v0.5.0
+# RayLingo Integrity Security — v0.5.1
 
-RayLingo v0.5.0 使用 SHA-256 檔案清單與 Ed25519 簽章驗證受保護的執行檔案。
+RayLingo v0.5.1 使用 SHA-256 檔案清單與 Ed25519 簽章驗證受保護的套件檔案，包含執行檔、UI locale、文件與圖示。
 
 - Runtime integrity：受保護檔案缺失、大小不符、Hash 不符或簽章驗證失敗時進入 locked state。
 - Signed update metadata：`updates/latest.json` 會驗證 algorithm、Key ID、repository identity、版本格式與 release asset URL。
