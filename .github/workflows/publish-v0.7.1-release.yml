@@ -1,0 +1,60 @@
+name: Publish RayLingo v0.7.1 Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-v0.7.1-release.yml'
+      - 'extension/**'
+      - 'platform/**'
+      - '.release_meta/**'
+      - 'updates/latest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and verify
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(python -c 'import json; print(json.load(open("extension/manifest.json"))["version"])')" = "0.7.1"
+          rm -rf release-work; mkdir -p release-work/{chromium,firefox,safari,source}
+          cp -a extension/. release-work/chromium/
+          cp -a extension/. release-work/firefox/; rm -f release-work/firefox/offscreen.html release-work/firefox/offscreen.js release-work/firefox/piper-autoinstall.js; cp platform/manifest.firefox.json release-work/firefox/manifest.json; cp .release_meta/firefox-integrity-v0.7.1.json release-work/firefox/integrity-manifest.json
+          cp -a extension/. release-work/safari/; rm -f release-work/safari/offscreen.html release-work/safari/offscreen.js release-work/safari/piper-autoinstall.js; cp platform/manifest.safari.json release-work/safari/manifest.json; cp .release_meta/safari-integrity-v0.7.1.json release-work/safari/integrity-manifest.json
+          cp -a extension/. release-work/source/; cp platform/manifest.firefox.json release-work/source/manifest.firefox.json; cp platform/manifest.safari.json release-work/source/manifest.safari.json
+          node <<'NODE'
+          const fs=require('fs'),path=require('path'),crypto=require('crypto');const PUB='aX2fqaYF7j0JcRbVDUkkqpYicLimgnhN90znvhO0RUE=',KID='ed25519-sha256:c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a';function c(v){if(Array.isArray(v))return '['+v.map(c).join(',')+']';if(v&&typeof v==='object')return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+c(v[k])).join(',')+'}';return JSON.stringify(v)}async function v(root,n){const m=JSON.parse(fs.readFileSync(path.join(root,'integrity-manifest.json')));if(m.keyId!==KID||m.signed.version!=='0.7.1'||m.signed.files.length!==n)throw Error(root+' metadata');for(const e of m.signed.files){const b=fs.readFileSync(path.join(root,e.path));if(b.length!==e.size||crypto.createHash('sha256').update(b).digest('hex')!==e.sha256)throw Error(root+' hash '+e.path)}const k=await crypto.webcrypto.subtle.importKey('raw',Buffer.from(PUB,'base64'),{name:'Ed25519'},false,['verify']);if(!await crypto.webcrypto.subtle.verify({name:'Ed25519'},k,Buffer.from(m.signature,'base64'),Buffer.from(c(m.signed))))throw Error(root+' signature');console.log(root,'PASS',n)};(async()=>{await v('release-work/chromium',43);await v('release-work/firefox',40);await v('release-work/safari',40);const m=JSON.parse(fs.readFileSync('updates/latest.json'));const k=await crypto.webcrypto.subtle.importKey('raw',Buffer.from(PUB,'base64'),{name:'Ed25519'},false,['verify']);if(m.keyId!==KID||m.signed.version!=='0.7.1'||!await crypto.webcrypto.subtle.verify({name:'Ed25519'},k,Buffer.from(m.signature,'base64'),Buffer.from(c(m.signed))))throw Error('update signature');console.log('update PASS')})().catch(e=>{console.error(e);process.exit(1)})
+          NODE
+          (cd release-work/chromium && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.7.1_chromium.zip" .)
+          (cd release-work/firefox && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.7.1_firefox.zip" .)
+          (cd release-work/safari && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.7.1_safari-source.zip" .)
+          (cd release-work/source && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.7.1_source.zip" .)
+          for f in RayLingo_v0.7.1_*.zip; do unzip -t "$f" >/dev/null; sha256sum "$f"; done
+      - name: Release notes
+        shell: bash
+        run: |
+          cat > release-notes.md <<'EOF'
+          ## RayLingo v0.7.1
+          - 常駐懸浮翻譯器：縮成小點、hover 展開、狀態記憶。
+          - Gemini / DeepSeek AI translation provider，AI 譯文直接共用既有 TTS、複製與歷史。
+          - 圖片、PDF、DOCX、PPTX、文字、音訊與影片多模態處理。
+          - 影片字幕偵測/翻譯 overlay；無字幕時 Chromium/Brave 可由使用者明確啟動 tab capture，再取得 transcript + translation。
+          - 恢復 RayLingo v0.4.8 原始 user-authorized Ed25519 identity；未改寫既有 v0.5.x 歷史 release。v0.5.x 升級本版需一次手動安裝。
+          - Protected inventory: Chromium 43 / Firefox 40 / Safari 40。
+          EOF
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view v0.7.1 >/dev/null 2>&1; then echo 'v0.7.1 already exists' >&2; exit 1; fi
+          gh release create v0.7.1 RayLingo_v0.7.1_chromium.zip RayLingo_v0.7.1_firefox.zip RayLingo_v0.7.1_safari-source.zip RayLingo_v0.7.1_source.zip --target "$GITHUB_SHA" --title 'RayLingo v0.7.1' --notes-file release-notes.md
+          gh release view v0.7.1 --json tagName,url,targetCommitish,assets
