@@ -14,6 +14,8 @@ await new Promise((resolve, reject) => server.listen(8123, '127.0.0.1', err => e
 const browser = await puppeteer.launch({
   headless: 'new',
   pipe: true,
+  dumpio: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
   enableExtensions: [extensionPath],
 });
 
