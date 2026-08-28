@@ -5,6 +5,7 @@ on:
     branches: [feature/visible-translation-v0.6.0]
     paths:
       - '.github/workflows/runtime-v0.7.1.yml'
+      - '.github/scripts/runtime-v0.7.1.mjs'
       - 'extension/**'
       - 'platform/**'
       - '.release_meta/**'
@@ -26,6 +27,7 @@ jobs:
           set -euo pipefail
           test "$(python -c 'import json; print(json.load(open("extension/manifest.json"))["version"])')" = "0.7.1"
           for f in extension/*.js; do node --check "$f" >/dev/null; done
+          node --check .github/scripts/runtime-v0.7.1.mjs >/dev/null
           python - <<'PY'
           import glob,json
           for p in glob.glob('extension/_locales/*/messages.json')+['extension/manifest.json','platform/manifest.firefox.json','platform/manifest.safari.json','updates/latest.json']:
@@ -65,83 +67,17 @@ jobs:
           (cd release-work/source && zip -q -X -r "$GITHUB_WORKSPACE/RayLingo_v0.7.1_source.zip" .)
           for f in RayLingo_v0.7.1_*.zip; do unzip -t "$f" >/dev/null; sha256sum "$f"; done
 
-      - name: Chromium unpacked runtime gate
+      - name: Chromium Puppeteer runtime gate
         shell: bash
-        env:
-          DISPLAY: ':99'
         run: |
           set -euo pipefail
-          CHROME_BIN="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
-          DRIVER_BIN="$(command -v chromedriver || true)"
-          test -n "$CHROME_BIN" && test -n "$DRIVER_BIN"
-          Xvfb :99 -screen 0 1280x900x24 >/tmp/xvfb.log 2>&1 &
-          cat > /tmp/raylingo-runtime.py <<'PY'
-          import functools,json,os,subprocess,time,threading,http.server,socketserver,urllib.request
-          chrome=os.environ['CHROME_BIN']; driver=os.environ['DRIVER_BIN']; ext=os.path.abspath('release-work/chromium')
-          class H(http.server.SimpleHTTPRequestHandler):
-              def log_message(self,*a): pass
-          os.makedirs('/tmp/rlsite',exist_ok=True)
-          open('/tmp/rlsite/index.html','w').write('<!doctype html><meta charset="utf-8"><p id="probe">RayLingo runtime selection probe text.</p>')
-          handler=functools.partial(H,directory='/tmp/rlsite')
-          srv=socketserver.TCPServer(('127.0.0.1',8123),handler); threading.Thread(target=srv.serve_forever,daemon=True).start()
-          proc=subprocess.Popen([driver,'--port=9515','--log-path=/tmp/chromedriver.log'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-          def req(method,path,data=None):
-              body=None if data is None else json.dumps(data).encode()
-              r=urllib.request.Request('http://127.0.0.1:9515'+path,data=body,method=method,headers={'Content-Type':'application/json'})
-              try: return json.load(urllib.request.urlopen(r,timeout=15))
-              except urllib.error.HTTPError as e: raise RuntimeError(e.read().decode('utf-8','replace')) from e
-          for _ in range(80):
-              try: req('GET','/status'); break
-              except Exception: time.sleep(.1)
-          caps={'capabilities':{'alwaysMatch':{'browserName':'chrome','goog:chromeOptions':{'binary':chrome,'args':['--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--window-size=1280,900',f'--disable-extensions-except={ext}',f'--load-extension={ext}']}}}}
-          ses=req('POST','/session',caps); sid=ses.get('sessionId') or ses.get('value',{}).get('sessionId'); assert sid,ses
-          def nav(url): req('POST',f'/session/{sid}/url',{'url':url})
-          def js(script): return req('POST',f'/session/{sid}/execute/sync',{'script':script,'args':[]})['value']
-          def asyncjs(script): return req('POST',f'/session/{sid}/execute/async',{'script':script,'args':[]})['value']
-          def wait_js(script,timeout=10):
-              end=time.time()+timeout; last=None
-              while time.time()<end:
-                  try:
-                      last=js(script)
-                      if last: return last
-                  except Exception as e: last=str(e)
-                  time.sleep(.15)
-              raise AssertionError({'wait_script':script,'last':last})
-          def targets(): return req('POST',f'/session/{sid}/goog/cdp/execute',{'cmd':'Target.getTargets','params':{}})['value']['targetInfos']
-          try:
-              nav('http://127.0.0.1:8123/'); wait_js("return !!document.getElementById('probe')",5)
-              js("const r=document.createRange();r.selectNodeContents(document.getElementById('probe'));const s=getSelection();s.removeAllRanges();s.addRange(r);document.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));return true")
-              wait_js("return !!document.getElementById('__raylingo_root__')",12)
-              extid=None; seen=[]; end=time.time()+12
-              while time.time()<end and not extid:
-                  seen=[x.get('url','') for x in targets()]
-                  for u in seen:
-                      if u.startswith('chrome-extension://'):
-                          extid=u.split('/')[2]; break
-                  if not extid: time.sleep(.15)
-              assert extid,seen
-              nav(f'chrome-extension://{extid}/popup.html'); time.sleep(2)
-              ids=['selectionMode','selectionSourceLanguage','selectionTargetLanguage','typingEffectToggle','floatingWidgetEnabled','floatingWidgetHoverExpand','floatingWidgetStartCollapsed','translationProvider','multimodalFile','videoSubtitleEnabled','videoTranscriptButton']
-              st=js("return {version:chrome.runtime.getManifest().version,integrity:document.documentElement.dataset.integrity,ids:"+json.dumps(ids)+".map(x=>[x,!!document.getElementById(x)])}")
-              assert st['version']=='0.7.1' and st['integrity']=='verified' and all(v for _,v in st['ids']),st
-              result=asyncjs("const done=arguments[arguments.length-1];chrome.storage.local.set({floatingWidgetEnabled:false,selectionMode:'auto'}).then(()=>done(true),e=>done(String(e)))"); assert result is True,result
-              nav('http://127.0.0.1:8123/'); wait_js("return !!document.getElementById('probe')",5)
-              assert not js("return !!document.getElementById('__raylingo_root__')")
-              js("const r=document.createRange();r.selectNodeContents(document.getElementById('probe'));const s=getSelection();s.removeAllRanges();s.addRange(r);document.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));return true")
-              wait_js("return !!document.getElementById('__raylingo_root__')",10)
-              nav(f'chrome-extension://{extid}/popup.html'); time.sleep(1)
-              result=asyncjs("const done=arguments[arguments.length-1];chrome.storage.local.set({floatingWidgetEnabled:true,floatingWidgetHoverExpand:true,floatingWidgetStartCollapsed:true,floatingWidgetCollapsed:true,selectionMode:'off'}).then(()=>done(true),e=>done(String(e)))"); assert result is True,result
-              nav('http://127.0.0.1:8123/'); wait_js("return !!document.getElementById('probe')",5); wait_js("return !!document.getElementById('__raylingo_root__')",10)
-              nav(f'chrome-extension://{extid}/workspace.html'); time.sleep(2)
-              ids2=['geminiModel','geminiApiKey','deepseekModel','deepseekApiKey','geminiTestButton','deepseekTestButton','remoteMediaConsent']
-              st2=js("return "+json.dumps(ids2)+".map(x=>[x,!!document.getElementById(x)])"); assert all(v for _,v in st2),st2
-              print('Chromium runtime PASS',extid)
-          finally:
-              try:req('DELETE',f'/session/{sid}')
-              except Exception: pass
-              proc.terminate(); srv.shutdown()
-          PY
-          CHROME_BIN="$CHROME_BIN" DRIVER_BIN="$DRIVER_BIN" python /tmp/raylingo-runtime.py
+          rm -rf /tmp/raylingo-puppeteer
+          mkdir -p /tmp/raylingo-puppeteer
+          cd /tmp/raylingo-puppeteer
+          npm init -y >/dev/null
+          npm install --no-save --no-audit --no-fund puppeteer@latest
+          cp "$GITHUB_WORKSPACE/.github/scripts/runtime-v0.7.1.mjs" ./runtime.mjs
+          node ./runtime.mjs "$GITHUB_WORKSPACE/release-work/chromium"
 
       - uses: actions/upload-artifact@v4
         with:
