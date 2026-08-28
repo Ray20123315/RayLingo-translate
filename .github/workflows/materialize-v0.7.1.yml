@@ -1,0 +1,45 @@
+name: Materialize RayLingo v0.7.1 Candidate
+
+on:
+  push:
+    branches: [feature/visible-translation-v0.6.0]
+    paths:
+      - '.release_stage/v071-c9/**'
+      - '.github/workflows/materialize-v0.7.1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Reconstruct verified patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .release_stage/v071-c9/part*.txt | base64 -d | xz -d > /tmp/raylingo-v0.7.1.patch
+          echo '92732c9b4e8be2200d136f31b20595f2e60c3d11a29f42934c7aed2329bf358c  /tmp/raylingo-v0.7.1.patch' | sha256sum -c -
+          git apply --check /tmp/raylingo-v0.7.1.patch
+          git apply /tmp/raylingo-v0.7.1.patch
+          test "$(python -c 'import json; print(json.load(open("extension/manifest.json"))["version"])')" = '0.7.1'
+          grep -q 'c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a' extension/integrity-guard.js
+          grep -q 'c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a' extension/update-checker.js
+          ! grep -q '7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed' extension/integrity-guard.js
+          ! grep -q '7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed' extension/update-checker.js
+      - name: Commit verified candidate to feature branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .release_stage
+          rm -f .github/workflows/export-feature-v0.6.0.yml .github/workflows/materialize-v0.7.1.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --stat
+          git commit -m 'Implement RayLingo v0.7.1 AI multimodal media features'
+          git push origin HEAD:feature/visible-translation-v0.6.0
