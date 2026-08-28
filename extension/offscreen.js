@@ -15,6 +15,7 @@
   let currentOwner = null;
   let currentSessionId = null;
   let playbackToken = 0;
+  let tabCaptureSession = null;
 
   function emit(event, detail = {}) {
     chrome.runtime.sendMessage({ type: 'RAYLINGO_TTS_EVENT', event, owner: detail.owner ?? currentOwner, sessionId: detail.sessionId ?? currentSessionId, ...detail }).catch(() => null);
@@ -337,6 +338,134 @@
     if (message.type === 'request' && message.method === 'audioPlay') {
       playExternalPiperAudio(message).catch(error => sendPiperResponse(message.id, undefined, { message: error?.message || 'PIPER_AUDIO_FAILED' }));
     }
+  });
+
+
+  function captureMimeType() {
+    const candidates = [
+      'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=vp9,opus',
+      'video/webm'
+    ];
+    return candidates.find(type => globalThis.MediaRecorder?.isTypeSupported?.(type)) || '';
+  }
+
+  async function uploadCaptureBlob(blob, apiKey) {
+    if (!apiKey) throw new Error('AI_KEY_MISSING');
+    const mimeType = blob.type || 'video/webm';
+    const start = await fetch('https://generativelanguage.googleapis.com/upload/v1beta/files', {
+      method: 'POST',
+      headers: {
+        'x-goog-api-key': apiKey,
+        'X-Goog-Upload-Protocol': 'resumable',
+        'X-Goog-Upload-Command': 'start',
+        'X-Goog-Upload-Header-Content-Length': String(blob.size),
+        'X-Goog-Upload-Header-Content-Type': mimeType,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ file: { display_name: `RayLingo tab capture ${new Date().toISOString()}.webm` } }),
+      cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer'
+    });
+    if (!start.ok) throw new Error(`AI_UPLOAD_START_FAILED:${start.status}`);
+    const uploadUrl = start.headers.get('x-goog-upload-url');
+    if (!uploadUrl) throw new Error('AI_UPLOAD_URL_MISSING');
+    const upload = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: { 'X-Goog-Upload-Offset': '0', 'X-Goog-Upload-Command': 'upload, finalize', 'Content-Type': mimeType },
+      body: blob,
+      cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer'
+    });
+    const data = await upload.json().catch(() => ({}));
+    if (!upload.ok || !data?.file?.uri) throw new Error(data?.error?.message || `AI_UPLOAD_FAILED:${upload.status}`);
+    return { fileUri: data.file.uri, fileName: data.file.name || null, mimeType: data.file.mimeType || mimeType };
+  }
+
+  function cleanupTabCapture() {
+    const session = tabCaptureSession;
+    if (!session) return;
+    clearTimeout(session.limitTimer);
+    try { session.stream?.getTracks?.().forEach(track => track.stop()); } catch {}
+    try { session.audioContext?.close?.(); } catch {}
+  }
+
+  async function startTabCapture(payload = {}) {
+    if (tabCaptureSession?.recording) return { ok: true, recording: true, startedAt: tabCaptureSession.startedAt, mimeType: tabCaptureSession.mimeType };
+    if (!navigator.mediaDevices?.getUserMedia || !globalThis.MediaRecorder) throw new Error('TAB_CAPTURE_MEDIA_UNAVAILABLE');
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { mandatory: { chromeMediaSource: 'tab', chromeMediaSourceId: payload.streamId } },
+      video: { mandatory: { chromeMediaSource: 'tab', chromeMediaSourceId: payload.streamId, maxWidth: 854, maxHeight: 480, maxFrameRate: 8 } }
+    });
+    let audioContext = null;
+    try {
+      audioContext = new AudioContext();
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(audioContext.destination);
+    } catch {}
+    const mimeType = captureMimeType();
+    const chunks = [];
+    const recorder = new MediaRecorder(stream, { ...(mimeType ? { mimeType } : {}), videoBitsPerSecond: 420000, audioBitsPerSecond: 64000 });
+    const stopped = new Promise((resolve, reject) => {
+      recorder.addEventListener('dataavailable', event => { if (event.data?.size) chunks.push(event.data); });
+      recorder.addEventListener('stop', resolve, { once: true });
+      recorder.addEventListener('error', event => reject(event?.error || new Error('TAB_CAPTURE_RECORDER_FAILED')), { once: true });
+    });
+    const startedAt = Date.now();
+    tabCaptureSession = {
+      stream, audioContext, recorder, stopped, chunks, startedAt,
+      mimeType: recorder.mimeType || mimeType || 'video/webm',
+      apiKey: String(payload.apiKey || ''),
+      maxBytes: Math.max(1, Number(payload.maxBytes) || 120 * 1024 * 1024),
+      recording: true,
+      finalized: null,
+      limitTimer: null
+    };
+    recorder.start(1000);
+    tabCaptureSession.limitTimer = setTimeout(() => {
+      if (tabCaptureSession?.recording && recorder.state !== 'inactive') recorder.stop();
+    }, Math.max(10000, Math.min(20 * 60 * 1000, Number(payload.maxDurationMs) || 20 * 60 * 1000)));
+    return { ok: true, recording: true, startedAt, mimeType: tabCaptureSession.mimeType };
+  }
+
+  async function stopTabCapture() {
+    const session = tabCaptureSession;
+    if (!session) throw new Error('TAB_CAPTURE_NOT_ACTIVE');
+    if (session.finalized) return session.finalized;
+    if (session.recording && session.recorder.state !== 'inactive') session.recorder.stop();
+    session.recording = false;
+    await session.stopped;
+    cleanupTabCapture();
+    const durationMs = Math.max(0, Date.now() - session.startedAt);
+    const blob = new Blob(session.chunks, { type: session.mimeType || 'video/webm' });
+    if (!blob.size) { tabCaptureSession = null; throw new Error('TAB_CAPTURE_EMPTY'); }
+    if (blob.size > session.maxBytes) { tabCaptureSession = null; throw new Error('TAB_CAPTURE_TOO_LARGE'); }
+    const uploaded = await uploadCaptureBlob(blob, session.apiKey);
+    session.finalized = { ok: true, recording: false, hasRecording: true, ...uploaded, durationMs, size: blob.size };
+    const result = session.finalized;
+    tabCaptureSession = null;
+    return result;
+  }
+
+  function tabCaptureStatus() {
+    const session = tabCaptureSession;
+    return {
+      ok: true,
+      recording: Boolean(session?.recording && session?.recorder?.state !== 'inactive'),
+      hasRecording: Boolean(session && session.recorder?.state === 'inactive'),
+      startedAt: session?.startedAt || null,
+      durationMs: session?.startedAt ? Math.max(0, Date.now() - session.startedAt) : 0,
+      mimeType: session?.mimeType || null
+    };
+  }
+
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message?.type !== 'RAYLINGO_OFFSCREEN_TAB_CAPTURE') return false;
+    (async () => {
+      if (message.action === 'start') return startTabCapture(message.payload || {});
+      if (message.action === 'stop') return stopTabCapture();
+      if (message.action === 'status') return tabCaptureStatus();
+      return { ok: false, error: 'TAB_CAPTURE_UNKNOWN_ACTION' };
+    })().then(sendResponse).catch(error => sendResponse({ ok: false, errorCode: String(error?.message || '').split(':')[0] || 'TAB_CAPTURE_OFFSCREEN_FAILED', error: error?.message || 'Tab capture failed.' }));
+    return true;
   });
 
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {

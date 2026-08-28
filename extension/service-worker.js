@@ -1,6 +1,6 @@
 'use strict';
 
-if (typeof importScripts === 'function') importScripts('platform-compat.js', 'integrity-guard.js', 'language-registry.js', 'ui-i18n.js', 'tts-registry.js');
+if (typeof importScripts === 'function') importScripts('platform-compat.js', 'integrity-guard.js', 'language-registry.js', 'ui-i18n.js', 'tts-registry.js', 'ai-provider-worker.js');
 
 const integrityReady = RayLingoIntegrity.ensureVerified();
 async function requireIntegrity() { const state = await RayLingoIntegrity.ensureVerified(); if (!state.ok) { const error = new Error('INTEGRITY_LOCKED'); error.code='INTEGRITY_LOCKED'; throw error; } return state; }
@@ -18,6 +18,7 @@ let activeTtsSessionId = null;
 let activeTtsEngine = null;
 let activeTtsMonitorToken = 0;
 let activeWebSpeechUtterance = null;
+let activeTabCapture = null;
 
 async function hasOffscreenDocument() {
   if (!chrome.offscreen?.createDocument) return false;
@@ -41,8 +42,8 @@ async function ensureOffscreenDocument() {
   if (!creatingOffscreen) {
     creatingOffscreen = chrome.offscreen.createDocument({
       url: OFFSCREEN_DOCUMENT_PATH,
-      reasons: ['AUDIO_PLAYBACK', 'BLOBS', 'IFRAME_SCRIPTING'],
-      justification: 'Run RayLingo browser neural TTS in a hidden Piper iframe and play audio outside short-lived popup/content contexts.'
+      reasons: ['AUDIO_PLAYBACK', 'BLOBS', 'IFRAME_SCRIPTING', 'USER_MEDIA'],
+      justification: 'Run RayLingo TTS and, after an explicit user action, capture current-tab media in an offscreen document for transcription.'
     }).finally(() => { creatingOffscreen = null; });
   }
   await creatingOffscreen;
@@ -51,6 +52,78 @@ async function ensureOffscreenDocument() {
 async function sendTtsAction(action, payload = {}) {
   await ensureOffscreenDocument();
   return chrome.runtime.sendMessage({ type: 'RAYLINGO_OFFSCREEN_TTS', action, payload });
+}
+
+
+async function sendTabCaptureAction(action, payload = {}) {
+  await ensureOffscreenDocument();
+  return chrome.runtime.sendMessage({ type: 'RAYLINGO_OFFSCREEN_TAB_CAPTURE', action, payload });
+}
+
+async function startTabTranscription(payload = {}) {
+  await requireIntegrity();
+  if (!chrome.tabCapture?.getMediaStreamId) throw codedError('TAB_CAPTURE_UNAVAILABLE', 'Current-tab media capture is unavailable in this browser.');
+  const tabId = Number(payload.tabId);
+  if (!Number.isInteger(tabId) || tabId < 0) throw codedError('TAB_CAPTURE_NO_TAB', 'No capturable tab was selected.');
+  const stored = await chrome.storage.local.get({ geminiApiKey: '', remoteMediaConsent: false });
+  if (stored.remoteMediaConsent !== true) throw codedError('REMOTE_MEDIA_CONSENT_REQUIRED', 'Remote media processing is not enabled.');
+  const apiKey = String(stored.geminiApiKey || '').trim();
+  if (!apiKey) throw codedError('AI_KEY_MISSING', 'Gemini API key is required for current-tab transcription.');
+  if (activeTabCapture?.tabId && activeTabCapture.tabId !== tabId) throw codedError('TAB_CAPTURE_BUSY', 'Another tab is already being captured.');
+  if (activeTabCapture?.tabId === tabId) return { state: 'recording', ...activeTabCapture };
+  const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tabId });
+  if (!streamId) throw codedError('TAB_CAPTURE_STREAM_FAILED', 'Chrome did not return a tab media stream.');
+  const response = await sendTabCaptureAction('start', {
+    streamId,
+    apiKey,
+    maxDurationMs: 20 * 60 * 1000,
+    maxBytes: 120 * 1024 * 1024
+  });
+  if (!response?.ok) throw codedError(response?.errorCode || 'TAB_CAPTURE_START_FAILED', response?.error || 'Current-tab capture failed to start.');
+  activeTabCapture = { tabId, startedAt: response.startedAt || Date.now(), targetLanguage: RayLingoLanguages.normalizeCode(payload.targetLanguage) || 'zh-Hant' };
+  return { state: 'recording', ...activeTabCapture, mimeType: response.mimeType || 'video/webm' };
+}
+
+async function stopTabTranscription(payload = {}) {
+  await requireIntegrity();
+  if (!activeTabCapture) {
+    const status = await sendTabCaptureAction('status').catch(() => null);
+    if (!status?.recording && !status?.hasRecording) throw codedError('TAB_CAPTURE_NOT_ACTIVE', 'No current-tab recording is active.');
+  }
+  const targetLanguage = RayLingoLanguages.normalizeCode(payload.targetLanguage || activeTabCapture?.targetLanguage) || 'zh-Hant';
+  const stopped = await sendTabCaptureAction('stop');
+  if (!stopped?.ok) throw codedError(stopped?.errorCode || 'TAB_CAPTURE_STOP_FAILED', stopped?.error || 'Current-tab recording could not be finalized.');
+  activeTabCapture = null;
+  const processed = await RayLingoAIWorker.processMedia({
+    provider: 'gemini',
+    fileUri: stopped.fileUri,
+    fileName: stopped.fileName || null,
+    mimeType: stopped.mimeType || 'video/webm',
+    targetLanguage,
+    task: 'transcribe_translate',
+    displayName: 'Current tab capture'
+  });
+  return {
+    state: 'completed',
+    translation: processed.translation || processed.text,
+    transcript: processed.transcript || '',
+    provider: processed.provider,
+    targetLanguage,
+    durationMs: stopped.durationMs || 0,
+    size: stopped.size || 0,
+    mimeType: stopped.mimeType || 'video/webm'
+  };
+}
+
+async function tabTranscriptionStatus() {
+  const status = await sendTabCaptureAction('status').catch(() => ({ ok: false, recording: false, hasRecording: false }));
+  return {
+    state: status?.recording ? 'recording' : status?.hasRecording ? 'ready-to-process' : 'idle',
+    tabId: activeTabCapture?.tabId || null,
+    startedAt: activeTabCapture?.startedAt || status?.startedAt || null,
+    durationMs: status?.durationMs || 0,
+    mimeType: status?.mimeType || null
+  };
 }
 
 
@@ -450,6 +523,46 @@ chrome.runtime.onConnect.addListener(port => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'RAYLINGO_TAB_TRANSCRIBE_START') {
+    startTabTranscription(message.payload || {}).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'TAB_CAPTURE_START_FAILED', error: error?.message || 'Tab capture failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_TAB_TRANSCRIBE_STOP') {
+    stopTabTranscription(message.payload || {}).then(result => sendResponse({ ok: true, ...result })).catch(error => { activeTabCapture = null; sendResponse({ ok: false, errorCode: error?.code || 'TAB_CAPTURE_STOP_FAILED', error: error?.message || 'Tab transcription failed.' }); });
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_TAB_TRANSCRIBE_STATUS') {
+    tabTranscriptionStatus().then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, state: 'idle', errorCode: error?.code || 'TAB_CAPTURE_STATUS_FAILED', error: error?.message || 'Tab capture status failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_AI_STATUS') {
+    requireIntegrity().then(() => RayLingoAIWorker.status(message.payload || {})).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'AI_STATUS_FAILED', error: error?.message || 'AI status failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_AI_TEST') {
+    requireIntegrity().then(() => RayLingoAIWorker.testProvider(message.payload || {})).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'AI_TEST_FAILED', error: error?.message || 'AI test failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_AI_TRANSLATE') {
+    requireIntegrity().then(() => RayLingoAIWorker.translate(message.payload || {})).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'AI_TRANSLATE_FAILED', error: error?.message || 'AI translation failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_AI_MEDIA_PROCESS') {
+    requireIntegrity().then(() => RayLingoAIWorker.processMedia(message.payload || {})).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'AI_MEDIA_FAILED', error: error?.message || 'AI media processing failed.' }));
+    return true;
+  }
+
+  if (message?.type === 'RAYLINGO_AI_YOUTUBE_TRANSCRIPT') {
+    requireIntegrity().then(() => RayLingoAIWorker.youtubeTranscript(message.payload || {})).then(result => sendResponse({ ok: true, ...result })).catch(error => sendResponse({ ok: false, errorCode: error?.code || 'AI_TRANSCRIPT_FAILED', error: error?.message || 'AI transcript failed.' }));
+    return true;
+  }
+
   if (message?.type === 'RAYLINGO_INTEGRITY_STATUS') {
     RayLingoIntegrity.ensureVerified(Boolean(message.force)).then(sendResponse).catch(error => sendResponse({ ok:false, state:'locked', reason:error?.message||'INTEGRITY_FAILED' }));
     return true;
@@ -475,7 +588,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (['ended', 'stopped', 'error', 'cancelled', 'interrupted'].includes(message.event) && (!message.owner || message.owner === activeTtsOwner) && (!message.sessionId || message.sessionId === activeTtsSessionId)) { activeTtsOwner = null; activeTtsSessionId = null; }
     return false;
   }
-  if (message?.type === 'RAYLINGO_OFFSCREEN_TTS') return false;
+  if (message?.type === 'RAYLINGO_OFFSCREEN_TTS' || message?.type === 'RAYLINGO_OFFSCREEN_TAB_CAPTURE') return false;
   if (message?.type === 'RAYLINGO_REMOTE_TRANSLATE') {
     (async () => {
       try {

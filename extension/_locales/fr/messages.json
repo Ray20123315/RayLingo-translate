@@ -1,0 +1,212 @@
+{
+  "extName": {
+    "message": "RayLingo — Traducteur instantané"
+  },
+  "extDescription": {
+    "message": "Traduction multilingue instantanée pour les pages web."
+  },
+  "brandSubtitle": {
+    "message": "Instantané, multilingue et multi-navigateur"
+  },
+  "sourceLanguage": {
+    "message": "Source"
+  },
+  "targetLanguage": {
+    "message": "Cible"
+  },
+  "swap": {
+    "message": "Permuter les langues"
+  },
+  "detectedInput": {
+    "message": "Texte source"
+  },
+  "resultTitle": {
+    "message": "Traduction"
+  },
+  "speak": {
+    "message": "Écouter"
+  },
+  "copy": {
+    "message": "Copier"
+  },
+  "clear": {
+    "message": "Effacer"
+  },
+  "paste": {
+    "message": "Coller"
+  },
+  "inputPlaceholder": {
+    "message": "Saisissez ou collez du texte pour traduire automatiquement…"
+  },
+  "readyInput": {
+    "message": "Saisissez du texte pour lancer la traduction"
+  },
+  "openFullPage": {
+    "message": "Ouvrir l’espace complet"
+  },
+  "selectionMode": {
+    "message": "Comportement de sélection"
+  },
+  "selectionModeAuto": {
+    "message": "Ouvrir immédiatement le traducteur flottant"
+  },
+  "selectionModeButton": {
+    "message": "Afficher d’abord le bouton Traduire"
+  },
+  "selectionModeOff": {
+    "message": "Désactiver la traduction de sélection"
+  },
+  "selectionAppearanceTitle": {
+    "message": "Traducteur de sélection"
+  },
+  "selectionHelp": {
+    "message": "Sélectionnez du texte pour ouvrir un mini-traducteur et changer de langue dans le panneau flottant."
+  },
+  "selectionTriggerStyle": {
+    "message": "Style du déclencheur"
+  },
+  "selectionTriggerStyleLabel": {
+    "message": "Afficher le bouton Traduire"
+  },
+  "selectionTriggerStyleDot": {
+    "message": "Afficher un petit point"
+  },
+  "selectionTriggerSize": {
+    "message": "Taille du bouton/point"
+  },
+  "selectionSurfaceTheme": {
+    "message": "Arrière-plan"
+  },
+  "selectionSurfaceBlack": {
+    "message": "Noir"
+  },
+  "selectionSurfaceWhite": {
+    "message": "Blanc"
+  },
+  "selectionAccentColor": {
+    "message": "Couleur d’accent"
+  },
+  "selectionPreviewText": {
+    "message": "Aperçu de la sélection"
+  },
+  "uiLanguage": {
+    "message": "Langue de l’interface"
+  },
+  "uiLanguageHelp": {
+    "message": "L’espace complet et le traducteur flottant utilisent cette langue"
+  },
+  "typingEffect": {
+    "message": "Animation de frappe du résultat"
+  },
+  "selectionOriginal": {
+    "message": "Original"
+  },
+  "selectionResult": {
+    "message": "Traduction"
+  },
+  "selectionWaiting": {
+    "message": "Traduction…"
+  },
+  "selectionCopy": {
+    "message": "Copier"
+  },
+  "selectionSpeak": {
+    "message": "Écouter"
+  },
+  "selectionPin": {
+    "message": "Épingler"
+  },
+  "selectionUnpin": {
+    "message": "Désépingler"
+  },
+  "selectionClose": {
+    "message": "Fermer"
+  },
+  "statusDetecting": {
+    "message": "Détection de la langue…"
+  },
+  "statusRemoteTranslating": {
+    "message": "Traduction…"
+  },
+  "statusNativeTranslating": {
+    "message": "Traduction locale…"
+  },
+  "statusNativeDone": {
+    "message": "Traduction locale terminée"
+  },
+  "statusRemoteDone": {
+    "message": "Traduction terminée"
+  },
+  "securityLocked": {
+    "message": "Verrouillé"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo ne peut pas traduire cette sélection car la vérification d’intégrité a échoué."
+  },
+  "workspaceNavTranslate": {
+    "message": "Traduire"
+  },
+  "workspaceNavLanguage": {
+    "message": "Langue"
+  },
+  "workspaceNavSelection": {
+    "message": "Sélection"
+  },
+  "workspaceNavAppearance": {
+    "message": "Apparence"
+  },
+  "appearanceTitle": {
+    "message": "Apparence"
+  },
+  "quickSettings": {
+    "message": "Réglages rapides"
+  },
+  "selectionDefaultLanguages": {
+    "message": "Langues par défaut de sélection"
+  },
+  "lang_auto": {
+    "message": "Détection automatique"
+  },
+  "lang_en": {
+    "message": "Anglais"
+  },
+  "lang_zhHant": {
+    "message": "Chinois traditionnel"
+  },
+  "lang_zhHans": {
+    "message": "Chinois simplifié"
+  },
+  "lang_ja": {
+    "message": "Japonais"
+  },
+  "lang_ko": {
+    "message": "Coréen"
+  },
+  "lang_es": {
+    "message": "Espagnol"
+  },
+  "lang_fr": {
+    "message": "Français"
+  },
+  "lang_de": {
+    "message": "Allemand"
+  },
+  "videoTranscriptStop": {
+    "message": "停止錄製並翻譯"
+  },
+  "videoTranscriptRecording": {
+    "message": "正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。"
+  },
+  "videoTranscriptStarting": {
+    "message": "正在啟動目前分頁擷取…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "正在停止錄製、上傳並翻譯…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini 正在讀取公開 YouTube 影片…"
+  },
+  "videoTranscriptReady": {
+    "message": "錄製已停止；按下按鈕完成上傳與翻譯。"
+  }
+}

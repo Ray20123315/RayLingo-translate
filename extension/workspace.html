@@ -23,9 +23,10 @@
         <button class="nav-item" type="button" data-workspace-page="history" data-title-key="workspaceNavHistory"><span>06</span><b data-i18n="workspaceNavHistory">歷史</b></button>
         <button class="nav-item" type="button" data-workspace-page="engine" data-title-key="workspaceNavEngine"><span>07</span><b data-i18n="workspaceNavEngine">翻譯引擎</b></button>
         <button class="nav-item" type="button" data-workspace-page="security" data-title-key="workspaceNavSecurity"><span>08</span><b data-i18n="workspaceNavSecurity">安全與診斷</b></button>
+        <button class="nav-item" type="button" data-workspace-page="media" data-title-key="workspaceNavMedia"><span>09</span><b data-i18n="workspaceNavMedia">AI 與媒體</b></button>
       </nav>
       <div class="side-footer">
-        <div class="side-status-row"><span id="integrityBadge" class="integrity-badge" data-state="checking">…</span><span id="appVersion" class="version-badge">v0.4.8</span></div>
+        <div class="side-status-row"><span id="integrityBadge" class="integrity-badge" data-state="checking">…</span><span id="appVersion" class="version-badge">v—</span></div>
         <small>RayLingo cross-browser build</small>
       </div>
     </aside>
@@ -99,6 +100,8 @@
           <div class="card-head"><div><h2 data-i18n="selectionAppearanceTitle">反白翻譯</h2><p data-i18n="selectionHelp">反白後可直接開啟迷你翻譯器，並在浮窗切換語言。</p></div><span class="platform-badge">SELECT</span></div>
           <div class="setting-grid">
             <label class="select-setting"><span><b data-i18n="selectionMode">反白行為</b><small data-i18n="selectionHelp">控制反白後的啟動方式。</small></span><select id="selectionMode"><option value="auto" data-i18n="selectionModeAuto">直接開啟翻譯浮窗</option><option value="button" data-i18n="selectionModeButton">先顯示「譯」按鈕</option><option value="off" data-i18n="selectionModeOff">停用反白翻譯</option></select></label>
+            <label class="select-setting"><span><b data-i18n="sourceLanguage">來源語言</b><small data-i18n="selectionDefaultLanguages">反白預設語言</small></span><select id="selectionSourceLanguage"></select></label>
+            <label class="select-setting"><span><b data-i18n="targetLanguage">目標語言</b><small data-i18n="selectionDefaultLanguages">反白預設語言</small></span><select id="selectionTargetLanguage"></select></label>
             <label class="select-setting"><span><b data-i18n="selectionTriggerStyle">觸發樣式</b><small data-i18n="selectionAppearanceHelp">可顯示文字按鈕或小圓點。</small></span><select id="selectionTriggerStyle"><option value="label" data-i18n="selectionTriggerStyleLabel">顯示「譯」按鈕</option><option value="dot" data-i18n="selectionTriggerStyleDot">顯示小圓點</option></select></label>
             <label class="range-setting"><span><b data-i18n="selectionTriggerSize">按鈕／小點大小</b><small id="selectionTriggerSizeValue">36px</small></span><input id="selectionTriggerSize" type="range" min="14" max="56" step="1" value="36"></label>
           </div>
@@ -113,11 +116,11 @@
           <div class="card-head"><div><h2 data-i18n="appearanceTitle">介面外觀</h2><p data-i18n="appearanceHelp">Popup、完整網頁與反白翻譯共用背景與強調色。</p></div><span class="platform-badge">CUSTOM UI</span></div>
           <div class="setting-grid appearance-grid">
             <label class="select-setting"><span><b data-i18n="selectionSurfaceTheme">背景</b><small data-i18n="workspaceThemeHelp">切換 RayLingo 深色／淺色表面。</small></span><select id="selectionSurfaceTheme"><option value="black" data-i18n="selectionSurfaceBlack">黑色</option><option value="white" data-i18n="selectionSurfaceWhite">白色</option></select></label>
-            <div class="setting palette-setting"><span><b data-i18n="selectionAccentColor">強調色</b><small data-i18n="workspaceAccentHelp">按鈕、Focus、Badge 與品牌亮色。</small></span><code id="selectionAccentColorValue">#7658ff</code></div>
+            <div class="setting palette-setting"><span><b data-i18n="selectionAccentColor">強調色</b><small data-i18n="workspaceAccentHelp">按鈕、Focus、Badge 與品牌亮色。</small></span><code id="selectionAccentColorValue">#7c5cff</code></div>
           </div>
           <div class="background-section"><div><b data-i18n="workspaceAccentPresets">強調色預設</b><small data-i18n="workspaceAccentPresetsHelp">RayLingo 內建八組強調色色票。</small></div>
             <div id="accentPalette" class="swatch-grid" role="radiogroup" aria-label="Accent color">
-              <button type="button" class="accent-swatch" data-accent="#7658ff" data-name="violet"><i style="--swatch-a:#7658ff;--swatch-b:#9a83ff"></i><span>violet</span></button>
+              <button type="button" class="accent-swatch" data-accent="#7c5cff" data-name="violet"><i style="--swatch-a:#7c5cff;--swatch-b:#a892ff"></i><span>violet</span></button>
               <button type="button" class="accent-swatch" data-accent="#3478f6" data-name="blue"><i style="--swatch-a:#3478f6;--swatch-b:#64a2ff"></i><span>blue</span></button>
               <button type="button" class="accent-swatch" data-accent="#00a7c7" data-name="cyan"><i style="--swatch-a:#00a7c7;--swatch-b:#54d6e8"></i><span>cyan</span></button>
               <button type="button" class="accent-swatch" data-accent="#1f9d68" data-name="green"><i style="--swatch-a:#1f9d68;--swatch-b:#55c998"></i><span>green</span></button>
@@ -127,7 +130,7 @@
               <button type="button" class="accent-swatch" data-accent="#b84ad8" data-name="magenta"><i style="--swatch-a:#b84ad8;--swatch-b:#e685ff"></i><span>magenta</span></button>
             </div>
           </div>
-          <label class="custom-accent-row"><span><b data-i18n="customAccentColor">自訂顏色</b><small data-i18n="workspaceCustomAccentHelp">自訂顏色也會同步 Popup 與反白浮窗。</small></span><input id="selectionAccentColor" type="color" value="#7658ff"></label>
+          <label class="custom-accent-row"><span><b data-i18n="customAccentColor">自訂顏色</b><small data-i18n="workspaceCustomAccentHelp">自訂顏色也會同步 Popup 與反白浮窗。</small></span><input id="selectionAccentColor" type="color" value="#7c5cff"></label>
         </div>
       </section>
 
@@ -145,6 +148,43 @@
           <label class="toggle-list-item"><span><b data-i18n="remoteTitle">啟用遠端備援</b><small id="remoteFallbackHelp" data-i18n="remoteHelp">沒有本機 Translator API 時，允許將文字送至 Google Translate</small></span><input id="remoteFallbackToggle" type="checkbox" checked></label>
           <div class="runtime-box"><div><small data-i18n="workspaceProviderStatus">目前翻譯引擎</small><strong id="providerNote" data-i18n="providerChecking">正在檢查翻譯引擎…</strong></div><span class="safe-badge">AUTO</span></div>
         </div>
+        <div class="card ai-provider-card">
+          <div class="card-head"><div><h2 data-i18n="aiProviderTitle">AI Provider</h2><p data-i18n="aiProviderHelp">Gemini 支援多模態；DeepSeek 用於文字翻譯與分析。API key 只儲存在擴充功能本機儲存。</p></div><span class="platform-badge">AI</span></div>
+          <div class="setting-grid">
+            <label class="select-setting"><span><b data-i18n="translationProvider">翻譯引擎</b><small data-i18n="translationProviderHelp">可固定使用 Browser、Gemini 或 DeepSeek。</small></span><select id="translationProvider"><option value="auto">AUTO · Browser</option><option value="browser">Browser / Google fallback</option><option value="gemini">Gemini AI</option><option value="deepseek">DeepSeek AI</option></select></label>
+            <label class="select-setting"><span><b>Gemini model</b><small>Default: gemini-3.7-flash</small></span><input id="geminiModel" type="text" value="gemini-3.7-flash" spellcheck="false"></label>
+            <label class="select-setting secret-setting"><span><b>Gemini API key</b><small data-i18n="apiKeyLocalOnly">只儲存在這個瀏覽器，不寫入專案或記憶包。</small></span><input id="geminiApiKey" type="password" autocomplete="off" placeholder="AIza…"></label>
+            <label class="select-setting"><span><b>DeepSeek model</b><small>Default: deepseek-v4-flash</small></span><input id="deepseekModel" type="text" value="deepseek-v4-flash" spellcheck="false"></label>
+            <label class="select-setting secret-setting"><span><b>DeepSeek API key</b><small data-i18n="apiKeyLocalOnly">只儲存在這個瀏覽器，不寫入專案或記憶包。</small></span><input id="deepseekApiKey" type="password" autocomplete="off" placeholder="sk-…"></label>
+          </div>
+          <div class="button-row"><button id="geminiTestButton" class="primary-outline-btn" type="button">Test Gemini</button><button id="deepseekTestButton" class="primary-outline-btn" type="button">Test DeepSeek</button><span id="aiProviderStatus" class="inline-feature-status">—</span></div>
+        </div>
+      </section>
+
+
+      <section class="workspace-page" data-page="media">
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="floatingWidgetTitle">常駐懸浮翻譯器</h2><p data-i18n="floatingWidgetHelp">可縮成一個點、點擊展開，或滑鼠移上去自動展開。</p></div><span class="platform-badge">FLOAT</span></div>
+          <div class="setting-grid">
+            <label class="toggle-list-item"><span><b data-i18n="floatingWidgetEnabled">啟用常駐懸浮窗</b><small data-i18n="floatingWidgetHelp">每個一般網頁都保留 RayLingo 入口。</small></span><input id="floatingWidgetEnabled" type="checkbox"></label>
+            <label class="toggle-list-item"><span><b data-i18n="floatingWidgetHoverExpand">Hover 自動展開</b><small data-i18n="floatingWidgetHoverHelp">游標移到懸浮點時展開。</small></span><input id="floatingWidgetHoverExpand" type="checkbox" checked></label>
+            <label class="toggle-list-item"><span><b data-i18n="floatingWidgetStartCollapsed">啟動時縮成點</b><small data-i18n="floatingWidgetCollapsedHelp">需要時再展開。</small></span><input id="floatingWidgetStartCollapsed" type="checkbox" checked></label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="multimodalTitle">多模態文件翻譯</h2><p data-i18n="multimodalHelp">圖片、PDF、DOCX、PPTX、文字、音訊與影片。DOCX/PPTX 先在本機抽文字；原生媒體由 Gemini 處理。</p></div><span class="platform-badge">FILES</span></div>
+          <div class="file-drop-row"><input id="multimodalFile" type="file" accept="image/*,application/pdf,.docx,.pptx,text/*,audio/*,video/*,.srt,.vtt"><button id="multimodalProcessButton" class="primary-outline-btn" type="button" data-i18n="processFile">翻譯檔案</button></div>
+          <div id="multimodalStatus" class="runtime-box"><div><small>File</small><strong data-i18n="multimodalIdle">尚未選擇檔案</strong></div><span class="safe-badge">LOCAL / AI</span></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div><h2 data-i18n="videoTranslationTitle">影片翻譯</h2><p data-i18n="videoSubtitleHelp">先用現有字幕；無字幕時公開 YouTube 直接由 Gemini 處理，其他 Chromium 分頁可由你手動開始／停止分頁擷取後翻譯。</p></div><span class="platform-badge">VIDEO</span></div>
+          <div class="setting-grid">
+            <label class="toggle-list-item"><span><b data-i18n="videoSubtitleEnabled">啟用字幕翻譯 overlay</b><small data-i18n="videoSubtitleHelp">支援 HTML caption track 與 YouTube 顯示中的字幕。</small></span><input id="videoSubtitleEnabled" type="checkbox"></label>
+            <label class="select-setting"><span><b data-i18n="videoSubtitleTarget">字幕目標語言</b><small data-i18n="videoSubtitleTargetHelp">翻譯 overlay 使用此語言。</small></span><select id="videoSubtitleTargetLanguage"></select></label>
+          </div>
+          <label class="toggle-list-item privacy-consent"><span><b data-i18n="remoteMediaConsent">允許遠端媒體處理</b><small data-i18n="remoteMediaConsentHelp">圖片／PDF／音訊／影片或公開 YouTube URL 只有在你操作時才會送給 Gemini。</small></span><input id="remoteMediaConsent" type="checkbox"></label>
+          <div class="button-row"><button id="videoTranscriptButton" class="primary-outline-btn" type="button" data-i18n="videoTranscriptStart">目前影片：AI 取文字並翻譯</button><span id="videoStatus" class="inline-feature-status" data-i18n="videoTranscriptPrivacy">需要 Gemini。公開 YouTube 送出影片 URL；其他 Chromium 分頁僅在你開始擷取並停止後上傳錄製的低碼率 WebM。</span></div>
+        </div>
       </section>
 
       <section class="workspace-page" data-page="security">
@@ -153,11 +193,11 @@
           <div class="fingerprint-box"><small>Ed25519 + SHA-256</small><code>Runtime integrity guard active</code></div>
           <div class="security-note" data-i18n="workspaceSecurityNote">合法修改需要獨立 AI 授權檔重新簽章；授權檔不包含在擴充 ZIP。</div>
         </div>
-        <div class="card diagnostics-card"><div class="card-head"><div><h2 data-i18n="workspaceDiagnosticsTitle">執行狀態</h2><p data-i18n="workspaceDiagnosticsDescription">版本、引擎與安全狀態集中顯示於側欄與頁首。</p></div></div><div class="diagnostic-grid"><article><small>Product</small><strong>RayLingo</strong></article><article><small>Version</small><strong>0.4.8</strong></article><article><small>Build</small><strong>Signed integrity</strong></article></div></div>
+        <div class="card diagnostics-card"><div class="card-head"><div><h2 data-i18n="workspaceDiagnosticsTitle">執行狀態</h2><p data-i18n="workspaceDiagnosticsDescription">版本、引擎與安全狀態集中顯示於側欄與頁首。</p></div></div><div class="diagnostic-grid"><article><small>Product</small><strong>RayLingo</strong></article><article><small>Version</small><strong>…</strong></article><article><small>Build</small><strong>Signed integrity</strong></article></div></div>
         <div class="card update-card">
           <div class="card-head"><div><h2 data-i18n="updateTitle">檢查更新</h2><p data-i18n="updateDescription">從官方 GitHub 讀取已簽章版本資訊，不會自行替換擴充程式碼。</p></div><div class="update-actions"><button id="updateCheckButton" class="primary-outline-btn" type="button" data-i18n="updateCheckButton">檢查更新</button><button id="updateDownloadButton" class="secondary-btn update-download" type="button" data-i18n="updateDownloadButton" hidden>取得新版</button></div></div>
           <div class="runtime-box update-status-box"><div><small data-i18n="updateStatusLabel">更新狀態</small><strong id="updateStatus" data-i18n="updateStatusIdle">尚未檢查</strong></div><span id="updateSignatureBadge" class="safe-badge">SIGNED</span></div>
-          <div class="update-meta"><code id="updateVersionMeta">current 0.4.8</code><code id="updatePackageMeta">—</code></div>
+          <div class="update-meta"><code id="updateVersionMeta">current …</code><code id="updatePackageMeta">—</code></div>
         </div>
         <div class="card compatibility-card">
           <div class="card-head"><div><h2 data-i18n="compatTitle">瀏覽器相容性</h2><p data-i18n="compatDescription">同一核心依瀏覽器能力選擇背景與 TTS 後端。</p></div><span id="platformBadge" class="platform-badge">WEBEXT</span></div>
@@ -175,7 +215,9 @@
   <script src="integrity-client.js"></script>
   <script src="language-registry.js"></script>
   <script src="ui-i18n.js"></script>
+  <script src="ai-provider.js"></script>
   <script src="translator-engine.js"></script>
+  <script src="multimodal.js"></script>
   <script src="tts-registry.js"></script>
   <script src="selection-appearance.js"></script>
   <script src="popup.js"></script>

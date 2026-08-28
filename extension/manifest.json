@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
-  "version": "0.5.1",
+  "version": "0.7.1",
   "default_locale": "zh_TW",
   "permissions": [
     "storage",
@@ -10,12 +10,16 @@
     "clipboardRead",
     "clipboardWrite",
     "offscreen",
-    "tts"
+    "tts",
+    "activeTab",
+    "tabCapture"
   ],
   "host_permissions": [
     "https://translate.googleapis.com/*",
     "https://piper.ttstool.com/*",
-    "https://raw.githubusercontent.com/*"
+    "https://raw.githubusercontent.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.deepseek.com/*"
   ],
   "action": {
     "default_title": "__MSG_extName__",
@@ -39,15 +43,18 @@
         "integrity-client.js",
         "language-registry.js",
         "ui-i18n.js",
+        "ai-provider.js",
         "translator-engine.js",
         "tts-registry.js",
         "selection-appearance.js",
+        "media-translation.js",
         "content.js"
       ],
       "run_at": "document_idle",
       "exclude_matches": [
         "https://piper.ttstool.com/*"
-      ]
+      ],
+      "all_frames": true
     }
   ],
   "icons": {
@@ -58,5 +65,20 @@
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "_locales/*/messages.json"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
 }

@@ -1,17 +1,17 @@
 :root {
   color-scheme: dark light;
   font-family: Inter, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --bg:#0f0f0f;
-  --side:#111216;
-  --surface:#151519;
-  --surface2:#1c1d22;
+  --bg:#0b0c10;
+  --side:#0e0f13;
+  --surface:#121319;
+  --surface2:#18191f;
   --border:#292a31;
   --text:#f8f8fa;
   --text2:#c6c7ce;
   --muted:#858893;
-  --accent:#7658ff;
-  --accent2:#967fff;
-  --focus:#7658ff3d;
+  --accent:#7c5cff;
+  --accent2:#a892ff;
+  --focus:#7c5cff52;
   --accent-soft:color-mix(in srgb,var(--accent) 14%,transparent);
   --accent-soft-2:color-mix(in srgb,var(--accent) 7%,transparent);
   --accent-border:color-mix(in srgb,var(--accent) 42%,transparent);
@@ -86,7 +86,7 @@ select:focus-visible { border-color:var(--accent); box-shadow:0 0 0 3px var(--fo
 .action-button.danger-soft:hover:not(:disabled) { border-color:color-mix(in srgb,var(--danger) 42%,transparent); background:color-mix(in srgb,var(--danger) 10%,transparent); color:var(--danger); }
 textarea { width:100%; height:100px; min-height:82px; max-height:170px; resize:vertical; border:0; outline:0; padding:10px; background:transparent; color:var(--text); line-height:1.55; font-size:11.5px; }
 textarea::placeholder { color:color-mix(in srgb,var(--muted) 84%,transparent); }
-.translated-text { min-height:91px; max-height:160px; overflow:auto; padding:10px; white-space:pre-wrap; word-break:break-word; color:var(--text); line-height:1.55; font-size:11.5px; }
+.translated-text { user-select:text; -webkit-user-select:text; cursor:text; min-height:91px; max-height:160px; overflow:auto; padding:10px; white-space:pre-wrap; word-break:break-word; color:var(--text); line-height:1.55; font-size:11.5px; }
 .translated-text.placeholder { color:var(--muted); }
 .text-button { border:0; background:none; color:var(--accent2); padding:0; font-size:9px; font-weight:750; cursor:pointer; }
 .text-button:hover { text-decoration:underline; }
@@ -128,3 +128,13 @@ html[data-integrity="locked"] body > *:not(.integrity-lock-overlay) { pointer-ev
 *::-webkit-scrollbar { width:8px; height:8px; }
 *::-webkit-scrollbar-thumb { border-radius:999px; background:color-mix(in srgb,var(--accent) 45%,var(--muted)); border:2px solid transparent; background-clip:padding-box; }
 *::-webkit-scrollbar-track { background:transparent; }
+
+
+/* v0.6.0 visible quick settings: previously wired in JS but absent from Popup DOM. */
+.quick-settings{margin-top:10px;overflow:hidden;background:radial-gradient(circle at 8% -8%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 38%),var(--surface)}
+.quick-settings>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:10.5px;font-weight:820}
+.quick-settings>summary::-webkit-details-marker{display:none}.quick-settings>summary:before{content:'◆';font-size:7px;color:var(--accent2);filter:drop-shadow(0 0 8px var(--accent-shadow))}.quick-settings>summary small{grid-column:1/-1;color:var(--muted);font-size:8.5px;font-weight:500;line-height:1.45}
+.quick-settings:not([open])>summary{border-bottom:0}.quick-settings-body{padding:11px;display:grid;gap:9px}.compact-grid{display:grid;gap:8px}.compact-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.compact-field{display:grid;gap:5px;min-width:0}.compact-field>span,.compact-label{color:var(--muted);font-size:8.8px;font-weight:740}.compact-toggle,.compact-color,.compact-range{border:1px solid var(--border);border-radius:11px;background:var(--surface2);padding:8px 9px;display:flex;align-items:center;justify-content:space-between;gap:8px}.compact-toggle span,.compact-color span,.compact-range span{min-width:0;display:flex;flex-direction:column;gap:2px}.compact-toggle b,.compact-color b,.compact-range b{font-size:9px}.compact-toggle small,.compact-range small{font-size:7.8px;color:var(--muted);font-weight:600}.compact-toggle input{accent-color:var(--accent);width:16px;height:16px}.compact-color input[type=color]{width:38px;height:30px;padding:2px;border:1px solid var(--accent-border);border-radius:9px;background:var(--surface);cursor:pointer}.compact-color code{font:650 7.5px/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent2)}.compact-range{grid-column:1/-1}.compact-range input[type=range]{width:54%;accent-color:var(--accent)}.mini-divider{height:1px;background:linear-gradient(90deg,transparent,var(--accent-border),transparent)}.selection-language-row{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr)}.language-arrow{align-self:center;justify-self:center;margin-top:14px;color:var(--accent2);font-weight:800}.popup-accent-palette{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}.popup-accent-palette button{width:100%;aspect-ratio:1;border:1px solid var(--border);border-radius:9px;background:var(--swatch,var(--accent));cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.18)}.popup-accent-palette button:nth-child(1){--swatch:#7c5cff}.popup-accent-palette button:nth-child(2){--swatch:#3ea6ff}.popup-accent-palette button:nth-child(3){--swatch:#00c2d7}.popup-accent-palette button:nth-child(4){--swatch:#35c982}.popup-accent-palette button:nth-child(5){--swatch:#f1b44c}.popup-accent-palette button:nth-child(6){--swatch:#ff5f7a}.popup-accent-palette button:nth-child(7){--swatch:#d966ff}.popup-accent-palette button:nth-child(8){--swatch:#f4f4f5}.popup-accent-palette button.selected{border-color:var(--accent2);box-shadow:0 0 0 2px var(--focus),0 0 18px var(--accent-shadow)}.compact-preview{margin-top:0;min-height:104px}.compact-preview .selection-preview-canvas{min-height:102px;padding:14px}.compact-preview .selection-preview-trigger{left:20px;top:33px}.compact-preview .selection-preview-panel{left:80px;top:17px;width:245px;min-height:70px;padding:11px}.selection-input-hint{margin:0;color:var(--muted);font-size:8.3px;line-height:1.45}.appearance-controls{margin-top:1px}
+
+/* v0.7 AI / floating / multimodal */
+.ai-media-settings .quick-settings-body{gap:10px}.file-action-row,.file-drop-row,.button-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.file-action-row input[type=file],.file-drop-row input[type=file]{min-width:0;flex:1;color:var(--text2);font-size:11px}.wide-feature-button{width:100%;min-height:36px;border:1px solid var(--accent-border);border-radius:10px;background:var(--accent-soft-2);color:var(--accent2);font-weight:750;cursor:pointer}.wide-feature-button:hover{background:var(--accent-soft);color:var(--text)}.inline-feature-status{margin:0;color:var(--muted);font-size:10.5px;line-height:1.45}.inline-feature-status[data-state="error"]{color:#e16d78}.inline-feature-status[data-state="ready"]{color:var(--accent2)}

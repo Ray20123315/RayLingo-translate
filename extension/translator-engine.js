@@ -70,11 +70,18 @@
     return response.text;
   }
 
-  async function translate({ text, sourceLanguage = 'auto', targetLanguage, remoteFallbackEnabled = true, onStatus = () => {} }) {
+  async function translate({ text, sourceLanguage = 'auto', targetLanguage, remoteFallbackEnabled = true, provider = 'auto', onStatus = () => {} }) {
     if (globalThis.RayLingoIntegrityClient?.assertUnlocked) await RayLingoIntegrityClient.assertUnlocked();
     const trimmed = String(text || '').trim();
     if (!trimmed) return { text: '', sourceLanguage: null, targetLanguage, provider: 'none' };
     if (!RayLingoLanguages.isSupported(targetLanguage)) throw new Error('Unsupported target language');
+
+    const selectedProvider = globalThis.RayLingoAI?.normalizeTranslationProvider?.(provider) || 'auto';
+    if (selectedProvider === 'gemini' || selectedProvider === 'deepseek') {
+      onStatus({ type: 'ai', provider: selectedProvider });
+      const result = await RayLingoAI.translate({ text: trimmed, sourceLanguage, targetLanguage, provider: selectedProvider });
+      return { text: result.text, sourceLanguage: result.sourceLanguage || sourceLanguage || 'auto', targetLanguage, provider: result.provider || `ai-${selectedProvider}` };
+    }
 
     let resolvedSource = sourceLanguage;
     if (resolvedSource === 'auto') {

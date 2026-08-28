@@ -134,3 +134,13 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:20px;
 }
 
 .update-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.update-status-box{margin-top:10px}.update-status-box strong{overflow-wrap:anywhere}.update-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.update-meta code{font:700 9.5px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:5px 7px}.update-download[hidden]{display:none}.compat-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}.compat-list article{border:1px solid var(--border);border-radius:12px;background:var(--surface2);padding:10px}.compat-list small{display:block;color:var(--muted);font-size:9px;margin-bottom:4px}.compat-list strong{font-size:11px}.compat-list span{display:block;margin-top:3px;color:var(--text2);font-size:9.5px;line-height:1.45}@media(max-width:700px){.compat-list{grid-template-columns:1fr}}
+
+
+/* v0.6.0 semantic accent hierarchy */
+body[data-full-workspace="true"][data-ui-theme="black"] .workspace-content{background:radial-gradient(circle at 76% -6%,color-mix(in srgb,var(--accent) 8%,transparent),transparent 28%)}
+body[data-full-workspace="true"] .feature-card,body[data-full-workspace="true"] .card{background:linear-gradient(155deg,color-mix(in srgb,var(--accent) 3%,var(--surface)),var(--surface));border-color:color-mix(in srgb,var(--border) 92%,var(--accent) 8%)}
+body[data-full-workspace="true"] .page-header #workspaceEyebrow{color:var(--accent2);text-shadow:0 0 24px var(--accent-shadow)}
+body[data-full-workspace="true"] .workspace-output{user-select:text;-webkit-user-select:text;cursor:text}
+
+/* v0.7 AI / media */
+.secret-setting input,.select-setting input[type="text"],.select-setting input[type="password"]{min-width:230px;max-width:440px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--text);padding:0 11px;outline:none}.secret-setting input:focus,.select-setting input[type="text"]:focus{border-color:var(--accent-border);box-shadow:0 0 0 3px var(--focus)}.button-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}.file-drop-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.file-drop-row input[type=file]{flex:1;min-width:280px;padding:14px;border:1px dashed var(--accent-border);border-radius:12px;background:var(--accent-soft-2);color:var(--text2)}

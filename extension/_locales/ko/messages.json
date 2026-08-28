@@ -643,5 +643,35 @@
   },
   "compatCurrentBrowser": {
     "message": "현재 브라우저"
+  },
+  "quickSettings": {
+    "message": "빠른 설정"
+  },
+  "selectionDefaultLanguages": {
+    "message": "선택 번역 기본 언어"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo 무결성 검증에 실패하여 이 선택 영역을 번역할 수 없습니다."
+  },
+  "selectionInputHint": {
+    "message": "일반 웹 텍스트뿐 아니라 입력란과 텍스트 영역 안의 선택도 지원합니다."
+  },
+  "videoTranscriptStop": {
+    "message": "停止錄製並翻譯"
+  },
+  "videoTranscriptRecording": {
+    "message": "正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。"
+  },
+  "videoTranscriptStarting": {
+    "message": "正在啟動目前分頁擷取…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "正在停止錄製、上傳並翻譯…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini 正在讀取公開 YouTube 影片…"
+  },
+  "videoTranscriptReady": {
+    "message": "錄製已停止；按下按鈕完成上傳與翻譯。"
   }
 }

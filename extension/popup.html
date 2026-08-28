@@ -85,6 +85,65 @@
       </div>
     </section>
 
+    <details class="quick-settings section" open>
+      <summary><span data-i18n="quickSettings">快速設定</span><small data-i18n="selectionHelp">反白後直接開啟迷你翻譯器，並在浮窗切換語言。</small></summary>
+      <div class="quick-settings-body">
+        <div class="compact-grid two">
+          <label class="compact-field"><span data-i18n="uiLanguage">介面語言</span><select id="uiLocale"></select></label>
+          <label class="compact-toggle"><span><b data-i18n="typingEffect">結果逐字顯示</b><small data-i18n="workspaceTypingHelp">讓翻譯結果以打字效果呈現。</small></span><input id="typingEffectToggle" type="checkbox" checked></label>
+        </div>
+        <div class="mini-divider"></div>
+        <div class="compact-grid two">
+          <label class="compact-field"><span data-i18n="selectionMode">反白行為</span><select id="selectionMode"><option value="auto" data-i18n="selectionModeAuto">直接開啟翻譯浮窗</option><option value="button" data-i18n="selectionModeButton">先顯示「譯」按鈕</option><option value="off" data-i18n="selectionModeOff">停用反白翻譯</option></select></label>
+          <label class="compact-field"><span data-i18n="selectionTriggerStyle">觸發樣式</span><select id="selectionTriggerStyle"><option value="label" data-i18n="selectionTriggerStyleLabel">顯示「譯」按鈕</option><option value="dot" data-i18n="selectionTriggerStyleDot">顯示小圓點</option></select></label>
+        </div>
+        <div class="compact-label" data-i18n="selectionDefaultLanguages">反白預設語言</div>
+        <div class="language-row selection-language-row">
+          <label class="select-wrap"><span data-i18n="sourceLanguage">來源語言</span><select id="selectionSourceLanguage"></select></label>
+          <span class="language-arrow" aria-hidden="true">→</span>
+          <label class="select-wrap"><span data-i18n="targetLanguage">目標語言</span><select id="selectionTargetLanguage"></select></label>
+        </div>
+        <div class="compact-grid two appearance-controls">
+          <label class="compact-field"><span data-i18n="selectionSurfaceTheme">背景</span><select id="selectionSurfaceTheme"><option value="black" data-i18n="selectionSurfaceBlack">黑色</option><option value="white" data-i18n="selectionSurfaceWhite">白色</option></select></label>
+          <label class="compact-color"><span><b data-i18n="selectionAccentColor">強調色</b><code id="selectionAccentColorValue">#7c5cff</code></span><input id="selectionAccentColor" type="color" value="#7c5cff" aria-label="Accent color"></label>
+        </div>
+        <label class="compact-range"><span><b data-i18n="selectionTriggerSize">按鈕／小點大小</b><small id="selectionTriggerSizeValue">36px</small></span><input id="selectionTriggerSize" type="range" min="14" max="56" step="1" value="36"></label>
+        <div id="accentPalette" class="popup-accent-palette" role="radiogroup" aria-label="Accent color">
+          <button type="button" data-accent="#7c5cff" title="Violet"></button><button type="button" data-accent="#3ea6ff" title="Blue"></button><button type="button" data-accent="#00c2d7" title="Cyan"></button><button type="button" data-accent="#35c982" title="Green"></button><button type="button" data-accent="#f1b44c" title="Amber"></button><button type="button" data-accent="#ff5f7a" title="Rose"></button><button type="button" data-accent="#d966ff" title="Magenta"></button><button type="button" data-accent="#f4f4f5" title="Neutral"></button>
+        </div>
+        <div id="selectionAppearancePreview" class="selection-appearance-preview compact-preview">
+          <div class="selection-preview-canvas"><button id="selectionPreviewTrigger" class="selection-preview-trigger" type="button" tabindex="-1"><span class="selection-preview-label">譯</span><span class="selection-preview-dot"></span></button><div id="selectionPreviewPanel" class="selection-preview-panel"><span class="selection-preview-accent"></span><strong>RayLingo</strong><small data-i18n="selectionPreviewText">反白翻譯預覽</small></div></div>
+        </div>
+        <p class="selection-input-hint" data-i18n="selectionInputHint">可反白一般網頁文字，也支援輸入框與文字區域內的選取文字。</p>
+      </div>
+    </details>
+
+
+    <details class="quick-settings section ai-media-settings" open>
+      <summary><span data-i18n="aiMediaTitle">AI、懸浮窗與媒體</span><small data-i18n="aiMediaHelp">Gemini／DeepSeek、文件與影片翻譯。</small></summary>
+      <div class="quick-settings-body">
+        <div class="compact-grid two">
+          <label class="compact-field"><span data-i18n="translationProvider">翻譯引擎</span><select id="translationProvider"><option value="auto">AUTO · Browser</option><option value="browser">Browser / Google fallback</option><option value="gemini">Gemini AI</option><option value="deepseek">DeepSeek AI</option></select></label>
+          <label class="compact-toggle"><span><b data-i18n="floatingWidgetEnabled">常駐懸浮窗</b><small data-i18n="floatingWidgetHelp">縮成一個點，隨時展開翻譯。</small></span><input id="floatingWidgetEnabled" type="checkbox"></label>
+        </div>
+        <div class="compact-grid two">
+          <label class="compact-toggle"><span><b data-i18n="floatingWidgetHoverExpand">滑鼠移上自動展開</b><small data-i18n="floatingWidgetHoverHelp">游標移到懸浮點時展開。</small></span><input id="floatingWidgetHoverExpand" type="checkbox" checked></label>
+          <label class="compact-toggle"><span><b data-i18n="floatingWidgetStartCollapsed">啟動時縮小</b><small data-i18n="floatingWidgetCollapsedHelp">新分頁先顯示一個點。</small></span><input id="floatingWidgetStartCollapsed" type="checkbox" checked></label>
+        </div>
+        <div class="mini-divider"></div>
+        <div class="compact-label" data-i18n="multimodalTitle">圖片／文件／音訊／影片</div>
+        <div class="file-action-row"><input id="multimodalFile" type="file" accept="image/*,application/pdf,.docx,.pptx,text/*,audio/*,video/*,.srt,.vtt"><button id="multimodalProcessButton" class="action-button" type="button" data-i18n="processFile">翻譯檔案</button></div>
+        <p id="multimodalStatus" class="inline-feature-status" data-i18n="multimodalIdle">尚未選擇檔案</p>
+        <div class="compact-grid two">
+          <label class="compact-toggle"><span><b data-i18n="videoSubtitleEnabled">影片字幕翻譯</b><small data-i18n="videoSubtitleHelp">偵測字幕並顯示 RayLingo 翻譯 overlay。</small></span><input id="videoSubtitleEnabled" type="checkbox"></label>
+          <label class="compact-field"><span data-i18n="videoSubtitleTarget">字幕目標語言</span><select id="videoSubtitleTargetLanguage"></select></label>
+        </div>
+        <label class="compact-toggle privacy-consent"><span><b data-i18n="remoteMediaConsent">允許遠端媒體處理</b><small data-i18n="remoteMediaConsentHelp">圖片／PDF／音訊／影片或公開 YouTube URL 只有在你操作時才會送給 Gemini。</small></span><input id="remoteMediaConsent" type="checkbox"></label>
+        <button id="videoTranscriptButton" class="wide-feature-button" type="button" data-i18n="videoTranscriptStart">目前影片：AI 取文字並翻譯</button>
+        <p id="videoStatus" class="inline-feature-status" data-i18n="videoTranscriptPrivacy">沒有字幕時才使用；YouTube 送公開 URL，其他 Chromium 分頁則由你明確開始／停止擷取。</p>
+      </div>
+    </details>
+
     <div class="options-cta">
       <button id="openAppButton" type="button">
         <span data-i18n="openFullPage">完整網頁</span>
@@ -101,7 +160,7 @@
       <div class="footer-badges">
         <span id="apiBadge" class="api-badge">…</span>
         <span id="integrityBadge" class="integrity-badge" data-state="checking">…</span>
-        <span id="appVersion" class="version-badge">v0.4.8</span>
+        <span id="appVersion" class="version-badge">v—</span>
       </div>
     </footer>
   </main>
@@ -109,7 +168,9 @@
   <script src="integrity-client.js"></script>
   <script src="language-registry.js"></script>
   <script src="ui-i18n.js"></script>
+  <script src="ai-provider.js"></script>
   <script src="translator-engine.js"></script>
+  <script src="multimodal.js"></script>
   <script src="tts-registry.js"></script>
   <script src="selection-appearance.js"></script>
   <script src="popup.js"></script>

@@ -127,8 +127,8 @@
       },
       {
         "path": "manifest.json",
-        "sha256": "85f2796c1633ac5e3f3c310803ee88fc709924bae2deb65356e26a96bc807192",
-        "size": 1849
+        "sha256": "ff68ecf86913c45288e74e510fedb6149e5e01e70b294892a34869e3e3032e2f",
+        "size": 2185
       },
       {
         "path": "media-translation.js",
@@ -139,21 +139,6 @@
         "path": "multimodal.js",
         "sha256": "e64e25521651152861b49dcca213fb4cad69a8aa4842488af457ae66b2722dde",
         "size": 9212
-      },
-      {
-        "path": "offscreen.html",
-        "sha256": "219ba30d94d5047dc2b7a063272994755241187ed66d052e1a7f4154b26bf723",
-        "size": 517
-      },
-      {
-        "path": "offscreen.js",
-        "sha256": "e26d8fbcac66702da5ed2f9fd430e2cad259f84e20c729a012807957dc707e3c",
-        "size": 22325
-      },
-      {
-        "path": "piper-autoinstall.js",
-        "sha256": "7d3d208e796c843286facbad52220213d760b5a2e4860ee12f971a3d7fd51519",
-        "size": 3562
       },
       {
         "path": "platform-compat.js",
@@ -223,5 +208,5 @@
     ],
     "version": "0.7.1"
   },
-  "signature": "ULoytBhlR19b65jA+YxyxAqeGhhvZ/RmB3H7nHQI8t6NO+cYKlltOa9lSXAt4tHy/p+uNGy6quZFyQ4+ruVoAA=="
+  "signature": "Jk2wye1g+gwbmTFPtjrtHwzWBAsfMthyKvSgmn6Or1JeJtakyx3WOLY4+VSu5tf2gF4oV9lMEgV75WyPETUaDw=="
 }

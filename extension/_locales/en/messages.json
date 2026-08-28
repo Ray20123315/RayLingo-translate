@@ -643,5 +643,131 @@
   },
   "compatCurrentBrowser": {
     "message": "Current browser"
+  },
+  "quickSettings": {
+    "message": "Quick settings"
+  },
+  "selectionDefaultLanguages": {
+    "message": "Selection default languages"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo cannot translate this selection because integrity verification failed."
+  },
+  "selectionInputHint": {
+    "message": "Select text on a page, or select text inside an input/textarea."
+  },
+  "aiMediaTitle": {
+    "message": "AI, floating window & media"
+  },
+  "aiMediaHelp": {
+    "message": "Gemini / DeepSeek, documents and video translation."
+  },
+  "translationProvider": {
+    "message": "Translation provider"
+  },
+  "floatingWidgetEnabled": {
+    "message": "Persistent floating translator"
+  },
+  "floatingWidgetHelp": {
+    "message": "Keep RayLingo available on pages; collapse it to a dot when not needed."
+  },
+  "floatingWidgetHoverExpand": {
+    "message": "Expand on hover"
+  },
+  "floatingWidgetHoverHelp": {
+    "message": "Hover the floating dot to expand the translator."
+  },
+  "floatingWidgetStartCollapsed": {
+    "message": "Start collapsed"
+  },
+  "floatingWidgetCollapsedHelp": {
+    "message": "New pages start with a compact dot."
+  },
+  "floatingWidgetMinimize": {
+    "message": "Minimize"
+  },
+  "multimodalTitle": {
+    "message": "Multimodal files"
+  },
+  "multimodalHelp": {
+    "message": "Images, PDF, DOCX, PPTX, text, audio and video."
+  },
+  "processFile": {
+    "message": "Translate file"
+  },
+  "multimodalIdle": {
+    "message": "No file selected"
+  },
+  "multimodalChooseFile": {
+    "message": "Choose a file first."
+  },
+  "videoSubtitleEnabled": {
+    "message": "Translate video subtitles"
+  },
+  "videoSubtitleHelp": {
+    "message": "Detect captions and show a RayLingo translated overlay."
+  },
+  "videoSubtitleTarget": {
+    "message": "Subtitle target language"
+  },
+  "videoSubtitleTargetHelp": {
+    "message": "Language used by the translated subtitle overlay."
+  },
+  "videoTranscriptStart": {
+    "message": "Current YouTube: transcribe & translate with AI"
+  },
+  "videoTranscriptPrivacy": {
+    "message": "Used when captions are unavailable; the public YouTube URL is sent to Gemini."
+  },
+  "aiProviderTitle": {
+    "message": "AI Provider"
+  },
+  "aiProviderHelp": {
+    "message": "Gemini supports multimodal input; DeepSeek is used for text translation and analysis. API keys stay in extension-local storage."
+  },
+  "translationProviderHelp": {
+    "message": "Choose Browser, Gemini or DeepSeek explicitly."
+  },
+  "apiKeyLocalOnly": {
+    "message": "Stored only in this browser; never written to the project or memory archive."
+  },
+  "floatingWidgetTitle": {
+    "message": "Persistent floating translator"
+  },
+  "videoTranslationTitle": {
+    "message": "Video translation"
+  },
+  "workspaceNavMedia": {
+    "message": "AI & media"
+  },
+  "workspaceMediaDescription": {
+    "message": "Manage the persistent translator, multimodal files and video translation."
+  },
+  "remoteMediaConsent": {
+    "message": "Allow remote media processing"
+  },
+  "remoteMediaConsentHelp": {
+    "message": "Images, PDFs, audio, video, or a public YouTube URL are sent to Gemini only when you trigger the action."
+  },
+  "remoteMediaConsentRequired": {
+    "message": "Enable remote media processing first."
+  },
+  "videoTranscriptStop": {
+    "message": "Stop recording and translate"
+  },
+  "videoTranscriptRecording": {
+    "message": "Capturing the current tab video/audio. Press again to stop and translate."
+  },
+  "videoTranscriptStarting": {
+    "message": "Starting current-tab capture…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "Stopping capture, uploading, and translating…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini is reading the public YouTube video…"
+  },
+  "videoTranscriptReady": {
+    "message": "Recording stopped; press the button to upload and translate."
   }
 }

@@ -6,7 +6,10 @@
     { code: 'zh_CN', label: '简体中文', aliases: ['zh_cn', 'zh_hans', 'zh_sg'] },
     { code: 'en', label: 'English', aliases: ['en'] },
     { code: 'ja', label: '日本語', aliases: ['ja'] },
-    { code: 'ko', label: '한국어', aliases: ['ko'] }
+    { code: 'ko', label: '한국어', aliases: ['ko'] },
+    { code: 'es', label: 'Español', aliases: ['es'] },
+    { code: 'fr', label: 'Français', aliases: ['fr'] },
+    { code: 'de', label: 'Deutsch', aliases: ['de'] }
   ]);
   const SUPPORTED = Object.freeze(UI_LOCALES.map(locale => locale.code));
   const FALLBACK_LOCALE = 'en';

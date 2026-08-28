@@ -643,5 +643,35 @@
   },
   "compatCurrentBrowser": {
     "message": "現在のブラウザー"
+  },
+  "quickSettings": {
+    "message": "クイック設定"
+  },
+  "selectionDefaultLanguages": {
+    "message": "選択翻訳の既定言語"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo の整合性検証に失敗したため、この選択範囲は翻訳できません。"
+  },
+  "selectionInputHint": {
+    "message": "通常のページ文字だけでなく、入力欄やテキストエリア内の選択にも対応します。"
+  },
+  "videoTranscriptStop": {
+    "message": "停止錄製並翻譯"
+  },
+  "videoTranscriptRecording": {
+    "message": "正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。"
+  },
+  "videoTranscriptStarting": {
+    "message": "正在啟動目前分頁擷取…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "正在停止錄製、上傳並翻譯…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini 正在讀取公開 YouTube 影片…"
+  },
+  "videoTranscriptReady": {
+    "message": "錄製已停止；按下按鈕完成上傳與翻譯。"
   }
 }

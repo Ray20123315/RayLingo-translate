@@ -21,7 +21,23 @@
     { code: 'th', nativeName: 'ไทย', labelKey: 'lang_th', google: 'th', speech: 'th-TH' },
     { code: 'id', nativeName: 'Bahasa Indonesia', labelKey: 'lang_id', google: 'id', speech: 'id-ID' },
     { code: 'hi', nativeName: 'हिन्दी', labelKey: 'lang_hi', google: 'hi', speech: 'hi-IN' },
-    { code: 'ar', nativeName: 'العربية', labelKey: 'lang_ar', google: 'ar', speech: 'ar-SA' }
+    { code: 'ar', nativeName: 'العربية', labelKey: 'lang_ar', google: 'ar', speech: 'ar-SA' },
+    { code: 'he', nativeName: 'עברית', labelKey: 'lang_he', google: 'he', speech: 'he-IL' },
+    { code: 'cs', nativeName: 'Čeština', labelKey: 'lang_cs', google: 'cs', speech: 'cs-CZ' },
+    { code: 'da', nativeName: 'Dansk', labelKey: 'lang_da', google: 'da', speech: 'da-DK' },
+    { code: 'sv', nativeName: 'Svenska', labelKey: 'lang_sv', google: 'sv', speech: 'sv-SE' },
+    { code: 'no', nativeName: 'Norsk', labelKey: 'lang_no', google: 'no', speech: 'nb-NO' },
+    { code: 'fi', nativeName: 'Suomi', labelKey: 'lang_fi', google: 'fi', speech: 'fi-FI' },
+    { code: 'el', nativeName: 'Ελληνικά', labelKey: 'lang_el', google: 'el', speech: 'el-GR' },
+    { code: 'ro', nativeName: 'Română', labelKey: 'lang_ro', google: 'ro', speech: 'ro-RO' },
+    { code: 'hu', nativeName: 'Magyar', labelKey: 'lang_hu', google: 'hu', speech: 'hu-HU' },
+    { code: 'bg', nativeName: 'Български', labelKey: 'lang_bg', google: 'bg', speech: 'bg-BG' },
+    { code: 'ms', nativeName: 'Bahasa Melayu', labelKey: 'lang_ms', google: 'ms', speech: 'ms-MY' },
+    { code: 'fil', nativeName: 'Filipino', labelKey: 'lang_fil', google: 'tl', speech: 'fil-PH' },
+    { code: 'fa', nativeName: 'فارسی', labelKey: 'lang_fa', google: 'fa', speech: 'fa-IR' },
+    { code: 'bn', nativeName: 'বাংলা', labelKey: 'lang_bn', google: 'bn', speech: 'bn-BD' },
+    { code: 'ta', nativeName: 'தமிழ்', labelKey: 'lang_ta', google: 'ta', speech: 'ta-IN' },
+    { code: 'sw', nativeName: 'Kiswahili', labelKey: 'lang_sw', google: 'sw', speech: 'sw-KE' }
   ]);
 
   const byCode = new Map(LANGUAGES.map(language => [language.code, language]));
@@ -29,7 +45,7 @@
     ['zh-Hans', 'zh'], ['zh-CN', 'zh'], ['zh-SG', 'zh'], ['zh_CN', 'zh'],
     ['zh-Hant', 'zh-Hant'], ['zh-TW', 'zh-Hant'], ['zh-HK', 'zh-Hant'], ['zh-MO', 'zh-Hant'], ['zh_TW', 'zh-Hant'],
     ['pt-BR', 'pt'], ['pt-PT', 'pt'], ['pt_BR', 'pt'], ['pt_PT', 'pt'],
-    ['iw', 'he']
+    ['iw', 'he'], ['nb', 'no'], ['nn', 'no'], ['tl', 'fil']
   ]);
 
   const TRAD_HINTS = new Set('體臺灣國學會來時這個為與說後發麼開關點裡還過進長間見將無於從對實當樣義氣應經種總區電書門車東風頁廣網線語譯繁簡選擇顯示處理裝置輸入結果複製啟用偵測歷史釘選');

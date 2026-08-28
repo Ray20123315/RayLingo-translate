@@ -7,6 +7,7 @@
   let host = null;
   let shadow = null;
   let actionButton = null;
+  let dockButton = null;
   let panel = null;
   let selectedRect = null;
   let selectedText = '';
@@ -22,6 +23,9 @@
   let activeTtsSessionId = null;
   let selectionTtsWatchdogTimer = null;
   let lastPanelSourceLanguage = 'auto';
+  let persistentPanel = false;
+  let hoverOpened = false;
+  let hoverCloseTimer = null;
 
   const t = (key, fallback = '') => RayLingoI18n.t(key, fallback);
 
@@ -59,7 +63,12 @@
       selectionTriggerStyle: 'label',
       selectionTriggerSize: 36,
       selectionSurfaceTheme: 'black',
-      selectionAccentColor: '#7658ff'
+      selectionAccentColor: '#7c5cff',
+      translationProvider: 'auto',
+      floatingWidgetEnabled: false,
+      floatingWidgetHoverExpand: true,
+      floatingWidgetStartCollapsed: true,
+      floatingWidgetCollapsed: null
     });
     prefs = {
       selectionMode: stored.selectionMode || (stored.selectionEnabled === false ? 'off' : 'auto'),
@@ -73,6 +82,11 @@
       ttsVoice: typeof stored.ttsVoice === 'string' ? stored.ttsVoice : 'auto',
       systemVoice: typeof stored.systemVoice === 'string' ? stored.systemVoice : 'auto',
       ttsSpeed: RayLingoTTS.clampSpeed(stored.ttsSpeed),
+      translationProvider: globalThis.RayLingoAI?.normalizeTranslationProvider?.(stored.translationProvider) || 'auto',
+      floatingWidgetEnabled: stored.floatingWidgetEnabled === true,
+      floatingWidgetHoverExpand: stored.floatingWidgetHoverExpand !== false,
+      floatingWidgetStartCollapsed: stored.floatingWidgetStartCollapsed !== false,
+      floatingWidgetCollapsed: stored.floatingWidgetCollapsed == null ? null : stored.floatingWidgetCollapsed === true,
       ...RayLingoSelectionAppearance.fromStored(stored)
     };
     return prefs;
@@ -82,8 +96,10 @@
     if (ttsSpeaking || activeTtsSessionId) chrome.runtime.sendMessage({ type: 'RAYLINGO_TTS_STOP', owner: 'selection', sessionId: activeTtsSessionId }).catch(() => null);
     setSelectionSpeakState(false);
     host?.remove();
-    host = shadow = actionButton = panel = null;
+    host = shadow = actionButton = dockButton = panel = null;
     pinned = false;
+    persistentPanel = false;
+    hoverOpened = false;
     uiReady = null;
   }
 
@@ -97,25 +113,28 @@
       host = document.createElement('div');
       host.id = ROOT_ID;
       host.style.cssText = 'all:initial;position:fixed;inset:0;z-index:2147483647;pointer-events:none;';
-      shadow = host.attachShadow({ mode: 'closed' });
+      shadow = host.attachShadow({ mode: 'open' });
       shadow.innerHTML = `
         <style>
           :host{all:initial}.lf-root,.lf-root *{box-sizing:border-box}.lf-root{font-family:Inter,"Noto Sans TC","Noto Sans SC","Noto Sans JP","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--rl-selection-text)}
           .lf-action{position:fixed;width:var(--rl-selection-trigger-size);height:var(--rl-selection-trigger-size);border:2px solid var(--rl-selection-accent);border-radius:11px;background:var(--rl-selection-surface);color:var(--rl-selection-accent);font:800 clamp(10px,calc(var(--rl-selection-trigger-size) * .38),18px)/1 inherit;box-shadow:0 8px 24px rgba(0,0,0,.24);cursor:pointer;pointer-events:auto;display:none;place-items:center;padding:0;transition:transform .15s ease,background .15s ease,border-color .15s ease}.lf-action:hover{transform:translateY(-1px);background:var(--rl-selection-accent-soft)}.lf-action-point{display:none}.lf-action[data-style="dot"]{border:0;background:transparent;box-shadow:none;border-radius:999px;line-height:0;padding:0;margin:0}.lf-action[data-style="dot"] .lf-action-label{display:none}.lf-action[data-style="dot"] .lf-action-point{display:block;width:72%;height:72%;margin:0;border-radius:50%;background:var(--rl-selection-accent);box-shadow:0 0 0 3px var(--rl-selection-surface),0 5px 17px rgba(0,0,0,.28)}
-          .lf-panel{position:fixed;width:min(430px,calc(100vw - 20px));max-height:min(560px,calc(100vh - 20px));display:none;overflow:hidden;border:1px solid var(--rl-selection-line);border-radius:17px;background:var(--rl-selection-panel);box-shadow:var(--rl-selection-shadow);pointer-events:auto;color:var(--rl-selection-text)}
-          .lf-head{height:42px;display:flex;align-items:center;gap:8px;padding:0 10px 0 13px;border-bottom:1px solid var(--rl-selection-line)}.lf-brand{font-size:12px;font-weight:800;letter-spacing:.2px}.lf-dot{width:7px;height:7px;border-radius:50%;background:var(--rl-selection-accent)}.lf-spacer{flex:1}.lf-tool{height:28px;border:1px solid var(--rl-selection-line);border-radius:8px;background:var(--rl-selection-surface);color:var(--rl-selection-muted);padding:0 8px;font:700 10px/1 inherit;cursor:pointer}.lf-tool:hover{color:var(--rl-selection-accent-strong);background:var(--rl-selection-accent-soft)}.lf-tool[data-active="true"]{color:var(--rl-selection-accent-strong);background:var(--rl-selection-accent-soft);border-color:var(--rl-selection-accent-ring)}.lf-close{width:28px;padding:0;font-size:15px}
+          .lf-dock{position:fixed;right:16px;bottom:112px;min-width:36px;height:36px;border:1px solid var(--rl-selection-accent-ring);border-radius:999px;background:radial-gradient(circle at 20% 20%,var(--rl-selection-accent-soft),transparent 70%),var(--rl-selection-surface);color:var(--rl-selection-accent-strong);box-shadow:0 10px 30px rgba(0,0,0,.28);pointer-events:auto;cursor:pointer;display:none;align-items:center;gap:8px;padding:0 11px;font:800 11px/1 inherit;transition:width .18s ease,transform .18s ease,background .18s ease}.lf-dock:hover{transform:translateY(-1px);background:var(--rl-selection-accent-soft)}.lf-dock .lf-dock-dot{width:10px;height:10px;border-radius:999px;background:var(--rl-selection-accent);box-shadow:0 0 0 3px var(--rl-selection-accent-soft)}.lf-dock[data-collapsed="true"]{width:22px;min-width:22px;height:22px;padding:0;justify-content:center}.lf-dock[data-collapsed="true"] .lf-dock-label{display:none}.lf-dock[data-collapsed="true"] .lf-dock-dot{width:9px;height:9px;box-shadow:0 0 0 4px var(--rl-selection-surface),0 0 16px var(--rl-selection-accent-ring)}
+          .lf-panel{position:fixed;width:min(440px,calc(100vw - 20px));max-height:min(560px,calc(100vh - 20px));display:none;overflow:hidden;border:1px solid var(--rl-selection-line);border-radius:17px;background:radial-gradient(circle at 8% -6%,var(--rl-selection-accent-soft),transparent 40%),var(--rl-selection-panel);box-shadow:var(--rl-selection-shadow);pointer-events:auto;color:var(--rl-selection-text)}
+          .lf-head{height:42px;display:flex;align-items:center;gap:8px;padding:0 10px 0 13px;border-bottom:1px solid var(--rl-selection-line)}.lf-brand{font-size:12px;font-weight:800;letter-spacing:.2px}.lf-dot{width:7px;height:7px;border-radius:50%;background:var(--rl-selection-accent)}.lf-spacer{flex:1}.lf-tool{height:28px;border:1px solid var(--rl-selection-line);border-radius:8px;background:var(--rl-selection-surface);color:var(--rl-selection-muted);padding:0 8px;font:700 10px/1 inherit;cursor:pointer}.lf-tool:hover{color:var(--rl-selection-accent-strong);background:var(--rl-selection-accent-soft)}.lf-tool[data-active="true"]{color:var(--rl-selection-accent-strong);background:var(--rl-selection-accent-soft);border-color:var(--rl-selection-accent-ring)}.lf-minimize,.lf-close{width:28px;padding:0;font-size:15px}
           .lf-body{padding:11px;overflow:auto;max-height:calc(min(560px,100vh - 20px) - 42px)}
           .lf-langs{display:grid;grid-template-columns:1fr 34px 1fr;gap:7px;align-items:end}.lf-field{display:grid;gap:4px}.lf-field>span{font-size:9.5px;font-weight:700;color:var(--rl-selection-muted)}.lf-select{width:100%;height:34px;border:1px solid var(--rl-selection-line);border-radius:9px;background:var(--rl-selection-surface);color:var(--rl-selection-text);padding:0 27px 0 8px;font:500 11px/1 inherit;outline:none}.lf-select:focus{border-color:var(--rl-selection-accent);box-shadow:0 0 0 3px var(--rl-selection-accent-soft)}.lf-swap{height:34px;border:1px solid var(--rl-selection-line);border-radius:9px;background:var(--rl-selection-surface);color:var(--rl-selection-muted);cursor:pointer;font-size:15px}.lf-swap:hover{color:var(--rl-selection-accent-strong);background:var(--rl-selection-accent-soft)}
-          .lf-section{margin-top:9px;border:1px solid var(--rl-selection-line);border-radius:11px;overflow:hidden;background:var(--rl-selection-surface)}.lf-section-head{min-height:30px;padding:4px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rl-selection-line);color:var(--rl-selection-muted);font-size:9.5px;font-weight:700}.lf-source{display:block;width:100%;min-height:72px;max-height:145px;resize:vertical;border:0;outline:0;padding:9px 10px;background:var(--rl-selection-surface);color:var(--rl-selection-text);font:500 12px/1.55 inherit}.lf-result{min-height:68px;max-height:150px;overflow:auto;padding:9px 10px;white-space:pre-wrap;word-break:break-word;font:500 12px/1.58 inherit;color:var(--rl-selection-text)}.lf-result.placeholder{color:var(--rl-selection-muted)}.lf-result-actions{display:flex;gap:5px}.lf-link{border:1px solid var(--rl-selection-line);border-radius:7px;background:var(--rl-selection-surface);color:var(--rl-selection-accent-strong);padding:4px 7px;font:700 9.5px/1 inherit;cursor:pointer}.lf-link:hover{border-color:var(--rl-selection-accent);background:var(--rl-selection-accent-soft);text-decoration:none}
+          .lf-section{margin-top:9px;border:1px solid var(--rl-selection-line);border-radius:11px;overflow:hidden;background:var(--rl-selection-surface)}.lf-section-head{min-height:30px;padding:4px 9px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--rl-selection-line);color:var(--rl-selection-muted);font-size:9.5px;font-weight:700}.lf-source{display:block;width:100%;min-height:72px;max-height:145px;resize:vertical;border:0;outline:0;padding:9px 10px;background:var(--rl-selection-surface);color:var(--rl-selection-text);font:500 12px/1.55 inherit}.lf-result{user-select:text;-webkit-user-select:text;cursor:text;min-height:68px;max-height:150px;overflow:auto;padding:9px 10px;white-space:pre-wrap;word-break:break-word;font:500 12px/1.58 inherit;color:var(--rl-selection-text)}.lf-result.placeholder{color:var(--rl-selection-muted)}.lf-result-actions{display:flex;gap:5px}.lf-link{border:1px solid var(--rl-selection-line);border-radius:7px;background:var(--rl-selection-surface);color:var(--rl-selection-accent-strong);padding:4px 7px;font:700 9.5px/1 inherit;cursor:pointer}.lf-link:hover{border-color:var(--rl-selection-accent);background:var(--rl-selection-accent-soft);text-decoration:none}
           .lf-status{min-height:30px;display:flex;align-items:center;gap:6px;color:var(--rl-selection-muted);font:500 10px/1.35 inherit;padding:4px 2px}.lf-status-dot{width:6px;height:6px;border-radius:50%;background:var(--rl-selection-accent);flex:0 0 auto}.lf-status.working .lf-status-dot{background:#c38a17;animation:lfPulse 1s infinite}.lf-status.error{color:#d76868}.lf-status.error .lf-status-dot{background:#d76868}.lf-status-text{min-width:0}.lf-progress{margin-left:auto;font-variant-numeric:tabular-nums}.lf-privacy{display:none;margin-top:1px;padding:7px 8px;border-radius:8px;background:var(--rl-selection-surface-muted);color:var(--rl-selection-muted);border:1px solid var(--rl-selection-line);font:500 9.5px/1.4 inherit}.lf-privacy.visible{display:block}
           @keyframes lfPulse{50%{opacity:.35;transform:scale(.72)}}
         </style>
         <div class="lf-root">
+          <button class="lf-dock" type="button" aria-label="RayLingo"><span class="lf-dock-dot"></span><span class="lf-dock-label">RayLingo</span></button>
           <button class="lf-action" type="button"><span class="lf-action-label">${t('selectionAction', '譯')}</span><span class="lf-action-point" aria-hidden="true"></span></button>
           <section class="lf-panel" role="dialog" aria-label="RayLingo">
             <header class="lf-head">
               <span class="lf-dot"></span><span class="lf-brand">RayLingo</span><span class="lf-spacer"></span>
               <button class="lf-tool lf-pin" type="button">${t('selectionPin')}</button>
+              <button class="lf-tool lf-minimize" type="button" title="${t('floatingWidgetMinimize','縮小')}">−</button>
               <button class="lf-tool lf-close" type="button" title="${t('selectionClose')}">×</button>
             </header>
             <div class="lf-body">
@@ -139,9 +158,11 @@
         </div>`;
 
       actionButton = shadow.querySelector('.lf-action');
+      dockButton = shadow.querySelector('.lf-dock');
       panel = shadow.querySelector('.lf-panel');
       RayLingoSelectionAppearance.applyToElement(shadow.querySelector('.lf-root'), prefs);
       actionButton.dataset.style = prefs.selectionTriggerStyle;
+      dockButton.dataset.collapsed = 'true';
       const sourceSelect = shadow.querySelector('.lf-source-lang');
       const targetSelect = shadow.querySelector('.lf-target-lang');
       RayLingoI18n.populateLanguageSelect(sourceSelect, { includeAuto: true, selected: prefs.selectionSourceLanguage });
@@ -153,7 +174,13 @@
       actionButton.addEventListener('click', () => {
         if (selectedText && selectedRect) showPanel(selectedText, selectedRect, { immediate: true });
       });
-      shadow.querySelector('.lf-close').addEventListener('click', hideAll);
+      shadow.querySelector('.lf-close').addEventListener('click', () => { if (prefs?.floatingWidgetEnabled) minimizePersistentPanel(); else hideAll(); });
+      shadow.querySelector('.lf-minimize').addEventListener('click', minimizePersistentPanel);
+      dockButton.addEventListener('click', () => openPersistentPanel({ fromHover: false }));
+      dockButton.addEventListener('mouseenter', () => { if (prefs?.floatingWidgetHoverExpand) openPersistentPanel({ fromHover: true }); });
+      dockButton.addEventListener('mouseleave', scheduleHoverCollapse);
+      panel.addEventListener('mouseenter', () => { clearTimeout(hoverCloseTimer); });
+      panel.addEventListener('mouseleave', scheduleHoverCollapse);
       shadow.querySelector('.lf-pin').addEventListener('click', togglePin);
       shadow.querySelector('.lf-swap').addEventListener('click', swapPanelLanguages);
       shadow.querySelector('.lf-source-copy').addEventListener('click', copyPanelSource);
@@ -178,6 +205,113 @@
       document.documentElement.appendChild(host);
     })().finally(() => { uiReady = null; });
     return uiReady;
+  }
+
+  function scheduleHoverCollapse() {
+    clearTimeout(hoverCloseTimer);
+    if (!hoverOpened || pinned) return;
+    hoverCloseTimer = setTimeout(() => {
+      const overDock = dockButton?.matches(':hover');
+      const overPanel = panel?.matches(':hover');
+      if (!overDock && !overPanel) minimizePersistentPanel({ persist: false });
+    }, 420);
+  }
+
+  function persistentRect() {
+    const rect = dockButton?.getBoundingClientRect();
+    if (rect?.width) return rect;
+    return { left: Math.max(10, innerWidth - 455), right: innerWidth - 16, top: Math.max(10, innerHeight - 170), bottom: innerHeight - 112, width: 36, height: 36 };
+  }
+
+  async function setPersistentCollapsed(collapsed, persist = true) {
+    if (!dockButton) return;
+    const next = Boolean(collapsed);
+    dockButton.dataset.collapsed = String(next);
+    const changed = prefs?.floatingWidgetCollapsed !== next;
+    if (prefs) prefs.floatingWidgetCollapsed = next;
+    if (persist && changed) await chrome.storage.local.set({ floatingWidgetCollapsed: next }).catch(() => null);
+  }
+
+  async function openPersistentPanel({ fromHover = false } = {}) {
+    await ensureUi();
+    if (!prefs?.floatingWidgetEnabled) return;
+    clearTimeout(hoverCloseTimer);
+    persistentPanel = true;
+    hoverOpened = Boolean(fromHover);
+    dockButton.style.display = 'flex';
+    await setPersistentCollapsed(false, !fromHover);
+    actionButton.style.display = 'none';
+    panel.style.display = 'block';
+    const rect = persistentRect();
+    positionNearRect(panel, rect, false);
+    const source = shadow.querySelector('.lf-source');
+    if (!source.value && selectedText) source.value = selectedText.slice(0, MAX_SELECTION);
+    updateSourceCount();
+    if (!source.value.trim()) {
+      setPanelResult('—', true);
+      setPanelStatus(t('readyInput', '輸入文字後會自動翻譯'), 'ready');
+    }
+  }
+
+  async function minimizePersistentPanel({ persist = true } = {}) {
+    if (!prefs?.floatingWidgetEnabled) { hideAll(); return; }
+    clearTimeout(hoverCloseTimer);
+    hoverOpened = false;
+    persistentPanel = true;
+    if (panel) panel.style.display = 'none';
+    if (actionButton) actionButton.style.display = 'none';
+    if (dockButton) dockButton.style.display = 'flex';
+    await setPersistentCollapsed(true, persist);
+  }
+
+  async function syncPersistentWidget() {
+    await loadPreferences();
+    if (!prefs.floatingWidgetEnabled) {
+      if (dockButton) dockButton.style.display = 'none';
+      if (persistentPanel && panel) panel.style.display = 'none';
+      persistentPanel = false;
+      return;
+    }
+    await ensureUi();
+    dockButton.style.display = 'flex';
+    const collapsed = prefs.floatingWidgetCollapsed == null ? prefs.floatingWidgetStartCollapsed : prefs.floatingWidgetCollapsed;
+    if (collapsed) await minimizePersistentPanel({ persist: false });
+    else await openPersistentPanel({ fromHover: false });
+  }
+
+  async function showIntegrityBlocked(text, rect, state = null) {
+    await ensureUi();
+    actionButton.style.display = 'none';
+    panel.style.display = 'block';
+    if (!pinned) positionNearRect(panel, rect, true);
+    const source = shadow.querySelector('.lf-source');
+    source.value = String(text || '').slice(0, MAX_SELECTION);
+    updateSourceCount();
+    setPanelResult(t('statusNoResult', '—'), true);
+    const reason = state?.reason ? ` · ${state.reason}` : '';
+    setPanelStatus(`${t('selectionIntegrityBlocked', 'RayLingo integrity verification failed.')}${reason}`, 'error');
+  }
+
+  function readSelectionPayload(event = null) {
+    const target = event?.target instanceof Element ? event.target : document.activeElement;
+    if (target instanceof HTMLTextAreaElement || (target instanceof HTMLInputElement && /^(?:text|search|url|tel|email|password)$/i.test(target.type || 'text'))) {
+      const start = Number(target.selectionStart);
+      const end = Number(target.selectionEnd);
+      if (Number.isFinite(start) && Number.isFinite(end) && end > start) {
+        const text = String(target.value || '').slice(start, end).trim();
+        if (text) {
+          const box = target.getBoundingClientRect();
+          return { text, rect: { left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: box.width, height: box.height }, kind: 'form-control' };
+        }
+      }
+    }
+    const selection = window.getSelection();
+    const text = selection?.toString().trim() || '';
+    if (!text || !selection?.rangeCount) return null;
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    if (!rect || (!rect.width && !rect.height)) return null;
+    return { text, rect, kind: 'document' };
   }
 
   function updateSourceCount() {
@@ -209,6 +343,8 @@
 
   async function showPanel(text, rect, { immediate = false, targetLanguage = null } = {}) {
     await ensureUi();
+    persistentPanel = Boolean(prefs?.floatingWidgetEnabled);
+    if (dockButton && prefs?.floatingWidgetEnabled) dockButton.style.display = 'flex';
     actionButton.style.display = 'none';
     panel.style.display = 'block';
     if (!pinned) positionNearRect(panel, rect, true);
@@ -239,6 +375,7 @@
       case 'download': setPanelStatus(t('statusDownloadingModel'), 'working', `${event.percent}%`); break;
       case 'native': setPanelStatus(t('statusNativeTranslating'), 'working', event.total > 1 ? `${event.index}/${event.total}` : ''); break;
       case 'remote': setPanelStatus(t('statusRemoteTranslating'), 'working'); break;
+      case 'ai': setPanelStatus(`${event.provider === 'deepseek' ? 'DeepSeek' : 'Gemini'} AI…`, 'working'); break;
       default: break;
     }
   }
@@ -289,6 +426,7 @@
         sourceLanguage,
         targetLanguage,
         remoteFallbackEnabled: prefs.remoteFallbackEnabled,
+        provider: prefs.translationProvider,
         onStatus: engineStatus
       });
       if (serial !== translateSerial) return;
@@ -448,52 +586,59 @@
     if (!host) return;
     actionButton.style.display = 'none';
     panel.style.display = 'none';
+    if (prefs?.floatingWidgetEnabled && dockButton) dockButton.style.display = 'flex';
     const pin = shadow.querySelector('.lf-pin');
     if (pin) { pin.dataset.active = 'false'; pin.textContent = t('selectionPin'); }
   }
 
-  async function handleSelection() {
-    if (globalThis.RayLingoIntegrityClient && !(await RayLingoIntegrityClient.status()).ok) { hideAll(); return; }
+  async function handleSelection(event = null) {
     await loadPreferences();
     if (prefs.selectionMode === 'off') { hideAll(); return; }
-    const selection = window.getSelection();
-    const text = selection?.toString().trim() || '';
-    if (!text) {
+    const payload = readSelectionPayload(event);
+    if (!payload?.text) {
       if (!pinned) hideAll();
       return;
     }
-    if (text.length > MAX_SELECTION) {
-      if (!pinned) hideAll();
-      return;
-    }
-    const range = selection.rangeCount ? selection.getRangeAt(0) : null;
-    if (!range) return;
-    const rect = range.getBoundingClientRect();
-    if (!rect || (!rect.width && !rect.height)) return;
-    selectedText = text;
+    const { text, rect } = payload;
+    selectedText = text.slice(0, MAX_SELECTION);
     selectedRect = rect;
+    if (text.length > MAX_SELECTION) {
+      await ensureUi();
+      actionButton.style.display = 'none';
+      panel.style.display = 'block';
+      if (!pinned) positionNearRect(panel, rect, true);
+      shadow.querySelector('.lf-source').value = text.slice(0, MAX_SELECTION);
+      updateSourceCount();
+      setPanelResult('—', true);
+      setPanelStatus(t('selectionTooLong'), 'error');
+      return;
+    }
+    if (globalThis.RayLingoIntegrityClient) {
+      const integrity = await RayLingoIntegrityClient.status();
+      if (!integrity?.ok) { await showIntegrityBlocked(selectedText, rect, integrity); return; }
+    }
     if (pinned && panel?.style.display === 'block') return;
     if (prefs.selectionMode === 'button') await showAction(rect);
-    else await showPanel(text, rect, { immediate: true });
+    else await showPanel(selectedText, rect, { immediate: true });
   }
 
   document.addEventListener('mouseup', event => {
     if (host && event.composedPath().includes(host)) return;
-    setTimeout(handleSelection, 0);
+    setTimeout(() => handleSelection(event), 0);
   }, true);
 
   document.addEventListener('keyup', event => {
-    if (event.key === 'Shift' || event.key.startsWith('Arrow')) setTimeout(handleSelection, 0);
+    if (event.key === 'Shift' || event.key.startsWith('Arrow')) setTimeout(() => handleSelection(event), 0);
   }, true);
 
   document.addEventListener('mousedown', event => {
     if (!host || event.composedPath().includes(host)) return;
-    if (!pinned && panel?.style.display === 'block') hideAll();
+    if (!pinned && !persistentPanel && panel?.style.display === 'block') hideAll();
     else if (actionButton?.style.display === 'grid') hideAll();
   }, true);
 
   window.addEventListener('scroll', () => {
-    if (!pinned && (panel?.style.display === 'block' || actionButton?.style.display === 'grid')) hideAll();
+    if (!pinned && !persistentPanel && (panel?.style.display === 'block' || actionButton?.style.display === 'grid')) hideAll();
   }, { passive: true });
 
   chrome.runtime.onMessage.addListener((message) => {
@@ -536,12 +681,13 @@
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== 'local') return;
-    const relevant = ['uiLocale', 'selectionMode', 'selectionEnabled', 'typingEffectEnabled', 'historyEnabled', 'remoteFallbackEnabled', 'selectionSourceLanguage', 'selectionTargetLanguage', 'ttsEngine', 'ttsVoice', 'systemVoice', 'ttsSpeed', 'selectionTriggerStyle', 'selectionTriggerSize', 'selectionSurfaceTheme', 'selectionAccentColor'];
+    const relevant = ['uiLocale', 'selectionMode', 'selectionEnabled', 'typingEffectEnabled', 'historyEnabled', 'remoteFallbackEnabled', 'selectionSourceLanguage', 'selectionTargetLanguage', 'ttsEngine', 'ttsVoice', 'systemVoice', 'ttsSpeed', 'selectionTriggerStyle', 'selectionTriggerSize', 'selectionSurfaceTheme', 'selectionAccentColor', 'translationProvider', 'floatingWidgetEnabled', 'floatingWidgetHoverExpand', 'floatingWidgetStartCollapsed', 'floatingWidgetCollapsed'];
     if (!relevant.some(key => key in changes)) return;
     const localeChanged = 'uiLocale' in changes;
     loadPreferences().then(() => {
       if (localeChanged) destroyUi();
-      if (prefs.selectionMode === 'off') hideAll();
+      if (prefs.selectionMode === 'off' && !prefs.floatingWidgetEnabled) hideAll();
+      if ('floatingWidgetEnabled' in changes || 'floatingWidgetHoverExpand' in changes || 'floatingWidgetStartCollapsed' in changes || 'floatingWidgetCollapsed' in changes) syncPersistentWidget().catch(() => null);
       if (shadow) {
         shadow.querySelector('.lf-privacy')?.classList.toggle('visible', !RayLingoTranslator.isNativeAvailable() && prefs.remoteFallbackEnabled);
         RayLingoSelectionAppearance.applyToElement(shadow.querySelector('.lf-root'), prefs);
@@ -549,7 +695,14 @@
           actionButton.dataset.style = prefs.selectionTriggerStyle;
           if (actionButton.style.display !== 'none' && selectedRect) positionNearRect(actionButton, selectedRect, true);
         }
+        if (dockButton && prefs.floatingWidgetEnabled) {
+          dockButton.dataset.collapsed = String(prefs.floatingWidgetCollapsed == null ? prefs.floatingWidgetStartCollapsed : prefs.floatingWidgetCollapsed);
+        }
       }
     });
   });
+
+  // Persistent widget is opt-in and does not wait for a text selection.
+  syncPersistentWidget().catch(error => console.debug('[RayLingo] persistent widget init failed:', error));
+
 })();

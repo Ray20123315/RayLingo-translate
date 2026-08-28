@@ -32,6 +32,8 @@
     pasteButton: document.getElementById('pasteButton'),
     uiLocale: document.getElementById('uiLocale'),
     selectionMode: document.getElementById('selectionMode'),
+    selectionSourceLanguage: document.getElementById('selectionSourceLanguage'),
+    selectionTargetLanguage: document.getElementById('selectionTargetLanguage'),
     selectionTriggerStyle: document.getElementById('selectionTriggerStyle'),
     selectionTriggerSize: document.getElementById('selectionTriggerSize'),
     selectionTriggerSizeValue: document.getElementById('selectionTriggerSizeValue'),
@@ -68,7 +70,26 @@
     updateSignatureBadge: document.getElementById('updateSignatureBadge'),
     platformBadge: document.getElementById('platformBadge'),
     platformName: document.getElementById('platformName'),
-    platformCapabilities: document.getElementById('platformCapabilities')
+    platformCapabilities: document.getElementById('platformCapabilities'),
+    translationProvider: document.getElementById('translationProvider'),
+    geminiModel: document.getElementById('geminiModel'),
+    geminiApiKey: document.getElementById('geminiApiKey'),
+    deepseekModel: document.getElementById('deepseekModel'),
+    deepseekApiKey: document.getElementById('deepseekApiKey'),
+    geminiTestButton: document.getElementById('geminiTestButton'),
+    deepseekTestButton: document.getElementById('deepseekTestButton'),
+    aiProviderStatus: document.getElementById('aiProviderStatus'),
+    floatingWidgetEnabled: document.getElementById('floatingWidgetEnabled'),
+    floatingWidgetHoverExpand: document.getElementById('floatingWidgetHoverExpand'),
+    floatingWidgetStartCollapsed: document.getElementById('floatingWidgetStartCollapsed'),
+    multimodalFile: document.getElementById('multimodalFile'),
+    multimodalProcessButton: document.getElementById('multimodalProcessButton'),
+    multimodalStatus: document.getElementById('multimodalStatus'),
+    videoSubtitleEnabled: document.getElementById('videoSubtitleEnabled'),
+    videoSubtitleTargetLanguage: document.getElementById('videoSubtitleTargetLanguage'),
+    videoTranscriptButton: document.getElementById('videoTranscriptButton'),
+    videoStatus: document.getElementById('videoStatus'),
+    remoteMediaConsent: document.getElementById('remoteMediaConsent')
   };
 
   let preferences = null;
@@ -84,6 +105,7 @@
   let activeSpeechKind = null;
   let activeTtsSessionId = null;
   let ttsWatchdogTimer = null;
+  let tabCaptureActive = false;
   const lifecyclePort = chrome.runtime.connect({ name: `raylingo-${TTS_OWNER}` });
   if (elements.appVersion) elements.appVersion.textContent = `v${chrome.runtime.getManifest().version}`;
   let systemVoiceCatalog = [];
@@ -159,6 +181,7 @@
       case 'download': setStatus(t('statusDownloadingModel'), 'working', `${event.percent}%`); break;
       case 'native': setStatus(t('statusNativeTranslating'), 'working', event.total > 1 ? `${event.index}/${event.total}` : ''); break;
       case 'remote': setStatus(t('statusRemoteTranslating'), 'working', ''); break;
+      case 'ai': setStatus(`${event.provider === 'deepseek' ? 'DeepSeek' : 'Gemini'} AI…`, 'working', 'AI'); break;
       default: break;
     }
   }
@@ -179,6 +202,8 @@
       targetLanguage: 'zh-Hant',
       selectionMode: null,
       selectionEnabled: true,
+      selectionSourceLanguage: 'auto',
+      selectionTargetLanguage: null,
       typingEffectEnabled: true,
       historyEnabled: true,
       remoteFallbackEnabled: true,
@@ -190,13 +215,27 @@
       selectionTriggerStyle: 'label',
       selectionTriggerSize: 36,
       selectionSurfaceTheme: 'black',
-      selectionAccentColor: '#7658ff'
+      selectionAccentColor: '#7c5cff',
+      translationProvider: 'auto',
+      aiProvider: 'gemini',
+      geminiModel: 'gemini-3.7-flash',
+      geminiApiKey: '',
+      deepseekModel: 'deepseek-v4-flash',
+      deepseekApiKey: '',
+      floatingWidgetEnabled: false,
+      floatingWidgetHoverExpand: true,
+      floatingWidgetStartCollapsed: true,
+      videoSubtitleEnabled: false,
+      videoSubtitleTargetLanguage: null,
+      remoteMediaConsent: false
     });
     const selectionMode = stored.selectionMode || (stored.selectionEnabled === false ? 'off' : 'auto');
     preferences = {
       sourceLanguage: normalizeStoredLanguage(stored.sourceLanguage, 'auto'),
       targetLanguage: normalizeStoredLanguage(stored.targetLanguage, 'zh-Hant'),
       selectionMode,
+      selectionSourceLanguage: normalizeStoredLanguage(stored.selectionSourceLanguage, 'auto'),
+      selectionTargetLanguage: normalizeStoredLanguage(stored.selectionTargetLanguage || stored.targetLanguage, 'zh-Hant'),
       typingEffectEnabled: stored.typingEffectEnabled !== false,
       historyEnabled: stored.historyEnabled !== false,
       remoteFallbackEnabled: stored.remoteFallbackEnabled !== false,
@@ -205,6 +244,18 @@
       ttsVoice: typeof stored.ttsVoice === 'string' ? stored.ttsVoice : 'auto',
       systemVoice: typeof stored.systemVoice === 'string' ? stored.systemVoice : 'auto',
       ttsSpeed: RayLingoTTS.clampSpeed(stored.ttsSpeed),
+      translationProvider: globalThis.RayLingoAI?.normalizeTranslationProvider?.(stored.translationProvider) || 'auto',
+      aiProvider: globalThis.RayLingoAI?.normalizeProvider?.(stored.aiProvider) || 'gemini',
+      geminiModel: String(stored.geminiModel || 'gemini-3.7-flash'),
+      geminiApiKey: String(stored.geminiApiKey || ''),
+      deepseekModel: String(stored.deepseekModel || 'deepseek-v4-flash'),
+      deepseekApiKey: String(stored.deepseekApiKey || ''),
+      floatingWidgetEnabled: stored.floatingWidgetEnabled === true,
+      floatingWidgetHoverExpand: stored.floatingWidgetHoverExpand !== false,
+      floatingWidgetStartCollapsed: stored.floatingWidgetStartCollapsed !== false,
+      videoSubtitleEnabled: stored.videoSubtitleEnabled === true,
+      videoSubtitleTargetLanguage: normalizeStoredLanguage(stored.videoSubtitleTargetLanguage || stored.selectionTargetLanguage || stored.targetLanguage, 'zh-Hant'),
+      remoteMediaConsent: stored.remoteMediaConsent === true,
       ...RayLingoSelectionAppearance.fromStored(stored)
     };
   }
@@ -213,6 +264,8 @@
     preferences.sourceLanguage = elements.sourceLanguage.value;
     preferences.targetLanguage = elements.targetLanguage.value;
     if (elements.selectionMode) preferences.selectionMode = elements.selectionMode.value;
+    if (elements.selectionSourceLanguage) preferences.selectionSourceLanguage = elements.selectionSourceLanguage.value;
+    if (elements.selectionTargetLanguage) preferences.selectionTargetLanguage = elements.selectionTargetLanguage.value;
     if (elements.selectionTriggerStyle) preferences.selectionTriggerStyle = RayLingoSelectionAppearance.normalizeStyle(elements.selectionTriggerStyle.value);
     if (elements.selectionTriggerSize) preferences.selectionTriggerSize = RayLingoSelectionAppearance.clampSize(elements.selectionTriggerSize.value);
     if (elements.selectionSurfaceTheme) preferences.selectionSurfaceTheme = RayLingoSelectionAppearance.normalizeTheme(elements.selectionSurfaceTheme.value);
@@ -225,6 +278,17 @@
     if (elements.ttsVoice) preferences.ttsVoice = elements.ttsVoice.value || 'auto';
     if (elements.systemVoice) preferences.systemVoice = elements.systemVoice.value || 'auto';
     if (elements.ttsSpeed) preferences.ttsSpeed = RayLingoTTS.clampSpeed(elements.ttsSpeed.value);
+    if (elements.translationProvider) preferences.translationProvider = RayLingoAI.normalizeTranslationProvider(elements.translationProvider.value);
+    if (elements.geminiModel) preferences.geminiModel = elements.geminiModel.value.trim() || 'gemini-3.7-flash';
+    if (elements.geminiApiKey) preferences.geminiApiKey = elements.geminiApiKey.value.trim();
+    if (elements.deepseekModel) preferences.deepseekModel = elements.deepseekModel.value.trim() || 'deepseek-v4-flash';
+    if (elements.deepseekApiKey) preferences.deepseekApiKey = elements.deepseekApiKey.value.trim();
+    if (elements.floatingWidgetEnabled) preferences.floatingWidgetEnabled = elements.floatingWidgetEnabled.checked;
+    if (elements.floatingWidgetHoverExpand) preferences.floatingWidgetHoverExpand = elements.floatingWidgetHoverExpand.checked;
+    if (elements.floatingWidgetStartCollapsed) preferences.floatingWidgetStartCollapsed = elements.floatingWidgetStartCollapsed.checked;
+    if (elements.videoSubtitleEnabled) preferences.videoSubtitleEnabled = elements.videoSubtitleEnabled.checked;
+    if (elements.videoSubtitleTargetLanguage) preferences.videoSubtitleTargetLanguage = elements.videoSubtitleTargetLanguage.value;
+    if (elements.remoteMediaConsent) preferences.remoteMediaConsent = elements.remoteMediaConsent.checked;
     applyInterfaceTheme();
     await chrome.storage.local.set({ ...preferences, selectionEnabled: preferences.selectionMode !== 'off' });
   }
@@ -311,11 +375,24 @@
   function renderPreferenceControls() {
     if (elements.uiLocale) RayLingoI18n.populateUiLocaleSelect(elements.uiLocale, preferences.uiLocale);
     if (elements.selectionMode) elements.selectionMode.value = preferences.selectionMode;
+    if (elements.selectionSourceLanguage) RayLingoI18n.populateLanguageSelect(elements.selectionSourceLanguage, { includeAuto: true, selected: preferences.selectionSourceLanguage });
+    if (elements.selectionTargetLanguage) RayLingoI18n.populateLanguageSelect(elements.selectionTargetLanguage, { selected: preferences.selectionTargetLanguage });
     if (elements.selectionTriggerStyle) elements.selectionTriggerStyle.value = preferences.selectionTriggerStyle;
     if (elements.selectionTriggerSize) elements.selectionTriggerSize.value = String(preferences.selectionTriggerSize);
     if (elements.selectionSurfaceTheme) elements.selectionSurfaceTheme.value = preferences.selectionSurfaceTheme;
     if (elements.selectionAccentColor) elements.selectionAccentColor.value = preferences.selectionAccentColor;
     if (elements.typingEffectToggle) elements.typingEffectToggle.checked = preferences.typingEffectEnabled;
+    if (elements.translationProvider) elements.translationProvider.value = preferences.translationProvider;
+    if (elements.geminiModel) elements.geminiModel.value = preferences.geminiModel;
+    if (elements.geminiApiKey) elements.geminiApiKey.value = preferences.geminiApiKey;
+    if (elements.deepseekModel) elements.deepseekModel.value = preferences.deepseekModel;
+    if (elements.deepseekApiKey) elements.deepseekApiKey.value = preferences.deepseekApiKey;
+    if (elements.floatingWidgetEnabled) elements.floatingWidgetEnabled.checked = preferences.floatingWidgetEnabled;
+    if (elements.floatingWidgetHoverExpand) elements.floatingWidgetHoverExpand.checked = preferences.floatingWidgetHoverExpand;
+    if (elements.floatingWidgetStartCollapsed) elements.floatingWidgetStartCollapsed.checked = preferences.floatingWidgetStartCollapsed;
+    if (elements.videoSubtitleEnabled) elements.videoSubtitleEnabled.checked = preferences.videoSubtitleEnabled;
+    if (elements.videoSubtitleTargetLanguage) RayLingoI18n.populateLanguageSelect(elements.videoSubtitleTargetLanguage, { selected: preferences.videoSubtitleTargetLanguage });
+    if (elements.remoteMediaConsent) elements.remoteMediaConsent.checked = preferences.remoteMediaConsent;
     if (elements.historyToggle) elements.historyToggle.checked = preferences.historyEnabled;
     if (elements.remoteFallbackToggle) elements.remoteFallbackToggle.checked = preferences.remoteFallbackEnabled;
     if (elements.ttsEngine) elements.ttsEngine.value = preferences.ttsEngine;
@@ -330,6 +407,15 @@
 
   async function refreshProviderUi() {
     isBrave = await detectBrave();
+    if (preferences?.translationProvider === 'gemini' || preferences?.translationProvider === 'deepseek') {
+      const provider = preferences.translationProvider;
+      const status = await RayLingoAI.status(provider).catch(() => null);
+      const configured = provider === 'gemini' ? status?.geminiConfigured : status?.deepseekConfigured;
+      setApiBadge(configured ? 'ready' : 'error', provider === 'gemini' ? 'Gemini' : 'DeepSeek');
+      if (elements.providerNote) elements.providerNote.textContent = configured ? `${provider === 'gemini' ? 'Gemini' : 'DeepSeek'} AI translation` : `${provider === 'gemini' ? 'Gemini' : 'DeepSeek'} API key required`;
+      if (!elements.sourceText.value.trim()) setStatus(configured ? 'AI ready' : 'API key required', configured ? 'ready' : 'error');
+      return;
+    }
     if (RayLingoTranslator.isNativeAvailable()) {
       setApiBadge('ready', t('badgeLocal'));
       if (elements.providerNote) elements.providerNote.textContent = t('providerNative');
@@ -376,6 +462,7 @@
         sourceLanguage: elements.sourceLanguage.value,
         targetLanguage: elements.targetLanguage.value,
         remoteFallbackEnabled: preferences.remoteFallbackEnabled,
+        provider: preferences.translationProvider,
         onStatus: engineStatus
       });
       if (serial !== requestSerial) return;
@@ -718,6 +805,123 @@
     if (elements.historyList) await renderHistory();
   }
 
+  function setInlineFeatureStatus(element, text, state = '') {
+    if (!element) return;
+    element.textContent = text;
+    element.dataset.state = state;
+  }
+
+  async function testAiProvider(provider) {
+    setInlineFeatureStatus(elements.aiProviderStatus, `${provider}…`);
+    try {
+      await savePreferences();
+      const result = await RayLingoAI.test(provider);
+      setInlineFeatureStatus(elements.aiProviderStatus, `${provider}: ${String(result.text || 'OK').slice(0, 80)}`, 'ready');
+    } catch (error) {
+      setInlineFeatureStatus(elements.aiProviderStatus, `${provider}: ${localizedError(error)}`, 'error');
+    }
+  }
+
+  async function processMultimodalFile() {
+    const file = elements.multimodalFile?.files?.[0];
+    if (!file) { setInlineFeatureStatus(elements.multimodalStatus, t('multimodalChooseFile', '請先選擇檔案'), 'error'); return; }
+    const provider = preferences.translationProvider === 'deepseek' ? 'deepseek' : 'gemini';
+    const mediaNeedsRemote = !['docx','pptx','txt','md','csv','html','htm','xml','srt','vtt','json'].includes((file.name.split('.').pop() || '').toLowerCase());
+    if (mediaNeedsRemote && !preferences.remoteMediaConsent) { setInlineFeatureStatus(elements.multimodalStatus, t('remoteMediaConsentRequired','請先允許遠端媒體處理'), 'error'); return; }
+    setInlineFeatureStatus(elements.multimodalStatus, `${file.name} · processing…`);
+    try {
+      const prepared = await RayLingoMultimodal.process(file, { provider, targetLanguage: elements.targetLanguage.value, task: file.type.startsWith('audio/') || file.type.startsWith('video/') ? 'transcribe_translate' : 'extract_translate' });
+      if (prepared.kind === 'text') {
+        elements.sourceText.value = prepared.text.slice(0, 12000);
+        updateCharCount();
+        if (preferences.translationProvider === 'auto' || preferences.translationProvider === 'browser') await translateCurrentText();
+        else {
+          const result = await RayLingoAI.translate({ text: prepared.text, sourceLanguage: 'auto', targetLanguage: elements.targetLanguage.value, provider });
+          lastResultLanguage = elements.targetLanguage.value;
+          setOutput(result.text, { animate: preferences.typingEffectEnabled });
+          setStatus(`${provider === 'gemini' ? 'Gemini' : 'DeepSeek'} AI`, 'ready');
+        }
+      } else {
+        if (prepared.transcript) {
+          elements.sourceText.value = prepared.transcript.slice(0, 12000);
+          lastSourceLanguage = 'auto';
+          updateCharCount();
+        }
+        lastResultLanguage = elements.targetLanguage.value;
+        setOutput(prepared.translation || prepared.text, { animate: preferences.typingEffectEnabled });
+        setStatus(prepared.transcript ? 'Gemini · transcript + translation' : 'Gemini multimodal', 'ready');
+      }
+      setInlineFeatureStatus(elements.multimodalStatus, `${file.name} · done`, 'ready');
+    } catch (error) {
+      setInlineFeatureStatus(elements.multimodalStatus, localizedError(error), 'error');
+      setStatus(localizedError(error), 'error');
+    }
+  }
+
+  function setTabCaptureUi(active, detail = '') {
+    tabCaptureActive = Boolean(active);
+    if (elements.videoTranscriptButton) {
+      elements.videoTranscriptButton.dataset.capturing = String(tabCaptureActive);
+      elements.videoTranscriptButton.textContent = tabCaptureActive ? t('videoTranscriptStop', '停止錄製並翻譯') : t('videoTranscriptStart', '目前影片：AI 取文字並翻譯');
+    }
+    if (detail && elements.videoStatus) setInlineFeatureStatus(elements.videoStatus, detail, active ? 'working' : 'ready');
+  }
+
+  async function refreshTabCaptureStatus() {
+    if (!elements.videoTranscriptButton || !chrome.runtime?.sendMessage) return;
+    const status = await chrome.runtime.sendMessage({ type: 'RAYLINGO_TAB_TRANSCRIBE_STATUS' }).catch(() => null);
+    if (status?.ok && status.state === 'recording') setTabCaptureUi(true, t('videoTranscriptRecording', '正在擷取目前分頁的影片／音訊…'));
+    else if (status?.ok && status.state === 'ready-to-process') setTabCaptureUi(true, t('videoTranscriptReady', '錄製已停止；按下按鈕完成上傳與翻譯。'));
+    else setTabCaptureUi(false);
+  }
+
+  async function runCurrentVideoTranscript() {
+    if (!preferences.remoteMediaConsent) { setInlineFeatureStatus(elements.videoStatus, t('remoteMediaConsentRequired','請先允許遠端媒體處理'), 'error'); return; }
+    try {
+      await savePreferences();
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) throw new Error('No active tab');
+      const isYoutube = /^https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\//i.test(String(tab.url || ''));
+
+      if (isYoutube && !tabCaptureActive) {
+        setInlineFeatureStatus(elements.videoStatus, t('videoYoutubeProcessing', 'Gemini 正在讀取公開 YouTube 影片…'), 'working');
+        const response = await chrome.tabs.sendMessage(tab.id, { type: 'RAYLINGO_MEDIA_TRANSCRIBE_CURRENT' });
+        if (!response?.ok) { const error = new Error(response?.error || 'Video transcription failed'); error.code = response?.errorCode; throw error; }
+        setInlineFeatureStatus(elements.videoStatus, `${response.segments || 0} segments loaded`, 'ready');
+        return;
+      }
+
+      if (!tabCaptureActive) {
+        setInlineFeatureStatus(elements.videoStatus, t('videoTranscriptStarting', '正在啟動目前分頁擷取…'), 'working');
+        const response = await chrome.runtime.sendMessage({ type: 'RAYLINGO_TAB_TRANSCRIBE_START', payload: { tabId: tab.id, targetLanguage: elements.videoSubtitleTargetLanguage?.value || elements.targetLanguage.value } });
+        if (!response?.ok) { const error = new Error(response?.error || 'Tab capture failed'); error.code = response?.errorCode; throw error; }
+        setTabCaptureUi(true, t('videoTranscriptRecording', '正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。'));
+        return;
+      }
+
+      setInlineFeatureStatus(elements.videoStatus, t('videoTranscriptProcessing', '正在停止錄製、上傳並翻譯…'), 'working');
+      const response = await chrome.runtime.sendMessage({ type: 'RAYLINGO_TAB_TRANSCRIBE_STOP', payload: { targetLanguage: elements.videoSubtitleTargetLanguage?.value || elements.targetLanguage.value } });
+      if (!response?.ok) { const error = new Error(response?.error || 'Tab transcription failed'); error.code = response?.errorCode; throw error; }
+      setTabCaptureUi(false);
+      const transcript = String(response.transcript || '').trim();
+      const translated = String(response.translation || '').trim();
+      if (transcript) {
+        elements.sourceText.value = transcript.slice(0, 12000);
+        lastSourceLanguage = 'auto';
+        updateCharCount();
+      }
+      if (translated) {
+        lastResultLanguage = response.targetLanguage || elements.targetLanguage.value;
+        setOutput(translated, { animate: preferences.typingEffectEnabled });
+        setStatus('Gemini · transcript + translation', 'ready');
+      }
+      setInlineFeatureStatus(elements.videoStatus, `${Math.max(1, Math.round((response.durationMs || 0) / 1000))}s · ${(Number(response.size || 0) / 1048576).toFixed(1)} MB · done`, 'ready');
+    } catch (error) {
+      setTabCaptureUi(false);
+      setInlineFeatureStatus(elements.videoStatus, localizedError(error), 'error');
+    }
+  }
+
   elements.sourceText.addEventListener('input', () => { updateCharCount(); scheduleTranslation(); });
   elements.sourceLanguage.addEventListener('change', async () => { await savePreferences(); renderQuickPairs(); scheduleTranslation(50); });
   elements.targetLanguage.addEventListener('change', async () => { populateAiVoiceControl(); populateSystemVoiceControl(); await savePreferences(); renderQuickPairs(); refreshTtsStatus(false).catch(() => null); scheduleTranslation(50); });
@@ -762,6 +966,8 @@
   elements.ttsSpeed?.addEventListener('change', savePreferences);
   elements.uiLocale?.addEventListener('change', changeUiLocale);
   elements.selectionMode?.addEventListener('change', savePreferences);
+  elements.selectionSourceLanguage?.addEventListener('change', savePreferences);
+  elements.selectionTargetLanguage?.addEventListener('change', savePreferences);
   elements.selectionTriggerStyle?.addEventListener('change', async () => { updateSelectionAppearancePreview(); await savePreferences(); });
   elements.selectionSurfaceTheme?.addEventListener('change', async () => { updateSelectionAppearancePreview(); await savePreferences(); });
   elements.selectionTriggerSize?.addEventListener('input', updateSelectionAppearancePreview);
@@ -778,6 +984,22 @@
   elements.typingEffectToggle?.addEventListener('change', savePreferences);
   elements.historyToggle?.addEventListener('change', async () => { await savePreferences(); await renderHistory(); });
   elements.remoteFallbackToggle?.addEventListener('change', async () => { await savePreferences(); await refreshProviderUi(); if (elements.sourceText.value.trim()) scheduleTranslation(30); });
+  elements.translationProvider?.addEventListener('change', async () => { await savePreferences(); await refreshProviderUi(); if (elements.sourceText.value.trim()) scheduleTranslation(20); });
+  elements.geminiModel?.addEventListener('change', savePreferences);
+  elements.geminiApiKey?.addEventListener('change', savePreferences);
+  elements.deepseekModel?.addEventListener('change', savePreferences);
+  elements.deepseekApiKey?.addEventListener('change', savePreferences);
+  elements.geminiTestButton?.addEventListener('click', () => testAiProvider('gemini'));
+  elements.deepseekTestButton?.addEventListener('click', () => testAiProvider('deepseek'));
+  elements.floatingWidgetEnabled?.addEventListener('change', savePreferences);
+  elements.floatingWidgetHoverExpand?.addEventListener('change', savePreferences);
+  elements.floatingWidgetStartCollapsed?.addEventListener('change', savePreferences);
+  elements.multimodalProcessButton?.addEventListener('click', processMultimodalFile);
+  elements.multimodalFile?.addEventListener('change', () => setInlineFeatureStatus(elements.multimodalStatus, elements.multimodalFile.files?.[0]?.name || t('multimodalIdle','尚未選擇檔案')));
+  elements.videoSubtitleEnabled?.addEventListener('change', savePreferences);
+  elements.videoSubtitleTargetLanguage?.addEventListener('change', savePreferences);
+  elements.videoTranscriptButton?.addEventListener('click', runCurrentVideoTranscript);
+  elements.remoteMediaConsent?.addEventListener('change', savePreferences);
   elements.openAppButton?.addEventListener('click', async () => {
     const url = chrome.runtime.getURL('workspace.html');
     await chrome.tabs.create({ url }).catch(() => null);
@@ -818,6 +1040,12 @@
     let themed = false;
     if (changes.selectionSurfaceTheme) { preferences.selectionSurfaceTheme = RayLingoSelectionAppearance.normalizeTheme(changes.selectionSurfaceTheme.newValue); themed = true; }
     if (changes.selectionAccentColor) { preferences.selectionAccentColor = RayLingoSelectionAppearance.normalizeHex(changes.selectionAccentColor.newValue); themed = true; }
+    if (changes.selectionSourceLanguage) { preferences.selectionSourceLanguage = normalizeStoredLanguage(changes.selectionSourceLanguage.newValue, 'auto'); if (elements.selectionSourceLanguage) elements.selectionSourceLanguage.value = preferences.selectionSourceLanguage; }
+    if (changes.selectionTargetLanguage) { preferences.selectionTargetLanguage = normalizeStoredLanguage(changes.selectionTargetLanguage.newValue, 'zh-Hant'); if (elements.selectionTargetLanguage) elements.selectionTargetLanguage.value = preferences.selectionTargetLanguage; }
+    if (changes.translationProvider) { preferences.translationProvider = RayLingoAI.normalizeTranslationProvider(changes.translationProvider.newValue); if (elements.translationProvider) elements.translationProvider.value = preferences.translationProvider; }
+    if (changes.floatingWidgetEnabled) { preferences.floatingWidgetEnabled = changes.floatingWidgetEnabled.newValue === true; if (elements.floatingWidgetEnabled) elements.floatingWidgetEnabled.checked = preferences.floatingWidgetEnabled; }
+    if (changes.floatingWidgetHoverExpand) { preferences.floatingWidgetHoverExpand = changes.floatingWidgetHoverExpand.newValue !== false; if (elements.floatingWidgetHoverExpand) elements.floatingWidgetHoverExpand.checked = preferences.floatingWidgetHoverExpand; }
+    if (changes.videoSubtitleEnabled) { preferences.videoSubtitleEnabled = changes.videoSubtitleEnabled.newValue === true; if (elements.videoSubtitleEnabled) elements.videoSubtitleEnabled.checked = preferences.videoSubtitleEnabled; }
     if (themed) {
       if (elements.selectionSurfaceTheme) elements.selectionSurfaceTheme.value = preferences.selectionSurfaceTheme;
       if (elements.selectionAccentColor) elements.selectionAccentColor.value = preferences.selectionAccentColor;
@@ -850,6 +1078,7 @@
     await refreshProviderUi();
     if (elements.ttsStatus || elements.ttsVoice || elements.systemVoice) await refreshTtsStatus(false);
     if (elements.historyList) await renderHistory();
+    await refreshTabCaptureStatus().catch(() => null);
     elements.sourceText.focus();
   })().catch(error => {
     console.error('[RayLingo] popup init failed:', error);

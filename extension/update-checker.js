@@ -3,8 +3,8 @@
 
   const METADATA_URL = 'https://raw.githubusercontent.com/Ray20123315/RayLingo-translate/main/updates/latest.json';
   const EXPECTED_REPOSITORY = 'Ray20123315/RayLingo-translate';
-  const PUBLIC_KEY_B64 = 'BSvI+aEQja2zdnXo3OIxReAHOAzxwx85aTotVeKEppQ=';
-  const KEY_ID = 'ed25519-sha256:7d9fa0219c46ac10b516adc04f2234ded87f4f9ed7423e671190cfa6d62096ed';
+  const PUBLIC_KEY_B64 = 'aX2fqaYF7j0JcRbVDUkkqpYicLimgnhN90znvhO0RUE=';
+  const KEY_ID = 'ed25519-sha256:c9a44509e7b9249e71c8e5fa8ce41daf47277cb13c4130d8248cc64658b9868a';
   const encoder = new TextEncoder();
 
   function normalizeVersion(value) {

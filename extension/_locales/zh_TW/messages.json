@@ -643,5 +643,131 @@
   },
   "compatCurrentBrowser": {
     "message": "目前瀏覽器"
+  },
+  "quickSettings": {
+    "message": "快速設定"
+  },
+  "selectionDefaultLanguages": {
+    "message": "反白預設語言"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo 完整性驗證失敗，這段反白內容目前無法翻譯。"
+  },
+  "selectionInputHint": {
+    "message": "可反白一般網頁文字，也支援輸入框與文字區域內的選取文字。"
+  },
+  "aiMediaTitle": {
+    "message": "AI、懸浮窗與媒體"
+  },
+  "aiMediaHelp": {
+    "message": "Gemini／DeepSeek、文件與影片翻譯。"
+  },
+  "translationProvider": {
+    "message": "翻譯引擎"
+  },
+  "floatingWidgetEnabled": {
+    "message": "常駐懸浮翻譯器"
+  },
+  "floatingWidgetHelp": {
+    "message": "讓 RayLingo 常駐網頁；不用時可縮成一個點。"
+  },
+  "floatingWidgetHoverExpand": {
+    "message": "滑鼠移上自動展開"
+  },
+  "floatingWidgetHoverHelp": {
+    "message": "游標移到懸浮點時自動展開翻譯器。"
+  },
+  "floatingWidgetStartCollapsed": {
+    "message": "啟動時縮小"
+  },
+  "floatingWidgetCollapsedHelp": {
+    "message": "新頁面先顯示精簡小點。"
+  },
+  "floatingWidgetMinimize": {
+    "message": "縮小"
+  },
+  "multimodalTitle": {
+    "message": "多模態檔案"
+  },
+  "multimodalHelp": {
+    "message": "圖片、PDF、DOCX、PPTX、文字、音訊與影片。"
+  },
+  "processFile": {
+    "message": "翻譯檔案"
+  },
+  "multimodalIdle": {
+    "message": "尚未選擇檔案"
+  },
+  "multimodalChooseFile": {
+    "message": "請先選擇檔案。"
+  },
+  "videoSubtitleEnabled": {
+    "message": "影片字幕翻譯"
+  },
+  "videoSubtitleHelp": {
+    "message": "偵測字幕並顯示 RayLingo 翻譯 overlay。"
+  },
+  "videoSubtitleTarget": {
+    "message": "字幕目標語言"
+  },
+  "videoSubtitleTargetHelp": {
+    "message": "翻譯字幕 overlay 使用此語言。"
+  },
+  "videoTranscriptStart": {
+    "message": "目前 YouTube：AI 取文字並翻譯"
+  },
+  "videoTranscriptPrivacy": {
+    "message": "沒有字幕時才使用；公開 YouTube URL 會送給 Gemini。"
+  },
+  "aiProviderTitle": {
+    "message": "AI Provider"
+  },
+  "aiProviderHelp": {
+    "message": "Gemini 支援多模態；DeepSeek 用於文字翻譯與分析。API key 只儲存在擴充功能本機儲存。"
+  },
+  "translationProviderHelp": {
+    "message": "可固定使用 Browser、Gemini 或 DeepSeek。"
+  },
+  "apiKeyLocalOnly": {
+    "message": "只儲存在這個瀏覽器，不寫入專案或記憶包。"
+  },
+  "floatingWidgetTitle": {
+    "message": "常駐懸浮翻譯器"
+  },
+  "videoTranslationTitle": {
+    "message": "影片翻譯"
+  },
+  "workspaceNavMedia": {
+    "message": "AI 與媒體"
+  },
+  "workspaceMediaDescription": {
+    "message": "管理常駐懸浮翻譯器、多模態文件與影片翻譯。"
+  },
+  "remoteMediaConsent": {
+    "message": "允許遠端媒體處理"
+  },
+  "remoteMediaConsentHelp": {
+    "message": "圖片／PDF／音訊／影片或公開 YouTube URL 只有在你操作時才會送給 Gemini。"
+  },
+  "remoteMediaConsentRequired": {
+    "message": "請先允許遠端媒體處理。"
+  },
+  "videoTranscriptStop": {
+    "message": "停止錄製並翻譯"
+  },
+  "videoTranscriptRecording": {
+    "message": "正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。"
+  },
+  "videoTranscriptStarting": {
+    "message": "正在啟動目前分頁擷取…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "正在停止錄製、上傳並翻譯…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini 正在讀取公開 YouTube 影片…"
+  },
+  "videoTranscriptReady": {
+    "message": "錄製已停止；按下按鈕完成上傳與翻譯。"
   }
 }

@@ -1,0 +1,212 @@
+{
+  "extName": {
+    "message": "RayLingo — Sofortübersetzer"
+  },
+  "extDescription": {
+    "message": "Sofortige mehrsprachige Übersetzung für Webseiten."
+  },
+  "brandSubtitle": {
+    "message": "Sofort, mehrsprachig und browserübergreifend"
+  },
+  "sourceLanguage": {
+    "message": "Quelle"
+  },
+  "targetLanguage": {
+    "message": "Ziel"
+  },
+  "swap": {
+    "message": "Sprachen tauschen"
+  },
+  "detectedInput": {
+    "message": "Eingabetext"
+  },
+  "resultTitle": {
+    "message": "Übersetzung"
+  },
+  "speak": {
+    "message": "Vorlesen"
+  },
+  "copy": {
+    "message": "Kopieren"
+  },
+  "clear": {
+    "message": "Leeren"
+  },
+  "paste": {
+    "message": "Einfügen"
+  },
+  "inputPlaceholder": {
+    "message": "Text eingeben oder einfügen, um automatisch zu übersetzen…"
+  },
+  "readyInput": {
+    "message": "Text eingeben, um die Übersetzung zu starten"
+  },
+  "openFullPage": {
+    "message": "Vollständigen Arbeitsbereich öffnen"
+  },
+  "selectionMode": {
+    "message": "Auswahlverhalten"
+  },
+  "selectionModeAuto": {
+    "message": "Schwebenden Übersetzer sofort öffnen"
+  },
+  "selectionModeButton": {
+    "message": "Zuerst Übersetzen-Schaltfläche anzeigen"
+  },
+  "selectionModeOff": {
+    "message": "Auswahlübersetzung deaktivieren"
+  },
+  "selectionAppearanceTitle": {
+    "message": "Auswahlübersetzer"
+  },
+  "selectionHelp": {
+    "message": "Text markieren, um einen Mini-Übersetzer zu öffnen und Sprachen im schwebenden Panel zu wechseln."
+  },
+  "selectionTriggerStyle": {
+    "message": "Auslöserstil"
+  },
+  "selectionTriggerStyleLabel": {
+    "message": "Übersetzen-Schaltfläche anzeigen"
+  },
+  "selectionTriggerStyleDot": {
+    "message": "Kleinen Punkt anzeigen"
+  },
+  "selectionTriggerSize": {
+    "message": "Größe von Schaltfläche/Punkt"
+  },
+  "selectionSurfaceTheme": {
+    "message": "Hintergrund"
+  },
+  "selectionSurfaceBlack": {
+    "message": "Schwarz"
+  },
+  "selectionSurfaceWhite": {
+    "message": "Weiß"
+  },
+  "selectionAccentColor": {
+    "message": "Akzentfarbe"
+  },
+  "selectionPreviewText": {
+    "message": "Auswahlvorschau"
+  },
+  "uiLanguage": {
+    "message": "Oberflächensprache"
+  },
+  "uiLanguageHelp": {
+    "message": "Arbeitsbereich und schwebender Übersetzer verwenden diese Sprache"
+  },
+  "typingEffect": {
+    "message": "Tippeffekt für Ergebnisse"
+  },
+  "selectionOriginal": {
+    "message": "Original"
+  },
+  "selectionResult": {
+    "message": "Übersetzung"
+  },
+  "selectionWaiting": {
+    "message": "Übersetze…"
+  },
+  "selectionCopy": {
+    "message": "Kopieren"
+  },
+  "selectionSpeak": {
+    "message": "Vorlesen"
+  },
+  "selectionPin": {
+    "message": "Anheften"
+  },
+  "selectionUnpin": {
+    "message": "Lösen"
+  },
+  "selectionClose": {
+    "message": "Schließen"
+  },
+  "statusDetecting": {
+    "message": "Sprache wird erkannt…"
+  },
+  "statusRemoteTranslating": {
+    "message": "Übersetze…"
+  },
+  "statusNativeTranslating": {
+    "message": "Lokal übersetzen…"
+  },
+  "statusNativeDone": {
+    "message": "Lokale Übersetzung abgeschlossen"
+  },
+  "statusRemoteDone": {
+    "message": "Übersetzung abgeschlossen"
+  },
+  "securityLocked": {
+    "message": "Gesperrt"
+  },
+  "selectionIntegrityBlocked": {
+    "message": "RayLingo kann diese Auswahl nicht übersetzen, weil die Integritätsprüfung fehlgeschlagen ist."
+  },
+  "workspaceNavTranslate": {
+    "message": "Übersetzen"
+  },
+  "workspaceNavLanguage": {
+    "message": "Sprache"
+  },
+  "workspaceNavSelection": {
+    "message": "Auswahl"
+  },
+  "workspaceNavAppearance": {
+    "message": "Darstellung"
+  },
+  "appearanceTitle": {
+    "message": "Darstellung"
+  },
+  "quickSettings": {
+    "message": "Schnelleinstellungen"
+  },
+  "selectionDefaultLanguages": {
+    "message": "Standardsprachen für Auswahl"
+  },
+  "lang_auto": {
+    "message": "Automatisch erkennen"
+  },
+  "lang_en": {
+    "message": "Englisch"
+  },
+  "lang_zhHant": {
+    "message": "Traditionelles Chinesisch"
+  },
+  "lang_zhHans": {
+    "message": "Vereinfachtes Chinesisch"
+  },
+  "lang_ja": {
+    "message": "Japanisch"
+  },
+  "lang_ko": {
+    "message": "Koreanisch"
+  },
+  "lang_es": {
+    "message": "Spanisch"
+  },
+  "lang_fr": {
+    "message": "Französisch"
+  },
+  "lang_de": {
+    "message": "Deutsch"
+  },
+  "videoTranscriptStop": {
+    "message": "停止錄製並翻譯"
+  },
+  "videoTranscriptRecording": {
+    "message": "正在擷取目前分頁的影片／音訊；再次按下即可停止並翻譯。"
+  },
+  "videoTranscriptStarting": {
+    "message": "正在啟動目前分頁擷取…"
+  },
+  "videoTranscriptProcessing": {
+    "message": "正在停止錄製、上傳並翻譯…"
+  },
+  "videoYoutubeProcessing": {
+    "message": "Gemini 正在讀取公開 YouTube 影片…"
+  },
+  "videoTranscriptReady": {
+    "message": "錄製已停止；按下按鈕完成上傳與翻譯。"
+  }
+}

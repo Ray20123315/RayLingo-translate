@@ -5,7 +5,7 @@
     selectionTriggerStyle: 'label',
     selectionTriggerSize: 36,
     selectionSurfaceTheme: 'black',
-    selectionAccentColor: '#7658ff'
+    selectionAccentColor: '#7c5cff'
   });
 
   function clampSize(value) {
@@ -52,13 +52,13 @@
       accentStrong:mix(prefs.selectionAccentColor, dark ? 'white' : 'black', dark ? .28 : .18),
       accentSoft:`rgba(${rgb.r},${rgb.g},${rgb.b},${dark ? '.22' : '.12'})`,
       accentRing:`rgba(${rgb.r},${rgb.g},${rgb.b},${dark ? '.48' : '.34'})`,
-      panel:dark ? '#121319' : '#ffffff',
+      panel:dark ? '#111217' : '#ffffff',
       surface:dark ? '#121319' : '#ffffff',
-      surfaceMuted:dark ? '#0e0f14' : '#f4f4f6',
+      surfaceMuted:dark ? '#0b0c10' : '#f4f4f6',
       text:dark ? '#f5f6fa' : '#151519',
       muted:dark ? '#858995' : '#70737d',
-      line:dark ? '#242630' : '#e2e2e6',
-      shadow:dark ? '0 18px 55px rgba(0,0,0,.38)' : '0 14px 36px rgba(26,30,40,.14)'
+      line:dark ? '#292a31' : '#e2e2e6',
+      shadow:dark ? '0 22px 70px rgba(0,0,0,.46)' : '0 14px 36px rgba(26,30,40,.14)'
     };
   }
   function applyToElement(element, preferences = {}) {
@@ -93,9 +93,9 @@
       body[data-ui-theme="black"]{background:#0b0c10!important}
       body[data-ui-theme="black"] .app,body[data-ui-theme="black"] .workspace-layout{background:transparent}
       body[data-ui-theme="black"] .section,body[data-ui-theme="black"] .card,body[data-ui-theme="black"] .feature-card{box-shadow:inset 0 1px rgba(255,255,255,.025)}
-      body[data-ui-theme="black"] .translator-card,body[data-ui-theme="black"] .translator-hero{background:radial-gradient(circle at 9% 0%,var(--accent-soft),transparent 46%),var(--surface)!important}
+      body[data-ui-theme="black"] .translator-card,body[data-ui-theme="black"] .translator-hero{background:radial-gradient(circle at 7% -8%,color-mix(in srgb,var(--accent) 19%,transparent),transparent 43%),var(--surface)!important}
       .workspace-sidebar{background:color-mix(in srgb,var(--side) 96%,#000)!important}
-      .nav-item.active{color:var(--text)!important;background:var(--accent-soft)!important;border:1px solid var(--accent-border)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)!important}
+      .nav-item.active{color:var(--text)!important;background:linear-gradient(90deg,var(--accent-soft),color-mix(in srgb,var(--accent) 4%,transparent))!important;border:1px solid var(--accent-border)!important;box-shadow:inset 3px 0 0 var(--accent),inset 0 0 0 1px rgba(255,255,255,.025),0 10px 30px color-mix(in srgb,var(--accent) 9%,transparent)!important}
       .nav-item.active span{color:var(--accent2)!important}
       .quick-pairs button.active,.primary-outline-btn,.safe-badge,.platform-badge{background:var(--accent-soft-2)!important;border-color:var(--accent-border)!important;color:var(--accent2)!important}
       .quick-pairs button:hover,.secondary-btn:hover,.action-button:hover,.text-button:hover{background:var(--accent-soft-2)!important;border-color:var(--accent-border)!important;color:var(--text)!important}

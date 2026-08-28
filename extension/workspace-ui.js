@@ -12,7 +12,8 @@
     appearance:['workspaceAppearanceDescription','所有背景與強調色只在完整工作台設定。'],
     history:['workspaceHistoryDescription','管理只儲存在本機的翻譯歷史。'],
     engine:['workspaceEngineDescription','查看目前瀏覽器的翻譯能力與遠端備援。'],
-    security:['workspaceSecurityDescription','驗證 RayLingo Build 完整性與防偽狀態。']
+    security:['workspaceSecurityDescription','驗證 RayLingo Build 完整性與防偽狀態。'],
+    media:['workspaceMediaDescription','管理常駐懸浮翻譯器、多模態文件與影片翻譯。']
   });
   function t(key,fallback){ try{return globalThis.RayLingoI18n?.t?.(key,fallback)||fallback;}catch{return fallback;} }
   function syncRuntimeVersion() {
